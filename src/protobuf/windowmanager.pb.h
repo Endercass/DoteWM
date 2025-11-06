@@ -20,7 +20,6 @@
 #include "google/protobuf/io/coded_stream.h"
 #include "google/protobuf/arena.h"
 #include "google/protobuf/arenastring.h"
-#include "google/protobuf/generated_message_bases.h"
 #include "google/protobuf/generated_message_tctable_decl.h"
 #include "google/protobuf/generated_message_util.h"
 #include "google/protobuf/metadata_lite.h"
@@ -53,10 +52,10 @@ struct TableStruct_windowmanager_2eproto {
 extern "C" {
 extern const ::google::protobuf::internal::DescriptorTable descriptor_table_windowmanager_2eproto;
 }  // extern "C"
-class NoneReply;
-struct NoneReplyDefaultTypeInternal;
-extern NoneReplyDefaultTypeInternal _NoneReply_default_instance_;
-extern const ::google::protobuf::internal::ClassDataFull NoneReply_class_data_;
+class Packet;
+struct PacketDefaultTypeInternal;
+extern PacketDefaultTypeInternal _Packet_default_instance_;
+extern const ::google::protobuf::internal::ClassDataFull Packet_class_data_;
 class WindowRequest;
 struct WindowRequestDefaultTypeInternal;
 extern WindowRequestDefaultTypeInternal _WindowRequest_default_instance_;
@@ -127,7 +126,7 @@ class WindowRequest final : public ::google::protobuf::Message
     return *reinterpret_cast<const WindowRequest*>(
         &_WindowRequest_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 1;
+  static constexpr int kIndexInFileMessages = 0;
   friend void swap(WindowRequest& a, WindowRequest& b) { a.Swap(&b); }
   inline void Swap(WindowRequest* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -263,29 +262,30 @@ class WindowRequest final : public ::google::protobuf::Message
 extern const ::google::protobuf::internal::ClassDataFull WindowRequest_class_data_;
 // -------------------------------------------------------------------
 
-class NoneReply final : public ::google::protobuf::internal::ZeroFieldsBase
-/* @@protoc_insertion_point(class_definition:NoneReply) */ {
+class Packet final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:Packet) */ {
  public:
-  inline NoneReply() : NoneReply(nullptr) {}
+  inline Packet() : Packet(nullptr) {}
+  ~Packet() PROTOBUF_FINAL;
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(NoneReply* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
+  void operator delete(Packet* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
     SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(NoneReply));
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(Packet));
   }
 #endif
 
   template <typename = void>
-  explicit PROTOBUF_CONSTEXPR NoneReply(::google::protobuf::internal::ConstantInitialized);
+  explicit PROTOBUF_CONSTEXPR Packet(::google::protobuf::internal::ConstantInitialized);
 
-  inline NoneReply(const NoneReply& from) : NoneReply(nullptr, from) {}
-  inline NoneReply(NoneReply&& from) noexcept
-      : NoneReply(nullptr, ::std::move(from)) {}
-  inline NoneReply& operator=(const NoneReply& from) {
+  inline Packet(const Packet& from) : Packet(nullptr, from) {}
+  inline Packet(Packet&& from) noexcept
+      : Packet(nullptr, ::std::move(from)) {}
+  inline Packet& operator=(const Packet& from) {
     CopyFrom(from);
     return *this;
   }
-  inline NoneReply& operator=(NoneReply&& from) noexcept {
+  inline Packet& operator=(Packet&& from) noexcept {
     if (this == &from) return *this;
     if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
       InternalSwap(&from);
@@ -313,13 +313,17 @@ class NoneReply final : public ::google::protobuf::internal::ZeroFieldsBase
   static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const NoneReply& default_instance() {
-    return *reinterpret_cast<const NoneReply*>(
-        &_NoneReply_default_instance_);
+  static const Packet& default_instance() {
+    return *reinterpret_cast<const Packet*>(
+        &_Packet_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 0;
-  friend void swap(NoneReply& a, NoneReply& b) { a.Swap(&b); }
-  inline void Swap(NoneReply* PROTOBUF_NONNULL other) {
+  enum DataCase {
+    kWindowRequest = 1,
+    DATA_NOT_SET = 0,
+  };
+  static constexpr int kIndexInFileMessages = 1;
+  friend void swap(Packet& a, Packet& b) { a.Swap(&b); }
+  inline void Swap(Packet* PROTOBUF_NONNULL other) {
     if (other == this) return;
     if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
       InternalSwap(other);
@@ -327,7 +331,7 @@ class NoneReply final : public ::google::protobuf::internal::ZeroFieldsBase
       ::google::protobuf::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(NoneReply* PROTOBUF_NONNULL other) {
+  void UnsafeArenaSwap(Packet* PROTOBUF_NONNULL other) {
     if (other == this) return;
     ABSL_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -335,33 +339,60 @@ class NoneReply final : public ::google::protobuf::internal::ZeroFieldsBase
 
   // implements Message ----------------------------------------------
 
-  NoneReply* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
-    return ::google::protobuf::internal::ZeroFieldsBase::DefaultConstruct<NoneReply>(arena);
+  Packet* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<Packet>(arena);
   }
-  using ::google::protobuf::internal::ZeroFieldsBase::CopyFrom;
-  inline void CopyFrom(const NoneReply& from) {
-    ::google::protobuf::internal::ZeroFieldsBase::CopyImpl(*this, from);
-  }
-  using ::google::protobuf::internal::ZeroFieldsBase::MergeFrom;
-  void MergeFrom(const NoneReply& from) {
-    ::google::protobuf::internal::ZeroFieldsBase::MergeImpl(*this, from);
-  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const Packet& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const Packet& from) { Packet::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
+                        const ::google::protobuf::MessageLite& from_msg);
 
   public:
   bool IsInitialized() const {
     return true;
   }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(Packet* PROTOBUF_NONNULL other);
  private:
   template <typename T>
   friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "NoneReply"; }
+  static ::absl::string_view FullMessageName() { return "Packet"; }
 
  protected:
-  explicit NoneReply(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  NoneReply(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const NoneReply& from);
-  NoneReply(
-      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, NoneReply&& from) noexcept
-      : NoneReply(arena) {
+  explicit Packet(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  Packet(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Packet& from);
+  Packet(
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, Packet&& from) noexcept
+      : Packet(arena) {
     *this = ::std::move(from);
   }
   const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
@@ -377,12 +408,39 @@ class NoneReply final : public ::google::protobuf::internal::ZeroFieldsBase
   // nested types ----------------------------------------------------
 
   // accessors -------------------------------------------------------
-  // @@protoc_insertion_point(class_scope:NoneReply)
+  enum : int {
+    kWindowRequestFieldNumber = 1,
+  };
+  // .WindowRequest window_request = 1;
+  bool has_window_request() const;
+  private:
+  bool _internal_has_window_request() const;
+
+  public:
+  void clear_window_request() ;
+  const ::WindowRequest& window_request() const;
+  [[nodiscard]] ::WindowRequest* PROTOBUF_NULLABLE release_window_request();
+  ::WindowRequest* PROTOBUF_NONNULL mutable_window_request();
+  void set_allocated_window_request(::WindowRequest* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_window_request(::WindowRequest* PROTOBUF_NULLABLE value);
+  ::WindowRequest* PROTOBUF_NULLABLE unsafe_arena_release_window_request();
+
+  private:
+  const ::WindowRequest& _internal_window_request() const;
+  ::WindowRequest* PROTOBUF_NONNULL _internal_mutable_window_request();
+
+  public:
+  void clear_data();
+  DataCase data_case() const;
+  // @@protoc_insertion_point(class_scope:Packet)
  private:
   class _Internal;
+  void set_has_window_request();
+  inline bool has_data() const;
+  inline void clear_has_data();
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<0, 0,
-                                   0, 0,
+  static const ::google::protobuf::internal::TcParseTable<0, 1,
+                                   1, 0,
                                    2>
       _table_;
 
@@ -392,10 +450,29 @@ class NoneReply final : public ::google::protobuf::internal::ZeroFieldsBase
   friend class ::google::protobuf::Arena::InternalHelper;
   using InternalArenaConstructable_ = void;
   using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+        const Packet& from_msg);
+    union DataUnion {
+      constexpr DataUnion() : _constinit_{} {}
+      ::google::protobuf::internal::ConstantInitialized _constinit_;
+      ::WindowRequest* PROTOBUF_NULLABLE window_request_;
+    } data_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::uint32_t _oneof_case_[1];
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
   friend struct ::TableStruct_windowmanager_2eproto;
 };
 
-extern const ::google::protobuf::internal::ClassDataFull NoneReply_class_data_;
+extern const ::google::protobuf::internal::ClassDataFull Packet_class_data_;
 
 // ===================================================================
 
@@ -409,10 +486,6 @@ extern const ::google::protobuf::internal::ClassDataFull NoneReply_class_data_;
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
-// NoneReply
-
 // -------------------------------------------------------------------
 
 // WindowRequest
@@ -441,6 +514,100 @@ inline void WindowRequest::_internal_set_window(::uint64_t value) {
   _impl_.window_ = value;
 }
 
+// -------------------------------------------------------------------
+
+// Packet
+
+// .WindowRequest window_request = 1;
+inline bool Packet::has_window_request() const {
+  return data_case() == kWindowRequest;
+}
+inline bool Packet::_internal_has_window_request() const {
+  return data_case() == kWindowRequest;
+}
+inline void Packet::set_has_window_request() {
+  _impl_._oneof_case_[0] = kWindowRequest;
+}
+inline void Packet::clear_window_request() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (data_case() == kWindowRequest) {
+    if (GetArena() == nullptr) {
+      delete _impl_.data_.window_request_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.data_.window_request_);
+    }
+    clear_has_data();
+  }
+}
+inline ::WindowRequest* PROTOBUF_NULLABLE Packet::release_window_request() {
+  // @@protoc_insertion_point(field_release:Packet.window_request)
+  if (data_case() == kWindowRequest) {
+    clear_has_data();
+    auto* temp = _impl_.data_.window_request_;
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.data_.window_request_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::WindowRequest& Packet::_internal_window_request() const {
+  return data_case() == kWindowRequest ? *_impl_.data_.window_request_ : reinterpret_cast<::WindowRequest&>(::_WindowRequest_default_instance_);
+}
+inline const ::WindowRequest& Packet::window_request() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:Packet.window_request)
+  return _internal_window_request();
+}
+inline ::WindowRequest* PROTOBUF_NULLABLE Packet::unsafe_arena_release_window_request() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Packet.window_request)
+  if (data_case() == kWindowRequest) {
+    clear_has_data();
+    auto* temp = _impl_.data_.window_request_;
+    _impl_.data_.window_request_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Packet::unsafe_arena_set_allocated_window_request(
+    ::WindowRequest* PROTOBUF_NULLABLE value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_data();
+  if (value) {
+    set_has_window_request();
+    _impl_.data_.window_request_ = value;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Packet.window_request)
+}
+inline ::WindowRequest* PROTOBUF_NONNULL Packet::_internal_mutable_window_request() {
+  if (data_case() != kWindowRequest) {
+    clear_data();
+    set_has_window_request();
+    _impl_.data_.window_request_ = 
+        ::google::protobuf::Message::DefaultConstruct<::WindowRequest>(GetArena());
+  }
+  return _impl_.data_.window_request_;
+}
+inline ::WindowRequest* PROTOBUF_NONNULL Packet::mutable_window_request()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::WindowRequest* _msg = _internal_mutable_window_request();
+  // @@protoc_insertion_point(field_mutable:Packet.window_request)
+  return _msg;
+}
+
+inline bool Packet::has_data() const {
+  return data_case() != DATA_NOT_SET;
+}
+inline void Packet::clear_has_data() {
+  _impl_._oneof_case_[0] = DATA_NOT_SET;
+}
+inline Packet::DataCase Packet::data_case() const {
+  return Packet::DataCase(_impl_._oneof_case_[0]);
+}
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif  // __GNUC__

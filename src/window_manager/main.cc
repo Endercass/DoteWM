@@ -9,6 +9,7 @@
 #include <X11/extensions/Xcomposite.h>
 #include <X11/extensions/Xfixes.h>
 #include <X11/extensions/shape.h>
+#include <mutex>
 
 #undef Status
 #undef Bool
@@ -18,7 +19,6 @@
 #undef Always
 #undef Success
 
-#include <grpcpp/grpcpp.h>
 #include <sys/time.h>
 #include <algorithm>
 #include <cmath>
@@ -28,7 +28,6 @@
 #include <optional>
 #include <unordered_map>
 #include <vector>
-#include "../protobuf/windowmanager.grpc.pb.h"
 #include "main.hpp"
 
 #define GLX_CONTEXT_MAJOR_VERSION_ARB 0x2091
@@ -137,16 +136,43 @@ int x11_error_handler(Display* display, XErrorEvent* event) {
   return 0;
 }
 
-class WindowManagerServiceImpl final : public WindowManager::Service {
-  NokoWindowManager* parent;
+// grpc::Status WindowManagerServiceImpl::RegisterBaseWindow(
+//     grpc::ServerContext* context,
+//     const WindowRequest* request,
+//     NoneReply* reply) {
+//   Window base_window = request->window();
+//
+//   printf("attempting to register\n");
+//
+//   // https://stackoverflow.com/questions/17527621/is-stdmutex-fair this
+//   // should probably be chill to do like 90% of the time. we might loose a
+//   // couple of events but that's fine
+//   std::unique_lock<std::mutex> ipc_lock_gaurd(parent->ipc_lock);
+//   parent->ipc_cv.wait(ipc_lock_gaurd);
+//   parent->register_base_window(base_window);
+//   ipc_lock_gaurd.unlock();
+//
+//   return grpc::Status::OK;
+// }
 
-  grpc::Status RegisterBaseWindow(grpc::ServerContext* context,
-                                  const WindowRequest* request,
-                                  NoneReply* reply) override {
-    Window base_window = request->window();
-    return grpc::Status::OK;
-  }
-};
+void NokoWindowManager::register_base_window(Window base) {
+  base_window = base;
+
+  XWMHints hints;
+  hints.flags = InputHint;
+  hints.input = false;
+  XSetWMHints(display, base, &hints);
+
+  XWindowChanges changes;
+  changes.x = 0;
+  changes.y = 0;
+  changes.width = screen_width;
+  changes.height = screen_height;
+  changes.stack_mode = BottomIf;
+  XConfigureWindow(display, base, CWX | CWY | CWWidth | CWHeight | CWStackMode,
+                   &changes);
+  printf("registering\n");
+}
 
 void NokoWindowManager::bind_window_texture(Window window_index) {
   NokoWindow* window = &windows[window_index];
@@ -208,7 +234,8 @@ void NokoWindowManager::bind_window_texture(Window window_index) {
 }
 
 void NokoWindowManager::run() {
-  glDisable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
+  glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -216,13 +243,14 @@ void NokoWindowManager::run() {
     while (process_events())
       ;
     glClearColor(1, 1, 1, 1);
-
+    glClearDepth(1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (auto window : windows) {
       render_window(window.second.window);
     }
 
+    ipc_step();
     glXSwapBuffers(display, output_window);
 
     // render our windows
@@ -262,7 +290,10 @@ void NokoWindowManager::render_window(unsigned window_id) {
 
   // calculate window depth
 
-  float depth = 1.0;
+  float depth = 0.1;
+  if (base_window.has_value() && window->window == base_window.value()) {
+    depth = 0.9;
+  }
 
   glUseProgram(shader);
   glUniform1i(texture_uniform, 0);
@@ -321,23 +352,9 @@ bool NokoWindowManager::process_events() {
                   ButtonPressMask | ButtonReleaseMask | ButtonMotionMask,
                   GrabModeSync, GrabModeSync, 0, 0);
 
+      update_client_list();
       printf("created a window!\n");
 
-    } else if (type == PropertyNotify) {
-      printf("a\n");
-
-      Window x_window = event.xproperty.window;
-
-      if (event.xproperty.atom != XA_WM_CLASS)
-        goto done;
-
-      printf("b\n");
-      XClassHint hint;
-      XGetClassHint(display, x_window, &hint);
-
-      if (hint.res_class != NULL) {
-        printf("%s\n", hint.res_class);
-      }
     } else if (type == ConfigureNotify || type == MapNotify /* show window */ ||
                type == UnmapNotify /* hide window */) {
       Window x_window;
@@ -423,6 +440,36 @@ bool NokoWindowManager::process_events() {
       gl_set_vao_vbo_ibo_data(window->vao, window->vbo,
                               sizeof(vertex_positions), vertex_positions,
                               window->ibo, sizeof(indices), indices);
+    } else if (type == DestroyNotify) {
+      Window x_window = event.xdestroywindow.window;
+      if (!x_window)
+        goto done;
+
+      if (windows.find(x_window) == windows.end())
+        goto done;
+
+      windows.erase(x_window);
+
+      update_client_list();
+    } else if (type == ButtonPress || type == ButtonRelease) {
+      Window x_window = -1;
+
+      if (std::find(blacklisted_windows.begin(), blacklisted_windows.end(),
+                    x_window) == blacklisted_windows.end())
+
+        if (type == ButtonPress) {
+          x_window = event.xbutton.window;
+          focus_window(x_window);
+        }
+
+      // pass the event on to the client
+      XAllowEvents(display, ReplayPointer, CurrentTime);
+
+      // if we shouldn't pass the event on to the client, we still need to
+      // sync the pointer or else we hang
+      // XAllowEvents(wm->display, SyncPointer, CurrentTime);
+    } else if (type == KeyPress || type == KeyRelease) {
+      // TODO
     }
   }
 done:

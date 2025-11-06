@@ -7,7 +7,23 @@
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
 
+#undef Status
+#undef Bool
+#undef True
+#undef False
+#undef None
+#undef Always
+#undef Success
+
+#include "../protobuf/windowmanager.pb.h"
+
+#include <nn.h>
+#include <pair.h>
 #include <sstream>
 #include <string>
 
@@ -39,10 +55,6 @@ void OnTitleChange(CefRefPtr<CefBrowser> browser, const CefString& title) {
 
 void OnAfterCreated(CefRefPtr<CefBrowser> browser) {
   CEF_REQUIRE_UI_THREAD();
-
-#if defined(OS_LINUX)
-
-#endif
 
   // Add to the list of existing browsers.
   ClientManager::GetInstance()->OnAfterCreated(browser);

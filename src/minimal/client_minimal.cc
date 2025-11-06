@@ -3,7 +3,11 @@
 // can be found in the LICENSE file.
 
 #include "src/minimal/client_minimal.h"
+#include <X11/X.h>
 
+#include "nn.h"
+#include "pair.h"
+#include "src/protobuf/windowmanager.pb.h"
 #include "src/shared/client_util.h"
 
 #include "include/wrapper/cef_helpers.h"
@@ -15,7 +19,9 @@ namespace minimal {
 
 class MessageHandler : public CefMessageRouterBrowserSide::Handler {
  public:
-  explicit MessageHandler() {}
+  explicit MessageHandler(int sock) : ipc_sock(sock) {}
+
+  int ipc_sock;
 
   bool OnQuery(CefRefPtr<CefBrowser> browser,
                CefRefPtr<CefFrame> frame,
@@ -23,6 +29,17 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
                const CefString& request,
                bool persistent,
                CefRefPtr<Callback> callback) override {
+    char* buf = NULL;
+    int result = nn_recv(ipc_sock, &buf, NN_MSG, 0);
+    if (result > 0) {
+      Packet packet;
+      packet.ParseFromArray(buf, result);
+
+      // todo handle packet parsing
+
+      nn_freemsg(buf);
+    }
+
     const std::string& url = frame->GetURL();
 
     const std::string& message_name = request;
@@ -56,13 +73,42 @@ bool Client::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 void Client::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
   CEF_REQUIRE_UI_THREAD();
 
+#if defined(OS_LINUX)
+  ::Window window = browser->GetHost()->GetWindowHandle();
+
+  int sock;
+  if ((sock = nn_socket(AF_SP, NN_PAIR)) < 0) {
+    printf("nn_socket\n");
+  }
+  if (nn_connect(sock, "ipc:///tmp/noko.ipc") < 0) {
+    printf("nn_connect\n");
+  }
+
+  // non-blocking
+  int to = 0;
+  if (nn_setsockopt(sock, NN_SOL_SOCKET, NN_RCVTIMEO, &to, sizeof(to)) < 0) {
+    printf("ipc failed\n");
+  }
+
+  Packet packet;
+  packet.mutable_window_request()->set_window(window);
+
+  size_t len = packet.ByteSizeLong();
+  char* buf = (char*)malloc(len);
+  packet.SerializeToArray(buf, len);
+
+  nn_send(sock, buf, len, 0);
+
+  free(buf);
+#endif
+
   if (!message_router_) {
     // Create the browser-side router for query handling.
     CefMessageRouterConfig config;
     message_router_ = CefMessageRouterBrowserSide::Create(config);
 
     // Register handlers with the router.
-    message_handler_.reset(new MessageHandler());
+    message_handler_.reset(new MessageHandler(sock));
     message_router_->AddHandler(message_handler_.get(), false);
   }
 

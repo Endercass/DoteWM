@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-service WindowManager {
-  rpc RegisterBaseWindow(WindowRequest) returns (NoneReply) {}
-}
-
-message NoneReply {}
-
 message WindowRequest {
   uint64 window = 1;
+}
+
+message Packet {
+  oneof data {
+    WindowRequest window_request = 1;
+  }
 }

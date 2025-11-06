@@ -9,6 +9,7 @@
       "-D__STDC_FORMAT_MACROS",
       "-I/home/foxmoss/Projects/cef-project",
       "-I/home/foxmoss/Projects/cef-project/third_party/cef/cef_binary_139.0.28+g55ab8a8+chromium-139.0.7258.139_linux64",
+      "-I/home/foxmoss/Projects/cef-project/build/_deps/nanomsg-src/src",
       "-O3",
       "-DNDEBUG",
       "-fno-strict-aliasing",
@@ -48,11 +49,11 @@
       "-D_FORTIFY_SOURCE=2",
       "-c",
       "-o",
-      "src/minimal/CMakeFiles/minimal.dir/app_browser_minimal.cc.o",
-      "/home/foxmoss/Projects/cef-project/src/minimal/app_browser_minimal.cc"
+      "src/shared/CMakeFiles/shared.dir/client_util.cc.o",
+      "/home/foxmoss/Projects/cef-project/src/shared/client_util.cc"
     ],
     "directory": "/home/foxmoss/Projects/cef-project/build",
-    "file": "/home/foxmoss/Projects/cef-project/src/minimal/app_browser_minimal.cc",
-    "output": "/home/foxmoss/Projects/cef-project/build/src/minimal/CMakeFiles/minimal.dir/app_browser_minimal.cc.o"
+    "file": "/home/foxmoss/Projects/cef-project/src/shared/client_util.cc",
+    "output": "/home/foxmoss/Projects/cef-project/build/src/shared/CMakeFiles/shared.dir/client_util.cc.o"
   }
 ]
