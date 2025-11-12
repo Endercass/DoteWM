@@ -156,8 +156,15 @@ void NokoWindowManager::register_border(Window window,
                                         int32_t y,
                                         int32_t width,
                                         int32_t height) {
-  if (!base_window.has_value())
+  if (windows.find(window) == windows.end())
     return;
+
+  windows[window].border = {
+      .x = x,
+      .y = y,
+      .width = width,
+      .height = height,
+  };
 }
 
 void NokoWindowManager::register_base_window(Window base) {
@@ -247,16 +254,28 @@ void NokoWindowManager::run() {
   while (true) {
     while (process_events())
       ;
+
     glClearColor(1, 1, 1, 1);
     glClearDepth(1.2);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    ipc_step();
     for (auto window : windows) {
       render_window(window.second.window);
     }
 
-    glXSwapBuffers(display, output_window);
+    int ret = ipc_step();
+
+    Packet packet;
+    auto segment = packet.add_segments();
+
+    auto reply = segment->mutable_render_reply();
+    reply->set_last_frame_observered(0);
+
+    size_t len = packet.ByteSizeLong();
+    char* buf = (char*)malloc(len);
+    packet.SerializeToArray(buf, len);
+
+    nn_send(ipc_sock, buf, len, 0);
 
     // render our windows
 
@@ -309,6 +328,40 @@ void NokoWindowManager::render_window(unsigned window_id) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
+  if (window->border.has_value() && base_window.has_value() &&
+      windows.find(base_window.value()) != windows.end()) {
+    glActiveTexture(GL_TEXTURE0);
+
+    bind_window_texture(windows[base_window.value()].window);
+
+    glUniform1f(opacity_uniform, 1);
+    glUniform1f(depth_uniform, window->depth + 0.001);
+
+    glUniform2f(position_uniform, x_coordinate_to_float(screen_width / 2),
+                y_coordinate_to_float(screen_height / 2));
+    glUniform2f(size_uniform, width_dimension_to_float(screen_width),
+                height_dimension_to_float(screen_height));
+
+    uint32_t pixel_border_width =
+        window->width - window->border->x + window->border->width;
+    uint32_t pixel_border_height =
+        window->height - window->border->y + window->border->height;
+    float border_x = x_coordinate_to_float(window->border->x + window->x +
+                                           pixel_border_width / 2);
+    float border_y = y_coordinate_to_float(window->border->y + window->y +
+                                           pixel_border_height / 2);
+    float border_width = width_dimension_to_float(pixel_border_width);
+    float border_height = height_dimension_to_float(pixel_border_height);
+
+    glUniform2f(cropped_position_uniform, border_x, border_y);
+    glUniform2f(cropped_size_uniform, border_width, border_height);
+
+    glBindVertexArray(window->vao);
+    glDrawElements(GL_TRIANGLES, window->index_count, GL_UNSIGNED_BYTE, NULL);
+
+    unbind_window_texture(windows[base_window.value()].window);
+  }
+
   glActiveTexture(GL_TEXTURE0);
   bind_window_texture(window->window);
 
@@ -317,6 +370,9 @@ void NokoWindowManager::render_window(unsigned window_id) {
 
   glUniform2f(position_uniform, gl_x, gl_y);
   glUniform2f(size_uniform, gl_width, gl_height);
+
+  glUniform2f(cropped_position_uniform, gl_x, gl_y);
+  glUniform2f(cropped_size_uniform, gl_width, gl_height);
 
   glBindVertexArray(window->vao);
   glDrawElements(GL_TRIANGLES, window->index_count, GL_UNSIGNED_BYTE, NULL);
@@ -715,10 +771,13 @@ std::optional<NokoWindowManager*> NokoWindowManager::create() {
       "uniform float depth;"
       "uniform vec2 position;"
       "uniform vec2 size;"
+      "uniform vec2 cropped_position;"
+      "uniform vec2 cropped_size;"
 
       "void main(void) {"
       "   local_position = vertex_position;"
-      "   gl_Position = vec4(vertex_position * (size/2) + position, depth, "
+      "   gl_Position = vec4(vertex_position * (cropped_size/2) + "
+      "cropped_position, depth, "
       "1.0);"
       "}";
 
@@ -729,11 +788,23 @@ std::optional<NokoWindowManager*> NokoWindowManager::create() {
 
       "uniform float opacity;"
       "uniform sampler2D texture_sampler;"
+      "uniform vec2 position;"
+      "uniform vec2 size;"
+      "uniform vec2 cropped_position;"
+      "uniform vec2 cropped_size;"
 
       "void main(void) {"
-      "   vec4 colour = texture(texture_sampler, local_position * vec2(0.5, "
-      "-0.5) + vec2(0.5));"
+      "   vec2 uncroped_position = (local_position / "
+      "((size/2)/(cropped_size/2)) - position + cropped_position);"
+      "   vec4 colour = texture(texture_sampler, uncroped_position  * "
+      "vec2(0.5, -0.5) + vec2(0.5));"
       "   float alpha = opacity * colour.a;"
+      // "   if(local_position.x < cropped_position.x || local_position.y < "
+      // "      cropped_position.y || local_position.x > cropped_position.x + "
+      // "      cropped_size.x || local_position.y > cropped_position.y + "
+      // "      cropped_size.y) {"
+      // "      alpha = 0;"
+      // "   }"
       "   fragment_colour = vec4(colour.rgb, alpha);"
       "}";
 
@@ -746,6 +817,10 @@ std::optional<NokoWindowManager*> NokoWindowManager::create() {
 
   ret->position_uniform = glGetUniformLocation(ret->shader, "position");
   ret->size_uniform = glGetUniformLocation(ret->shader, "size");
+
+  ret->cropped_position_uniform =
+      glGetUniformLocation(ret->shader, "cropped_position");
+  ret->cropped_size_uniform = glGetUniformLocation(ret->shader, "cropped_size");
 
   // blacklist the overlay and output windows for events
   ret->blacklisted_windows.push_back(ret->overlay_window);

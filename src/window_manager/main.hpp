@@ -46,6 +46,11 @@ typedef void (*glXReleaseTexImageEXT_t)(Display*, GLXDrawable, int);
 
 typedef void (*glXSwapIntervalEXT_t)(Display*, GLXDrawable, int);
 
+struct NokoWindowBorder {
+  int x, y;
+  int width, height;
+};
+
 struct NokoWindow {
   int exists;
   Window window;
@@ -56,6 +61,8 @@ struct NokoWindow {
   int x, y;
   int width, height;
   double depth;
+
+  std::optional<NokoWindowBorder> border;
 
   Pixmap x_pixmap;
   GLXPixmap pixmap;
@@ -70,9 +77,10 @@ class NokoWindowManager {
 
   void run();
 
-  void ipc_step() {
+  int ipc_step() {
     char* buf = NULL;
     int result;
+    int count = 0;
     do {
       result = nn_recv(ipc_sock, &buf, NN_MSG, 0);
       if (result > 0) {
@@ -80,6 +88,7 @@ class NokoWindowManager {
         packet.ParseFromArray(buf, result);
 
         for (auto segment : packet.segments()) {
+          count++;
           if (segment.data_case() == DataSegment::kWindowRequest) {
             register_base_window(segment.window_request().window());
           } else if (segment.data_case() == DataSegment::kWindowMapRequest) {
@@ -109,12 +118,21 @@ class NokoWindowManager {
             focus_window(segment.mutable_window_focus_request()->window());
           } else if (segment.data_case() ==
                      DataSegment::kWindowRegisterBorderRequest) {
+            register_border(
+                segment.mutable_window_register_border_request()->window(),
+                segment.mutable_window_register_border_request()->x(),
+                segment.mutable_window_register_border_request()->y(),
+                segment.mutable_window_register_border_request()->width(),
+                segment.mutable_window_register_border_request()->height());
+          } else if (segment.data_case() == DataSegment::kRenderRequest) {
+            glXSwapBuffers(display, output_window);
           }
         }
 
         nn_freemsg(buf);
       }
     } while (result > 0);
+    return count;
   }
 
   NokoWindowManager() {
@@ -163,6 +181,9 @@ class NokoWindowManager {
 
   GLuint position_uniform;
   GLuint size_uniform;
+
+  GLuint cropped_position_uniform;
+  GLuint cropped_size_uniform;
 
   glXBindTexImageEXT_t glXBindTexImageEXT;
   glXReleaseTexImageEXT_t glXReleaseTexImageEXT;

@@ -7,6 +7,13 @@ message WindowRequest {
   uint64 window = 1;
 }
 
+message RenderRequest {
+  uint64 frame_count = 1;
+}
+message RenderReply {
+  uint64 last_frame_observered = 1;
+}
+
 message WindowMapRequest {
   uint64 window = 1;
   uint32 x = 2;
@@ -73,6 +80,8 @@ message DataSegment {
     WindowReorderRequest window_reorder_request = 7;
     WindowFocusRequest window_focus_request = 8;
     WindowRegisterBorderRequest window_register_border_request = 9;
+    RenderRequest render_request = 10;
+    RenderReply render_reply = 11;
   }
 }
 

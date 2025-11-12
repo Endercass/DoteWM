@@ -7,6 +7,7 @@
 #include <absl/strings/str_format.h>
 #include <nlohmann/json_fwd.hpp>
 #include <string>
+#include <thread>
 
 #undef Success
 
@@ -38,10 +39,10 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
                CefRefPtr<Callback> callback) override {
     nlohmann::json from_browser = nlohmann::json::parse(request.ToString());
 
+    Packet packet;
     for (auto segment_json : from_browser) {
       if (segment_json["t"] == "window_map") {  // for some reason it crashes
                                                 // when we use ["type"] lol
-        Packet packet;
         auto segment = packet.add_segments();
         auto window_map = segment->mutable_window_map_request();
         window_map->set_window(
@@ -51,14 +52,7 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
         window_map->set_width(segment_json["width"]);
         window_map->set_height(segment_json["height"]);
 
-        size_t len = packet.ByteSizeLong();
-        char* buf = (char*)malloc(len);
-        packet.SerializeToArray(buf, len);
-
-        nn_send(ipc_sock, buf, len, 0);
-        free(buf);
       } else if (segment_json["t"] == "window_reorder") {
-        Packet packet;
         auto segment = packet.add_segments();
         auto window_reorder = segment->mutable_window_reorder_request();
 
@@ -66,27 +60,14 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
           window_reorder->add_windows(std::stoll(window.get<std::string>()));
         }
 
-        size_t len = packet.ByteSizeLong();
-        char* buf = (char*)malloc(len);
-        packet.SerializeToArray(buf, len);
-
-        nn_send(ipc_sock, buf, len, 0);
-        free(buf);
       } else if (segment_json["t"] == "window_focus") {
-        Packet packet;
         auto segment = packet.add_segments();
         auto window_focus = segment->mutable_window_focus_request();
 
         window_focus->set_window(
             std::stoll(segment_json["window"].get<std::string>()));
 
-        size_t len = packet.ByteSizeLong();
-        char* buf = (char*)malloc(len);
-        packet.SerializeToArray(buf, len);
-        nn_send(ipc_sock, buf, len, 0);
-        free(buf);
       } else if (segment_json["t"] == "window_register_border") {
-        Packet packet;
         auto segment = packet.add_segments();
         auto window_register_border =
             segment->mutable_window_register_border_request();
@@ -97,16 +78,21 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
         window_register_border->set_y(segment_json["y"]);
         window_register_border->set_width(segment_json["width"]);
         window_register_border->set_height(segment_json["height"]);
-
-        size_t len = packet.ByteSizeLong();
-        char* buf = (char*)malloc(len);
-        packet.SerializeToArray(buf, len);
-        nn_send(ipc_sock, buf, len, 0);
-        free(buf);
+      } else if (segment_json["t"] == "render_request") {
+        auto segment = packet.add_segments();
+        segment->mutable_render_request();
       }
     }
+    if (packet.segments_size() != 0) {
+      size_t len = packet.ByteSizeLong();
+      char* buf = (char*)malloc(len);
+      packet.SerializeToArray(buf, len);
 
-    char* buf = NULL;
+      nn_send(ipc_sock, buf, len, 0);
+      free(buf);
+    }
+
+    char* buf;
     int result = nn_recv(ipc_sock, &buf, NN_MSG, 0);
 
     nlohmann::json to_browser = nlohmann::json::array();
@@ -153,6 +139,13 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
                 {"x", segment.mouse_press_reply().x()},
                 {"y", segment.mouse_press_reply().y()}};
 
+            to_browser.push_back(obj);
+          } break;
+          case DataSegment::kRenderReply: {
+            nlohmann::json obj = {
+                {"t", "render_reply"},
+                {"last_frame_observered",
+                 segment.render_reply().last_frame_observered()}};
             to_browser.push_back(obj);
           } break;
 

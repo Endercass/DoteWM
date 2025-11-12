@@ -71,6 +71,14 @@ class Packet;
 struct PacketDefaultTypeInternal;
 extern PacketDefaultTypeInternal _Packet_default_instance_;
 extern const ::google::protobuf::internal::ClassDataFull Packet_class_data_;
+class RenderReply;
+struct RenderReplyDefaultTypeInternal;
+extern RenderReplyDefaultTypeInternal _RenderReply_default_instance_;
+extern const ::google::protobuf::internal::ClassDataFull RenderReply_class_data_;
+class RenderRequest;
+struct RenderRequestDefaultTypeInternal;
+extern RenderRequestDefaultTypeInternal _RenderRequest_default_instance_;
+extern const ::google::protobuf::internal::ClassDataFull RenderRequest_class_data_;
 class WindowFocusReply;
 struct WindowFocusReplyDefaultTypeInternal;
 extern WindowFocusReplyDefaultTypeInternal _WindowFocusReply_default_instance_;
@@ -397,7 +405,7 @@ class WindowReorderRequest final : public ::google::protobuf::Message
     return *reinterpret_cast<const WindowReorderRequest*>(
         &_WindowReorderRequest_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 7;
+  static constexpr int kIndexInFileMessages = 9;
   friend void swap(WindowReorderRequest& a, WindowReorderRequest& b) { a.Swap(&b); }
   inline void Swap(WindowReorderRequest* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -596,7 +604,7 @@ class WindowRegisterBorderRequest final : public ::google::protobuf::Message
     return *reinterpret_cast<const WindowRegisterBorderRequest*>(
         &_WindowRegisterBorderRequest_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 5;
+  static constexpr int kIndexInFileMessages = 7;
   friend void swap(WindowRegisterBorderRequest& a, WindowRegisterBorderRequest& b) { a.Swap(&b); }
   inline void Swap(WindowRegisterBorderRequest* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -835,7 +843,7 @@ class WindowMapRequest final : public ::google::protobuf::Message
     return *reinterpret_cast<const WindowMapRequest*>(
         &_WindowMapRequest_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 1;
+  static constexpr int kIndexInFileMessages = 3;
   friend void swap(WindowMapRequest& a, WindowMapRequest& b) { a.Swap(&b); }
   inline void Swap(WindowMapRequest* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1074,7 +1082,7 @@ class WindowMapReply final : public ::google::protobuf::Message
     return *reinterpret_cast<const WindowMapReply*>(
         &_WindowMapReply_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 8;
+  static constexpr int kIndexInFileMessages = 10;
   friend void swap(WindowMapReply& a, WindowMapReply& b) { a.Swap(&b); }
   inline void Swap(WindowMapReply* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1325,7 +1333,7 @@ class WindowFocusRequest final : public ::google::protobuf::Message
     return *reinterpret_cast<const WindowFocusRequest*>(
         &_WindowFocusRequest_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 6;
+  static constexpr int kIndexInFileMessages = 8;
   friend void swap(WindowFocusRequest& a, WindowFocusRequest& b) { a.Swap(&b); }
   inline void Swap(WindowFocusRequest* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1516,7 +1524,7 @@ class WindowFocusReply final : public ::google::protobuf::Message
     return *reinterpret_cast<const WindowFocusReply*>(
         &_WindowFocusReply_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 4;
+  static constexpr int kIndexInFileMessages = 6;
   friend void swap(WindowFocusReply& a, WindowFocusReply& b) { a.Swap(&b); }
   inline void Swap(WindowFocusReply* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1652,6 +1660,388 @@ class WindowFocusReply final : public ::google::protobuf::Message
 extern const ::google::protobuf::internal::ClassDataFull WindowFocusReply_class_data_;
 // -------------------------------------------------------------------
 
+class RenderRequest final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:RenderRequest) */ {
+ public:
+  inline RenderRequest() : RenderRequest(nullptr) {}
+  ~RenderRequest() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(RenderRequest* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(RenderRequest));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR RenderRequest(::google::protobuf::internal::ConstantInitialized);
+
+  inline RenderRequest(const RenderRequest& from) : RenderRequest(nullptr, from) {}
+  inline RenderRequest(RenderRequest&& from) noexcept
+      : RenderRequest(nullptr, ::std::move(from)) {}
+  inline RenderRequest& operator=(const RenderRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RenderRequest& operator=(RenderRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const RenderRequest& default_instance() {
+    return *reinterpret_cast<const RenderRequest*>(
+        &_RenderRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 1;
+  friend void swap(RenderRequest& a, RenderRequest& b) { a.Swap(&b); }
+  inline void Swap(RenderRequest* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RenderRequest* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  RenderRequest* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<RenderRequest>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const RenderRequest& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const RenderRequest& from) { RenderRequest::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
+                        const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(RenderRequest* PROTOBUF_NONNULL other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "RenderRequest"; }
+
+ protected:
+  explicit RenderRequest(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  RenderRequest(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const RenderRequest& from);
+  RenderRequest(
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, RenderRequest&& from) noexcept
+      : RenderRequest(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
+  static void* PROTOBUF_NONNULL PlacementNew_(
+      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static constexpr auto InternalNewImpl_();
+
+ public:
+  static constexpr auto InternalGenerateClassData_();
+
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kFrameCountFieldNumber = 1,
+  };
+  // uint64 frame_count = 1;
+  void clear_frame_count() ;
+  ::uint64_t frame_count() const;
+  void set_frame_count(::uint64_t value);
+
+  private:
+  ::uint64_t _internal_frame_count() const;
+  void _internal_set_frame_count(::uint64_t value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:RenderRequest)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<0, 1,
+                                   0, 0,
+                                   2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+        const RenderRequest& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::uint64_t frame_count_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_windowmanager_2eproto;
+};
+
+extern const ::google::protobuf::internal::ClassDataFull RenderRequest_class_data_;
+// -------------------------------------------------------------------
+
+class RenderReply final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:RenderReply) */ {
+ public:
+  inline RenderReply() : RenderReply(nullptr) {}
+  ~RenderReply() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(RenderReply* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(RenderReply));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR RenderReply(::google::protobuf::internal::ConstantInitialized);
+
+  inline RenderReply(const RenderReply& from) : RenderReply(nullptr, from) {}
+  inline RenderReply(RenderReply&& from) noexcept
+      : RenderReply(nullptr, ::std::move(from)) {}
+  inline RenderReply& operator=(const RenderReply& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RenderReply& operator=(RenderReply&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const RenderReply& default_instance() {
+    return *reinterpret_cast<const RenderReply*>(
+        &_RenderReply_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 2;
+  friend void swap(RenderReply& a, RenderReply& b) { a.Swap(&b); }
+  inline void Swap(RenderReply* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RenderReply* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  RenderReply* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<RenderReply>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const RenderReply& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const RenderReply& from) { RenderReply::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
+                        const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(RenderReply* PROTOBUF_NONNULL other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "RenderReply"; }
+
+ protected:
+  explicit RenderReply(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  RenderReply(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const RenderReply& from);
+  RenderReply(
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, RenderReply&& from) noexcept
+      : RenderReply(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
+  static void* PROTOBUF_NONNULL PlacementNew_(
+      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static constexpr auto InternalNewImpl_();
+
+ public:
+  static constexpr auto InternalGenerateClassData_();
+
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kLastFrameObserveredFieldNumber = 1,
+  };
+  // uint64 last_frame_observered = 1;
+  void clear_last_frame_observered() ;
+  ::uint64_t last_frame_observered() const;
+  void set_last_frame_observered(::uint64_t value);
+
+  private:
+  ::uint64_t _internal_last_frame_observered() const;
+  void _internal_set_last_frame_observered(::uint64_t value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:RenderReply)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<0, 1,
+                                   0, 0,
+                                   2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+        const RenderReply& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::uint64_t last_frame_observered_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_windowmanager_2eproto;
+};
+
+extern const ::google::protobuf::internal::ClassDataFull RenderReply_class_data_;
+// -------------------------------------------------------------------
+
 class MousePressReply final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:MousePressReply) */ {
  public:
@@ -1707,7 +2097,7 @@ class MousePressReply final : public ::google::protobuf::Message
     return *reinterpret_cast<const MousePressReply*>(
         &_MousePressReply_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 3;
+  static constexpr int kIndexInFileMessages = 5;
   friend void swap(MousePressReply& a, MousePressReply& b) { a.Swap(&b); }
   inline void Swap(MousePressReply* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1922,7 +2312,7 @@ class MouseMoveReply final : public ::google::protobuf::Message
     return *reinterpret_cast<const MouseMoveReply*>(
         &_MouseMoveReply_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 2;
+  static constexpr int kIndexInFileMessages = 4;
   friend void swap(MouseMoveReply& a, MouseMoveReply& b) { a.Swap(&b); }
   inline void Swap(MouseMoveReply* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2135,9 +2525,11 @@ class DataSegment final : public ::google::protobuf::Message
     kWindowReorderRequest = 7,
     kWindowFocusRequest = 8,
     kWindowRegisterBorderRequest = 9,
+    kRenderRequest = 10,
+    kRenderReply = 11,
     DATA_NOT_SET = 0,
   };
-  static constexpr int kIndexInFileMessages = 9;
+  static constexpr int kIndexInFileMessages = 11;
   friend void swap(DataSegment& a, DataSegment& b) { a.Swap(&b); }
   inline void Swap(DataSegment* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2234,6 +2626,8 @@ class DataSegment final : public ::google::protobuf::Message
     kWindowReorderRequestFieldNumber = 7,
     kWindowFocusRequestFieldNumber = 8,
     kWindowRegisterBorderRequestFieldNumber = 9,
+    kRenderRequestFieldNumber = 10,
+    kRenderReplyFieldNumber = 11,
   };
   // .WindowRequest window_request = 1;
   bool has_window_request() const;
@@ -2406,6 +2800,44 @@ class DataSegment final : public ::google::protobuf::Message
   ::WindowRegisterBorderRequest* PROTOBUF_NONNULL _internal_mutable_window_register_border_request();
 
   public:
+  // .RenderRequest render_request = 10;
+  bool has_render_request() const;
+  private:
+  bool _internal_has_render_request() const;
+
+  public:
+  void clear_render_request() ;
+  const ::RenderRequest& render_request() const;
+  [[nodiscard]] ::RenderRequest* PROTOBUF_NULLABLE release_render_request();
+  ::RenderRequest* PROTOBUF_NONNULL mutable_render_request();
+  void set_allocated_render_request(::RenderRequest* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_render_request(::RenderRequest* PROTOBUF_NULLABLE value);
+  ::RenderRequest* PROTOBUF_NULLABLE unsafe_arena_release_render_request();
+
+  private:
+  const ::RenderRequest& _internal_render_request() const;
+  ::RenderRequest* PROTOBUF_NONNULL _internal_mutable_render_request();
+
+  public:
+  // .RenderReply render_reply = 11;
+  bool has_render_reply() const;
+  private:
+  bool _internal_has_render_reply() const;
+
+  public:
+  void clear_render_reply() ;
+  const ::RenderReply& render_reply() const;
+  [[nodiscard]] ::RenderReply* PROTOBUF_NULLABLE release_render_reply();
+  ::RenderReply* PROTOBUF_NONNULL mutable_render_reply();
+  void set_allocated_render_reply(::RenderReply* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_render_reply(::RenderReply* PROTOBUF_NULLABLE value);
+  ::RenderReply* PROTOBUF_NULLABLE unsafe_arena_release_render_reply();
+
+  private:
+  const ::RenderReply& _internal_render_reply() const;
+  ::RenderReply* PROTOBUF_NONNULL _internal_mutable_render_reply();
+
+  public:
   void clear_data();
   DataCase data_case() const;
   // @@protoc_insertion_point(class_scope:DataSegment)
@@ -2420,11 +2852,13 @@ class DataSegment final : public ::google::protobuf::Message
   void set_has_window_reorder_request();
   void set_has_window_focus_request();
   void set_has_window_register_border_request();
+  void set_has_render_request();
+  void set_has_render_reply();
   inline bool has_data() const;
   inline void clear_has_data();
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<0, 9,
-                                   9, 0,
+  static const ::google::protobuf::internal::TcParseTable<0, 11,
+                                   11, 0,
                                    2>
       _table_;
 
@@ -2455,6 +2889,8 @@ class DataSegment final : public ::google::protobuf::Message
       ::google::protobuf::Message* PROTOBUF_NULLABLE window_reorder_request_;
       ::google::protobuf::Message* PROTOBUF_NULLABLE window_focus_request_;
       ::google::protobuf::Message* PROTOBUF_NULLABLE window_register_border_request_;
+      ::google::protobuf::Message* PROTOBUF_NULLABLE render_request_;
+      ::google::protobuf::Message* PROTOBUF_NULLABLE render_reply_;
     } data_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::uint32_t _oneof_case_[1];
@@ -2522,7 +2958,7 @@ class Packet final : public ::google::protobuf::Message
     return *reinterpret_cast<const Packet*>(
         &_Packet_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 10;
+  static constexpr int kIndexInFileMessages = 12;
   friend void swap(Packet& a, Packet& b) { a.Swap(&b); }
   inline void Swap(Packet* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2701,6 +3137,62 @@ inline ::uint64_t WindowRequest::_internal_window() const {
 inline void WindowRequest::_internal_set_window(::uint64_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.window_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// RenderRequest
+
+// uint64 frame_count = 1;
+inline void RenderRequest::clear_frame_count() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.frame_count_ = ::uint64_t{0u};
+  _impl_._has_bits_[0] &= ~0x00000001U;
+}
+inline ::uint64_t RenderRequest::frame_count() const {
+  // @@protoc_insertion_point(field_get:RenderRequest.frame_count)
+  return _internal_frame_count();
+}
+inline void RenderRequest::set_frame_count(::uint64_t value) {
+  _internal_set_frame_count(value);
+  _impl_._has_bits_[0] |= 0x00000001U;
+  // @@protoc_insertion_point(field_set:RenderRequest.frame_count)
+}
+inline ::uint64_t RenderRequest::_internal_frame_count() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.frame_count_;
+}
+inline void RenderRequest::_internal_set_frame_count(::uint64_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.frame_count_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// RenderReply
+
+// uint64 last_frame_observered = 1;
+inline void RenderReply::clear_last_frame_observered() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.last_frame_observered_ = ::uint64_t{0u};
+  _impl_._has_bits_[0] &= ~0x00000001U;
+}
+inline ::uint64_t RenderReply::last_frame_observered() const {
+  // @@protoc_insertion_point(field_get:RenderReply.last_frame_observered)
+  return _internal_last_frame_observered();
+}
+inline void RenderReply::set_last_frame_observered(::uint64_t value) {
+  _internal_set_last_frame_observered(value);
+  _impl_._has_bits_[0] |= 0x00000001U;
+  // @@protoc_insertion_point(field_set:RenderReply.last_frame_observered)
+}
+inline ::uint64_t RenderReply::_internal_last_frame_observered() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.last_frame_observered_;
+}
+inline void RenderReply::_internal_set_last_frame_observered(::uint64_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.last_frame_observered_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -4063,6 +4555,168 @@ inline ::WindowRegisterBorderRequest* PROTOBUF_NONNULL DataSegment::mutable_wind
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::WindowRegisterBorderRequest* _msg = _internal_mutable_window_register_border_request();
   // @@protoc_insertion_point(field_mutable:DataSegment.window_register_border_request)
+  return _msg;
+}
+
+// .RenderRequest render_request = 10;
+inline bool DataSegment::has_render_request() const {
+  return data_case() == kRenderRequest;
+}
+inline bool DataSegment::_internal_has_render_request() const {
+  return data_case() == kRenderRequest;
+}
+inline void DataSegment::set_has_render_request() {
+  _impl_._oneof_case_[0] = kRenderRequest;
+}
+inline void DataSegment::clear_render_request() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (data_case() == kRenderRequest) {
+    if (GetArena() == nullptr) {
+      delete _impl_.data_.render_request_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.data_.render_request_);
+    }
+    clear_has_data();
+  }
+}
+inline ::RenderRequest* PROTOBUF_NULLABLE DataSegment::release_render_request() {
+  // @@protoc_insertion_point(field_release:DataSegment.render_request)
+  if (data_case() == kRenderRequest) {
+    clear_has_data();
+    auto* temp = reinterpret_cast<::RenderRequest*>(_impl_.data_.render_request_);
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.data_.render_request_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::RenderRequest& DataSegment::_internal_render_request() const {
+  return data_case() == kRenderRequest ? *reinterpret_cast<::RenderRequest*>(_impl_.data_.render_request_) : reinterpret_cast<::RenderRequest&>(::_RenderRequest_default_instance_);
+}
+inline const ::RenderRequest& DataSegment::render_request() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:DataSegment.render_request)
+  return _internal_render_request();
+}
+inline ::RenderRequest* PROTOBUF_NULLABLE DataSegment::unsafe_arena_release_render_request() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:DataSegment.render_request)
+  if (data_case() == kRenderRequest) {
+    clear_has_data();
+    auto* temp = reinterpret_cast<::RenderRequest*>(_impl_.data_.render_request_);
+    _impl_.data_.render_request_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void DataSegment::unsafe_arena_set_allocated_render_request(
+    ::RenderRequest* PROTOBUF_NULLABLE value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_data();
+  if (value) {
+    set_has_render_request();
+    _impl_.data_.render_request_ = reinterpret_cast<::google::protobuf::Message*>(value);
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:DataSegment.render_request)
+}
+inline ::RenderRequest* PROTOBUF_NONNULL DataSegment::_internal_mutable_render_request() {
+  if (data_case() != kRenderRequest) {
+    clear_data();
+    set_has_render_request();
+    _impl_.data_.render_request_ = reinterpret_cast<::google::protobuf::Message*>(
+        ::google::protobuf::Message::DefaultConstruct<::RenderRequest>(GetArena()));
+  }
+  return reinterpret_cast<::RenderRequest*>(_impl_.data_.render_request_);
+}
+inline ::RenderRequest* PROTOBUF_NONNULL DataSegment::mutable_render_request()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::RenderRequest* _msg = _internal_mutable_render_request();
+  // @@protoc_insertion_point(field_mutable:DataSegment.render_request)
+  return _msg;
+}
+
+// .RenderReply render_reply = 11;
+inline bool DataSegment::has_render_reply() const {
+  return data_case() == kRenderReply;
+}
+inline bool DataSegment::_internal_has_render_reply() const {
+  return data_case() == kRenderReply;
+}
+inline void DataSegment::set_has_render_reply() {
+  _impl_._oneof_case_[0] = kRenderReply;
+}
+inline void DataSegment::clear_render_reply() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (data_case() == kRenderReply) {
+    if (GetArena() == nullptr) {
+      delete _impl_.data_.render_reply_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.data_.render_reply_);
+    }
+    clear_has_data();
+  }
+}
+inline ::RenderReply* PROTOBUF_NULLABLE DataSegment::release_render_reply() {
+  // @@protoc_insertion_point(field_release:DataSegment.render_reply)
+  if (data_case() == kRenderReply) {
+    clear_has_data();
+    auto* temp = reinterpret_cast<::RenderReply*>(_impl_.data_.render_reply_);
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.data_.render_reply_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::RenderReply& DataSegment::_internal_render_reply() const {
+  return data_case() == kRenderReply ? *reinterpret_cast<::RenderReply*>(_impl_.data_.render_reply_) : reinterpret_cast<::RenderReply&>(::_RenderReply_default_instance_);
+}
+inline const ::RenderReply& DataSegment::render_reply() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:DataSegment.render_reply)
+  return _internal_render_reply();
+}
+inline ::RenderReply* PROTOBUF_NULLABLE DataSegment::unsafe_arena_release_render_reply() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:DataSegment.render_reply)
+  if (data_case() == kRenderReply) {
+    clear_has_data();
+    auto* temp = reinterpret_cast<::RenderReply*>(_impl_.data_.render_reply_);
+    _impl_.data_.render_reply_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void DataSegment::unsafe_arena_set_allocated_render_reply(
+    ::RenderReply* PROTOBUF_NULLABLE value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_data();
+  if (value) {
+    set_has_render_reply();
+    _impl_.data_.render_reply_ = reinterpret_cast<::google::protobuf::Message*>(value);
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:DataSegment.render_reply)
+}
+inline ::RenderReply* PROTOBUF_NONNULL DataSegment::_internal_mutable_render_reply() {
+  if (data_case() != kRenderReply) {
+    clear_data();
+    set_has_render_reply();
+    _impl_.data_.render_reply_ = reinterpret_cast<::google::protobuf::Message*>(
+        ::google::protobuf::Message::DefaultConstruct<::RenderReply>(GetArena()));
+  }
+  return reinterpret_cast<::RenderReply*>(_impl_.data_.render_reply_);
+}
+inline ::RenderReply* PROTOBUF_NONNULL DataSegment::mutable_render_reply()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::RenderReply* _msg = _internal_mutable_render_reply();
+  // @@protoc_insertion_point(field_mutable:DataSegment.render_reply)
   return _msg;
 }
 
