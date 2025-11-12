@@ -79,6 +79,10 @@ class RenderRequest;
 struct RenderRequestDefaultTypeInternal;
 extern RenderRequestDefaultTypeInternal _RenderRequest_default_instance_;
 extern const ::google::protobuf::internal::ClassDataFull RenderRequest_class_data_;
+class RunProgramRequest;
+struct RunProgramRequestDefaultTypeInternal;
+extern RunProgramRequestDefaultTypeInternal _RunProgramRequest_default_instance_;
+extern const ::google::protobuf::internal::ClassDataFull RunProgramRequest_class_data_;
 class WindowFocusReply;
 struct WindowFocusReplyDefaultTypeInternal;
 extern WindowFocusReplyDefaultTypeInternal _WindowFocusReply_default_instance_;
@@ -405,7 +409,7 @@ class WindowReorderRequest final : public ::google::protobuf::Message
     return *reinterpret_cast<const WindowReorderRequest*>(
         &_WindowReorderRequest_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 9;
+  static constexpr int kIndexInFileMessages = 10;
   friend void swap(WindowReorderRequest& a, WindowReorderRequest& b) { a.Swap(&b); }
   inline void Swap(WindowReorderRequest* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -604,7 +608,7 @@ class WindowRegisterBorderRequest final : public ::google::protobuf::Message
     return *reinterpret_cast<const WindowRegisterBorderRequest*>(
         &_WindowRegisterBorderRequest_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 7;
+  static constexpr int kIndexInFileMessages = 8;
   friend void swap(WindowRegisterBorderRequest& a, WindowRegisterBorderRequest& b) { a.Swap(&b); }
   inline void Swap(WindowRegisterBorderRequest* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -843,7 +847,7 @@ class WindowMapRequest final : public ::google::protobuf::Message
     return *reinterpret_cast<const WindowMapRequest*>(
         &_WindowMapRequest_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 3;
+  static constexpr int kIndexInFileMessages = 4;
   friend void swap(WindowMapRequest& a, WindowMapRequest& b) { a.Swap(&b); }
   inline void Swap(WindowMapRequest* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1082,7 +1086,7 @@ class WindowMapReply final : public ::google::protobuf::Message
     return *reinterpret_cast<const WindowMapReply*>(
         &_WindowMapReply_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 10;
+  static constexpr int kIndexInFileMessages = 11;
   friend void swap(WindowMapReply& a, WindowMapReply& b) { a.Swap(&b); }
   inline void Swap(WindowMapReply* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1333,7 +1337,7 @@ class WindowFocusRequest final : public ::google::protobuf::Message
     return *reinterpret_cast<const WindowFocusRequest*>(
         &_WindowFocusRequest_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 8;
+  static constexpr int kIndexInFileMessages = 9;
   friend void swap(WindowFocusRequest& a, WindowFocusRequest& b) { a.Swap(&b); }
   inline void Swap(WindowFocusRequest* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1524,7 +1528,7 @@ class WindowFocusReply final : public ::google::protobuf::Message
     return *reinterpret_cast<const WindowFocusReply*>(
         &_WindowFocusReply_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 6;
+  static constexpr int kIndexInFileMessages = 7;
   friend void swap(WindowFocusReply& a, WindowFocusReply& b) { a.Swap(&b); }
   inline void Swap(WindowFocusReply* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1658,6 +1662,202 @@ class WindowFocusReply final : public ::google::protobuf::Message
 };
 
 extern const ::google::protobuf::internal::ClassDataFull WindowFocusReply_class_data_;
+// -------------------------------------------------------------------
+
+class RunProgramRequest final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:RunProgramRequest) */ {
+ public:
+  inline RunProgramRequest() : RunProgramRequest(nullptr) {}
+  ~RunProgramRequest() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(RunProgramRequest* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(RunProgramRequest));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR RunProgramRequest(::google::protobuf::internal::ConstantInitialized);
+
+  inline RunProgramRequest(const RunProgramRequest& from) : RunProgramRequest(nullptr, from) {}
+  inline RunProgramRequest(RunProgramRequest&& from) noexcept
+      : RunProgramRequest(nullptr, ::std::move(from)) {}
+  inline RunProgramRequest& operator=(const RunProgramRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RunProgramRequest& operator=(RunProgramRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const RunProgramRequest& default_instance() {
+    return *reinterpret_cast<const RunProgramRequest*>(
+        &_RunProgramRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 3;
+  friend void swap(RunProgramRequest& a, RunProgramRequest& b) { a.Swap(&b); }
+  inline void Swap(RunProgramRequest* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RunProgramRequest* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  RunProgramRequest* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<RunProgramRequest>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const RunProgramRequest& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const RunProgramRequest& from) { RunProgramRequest::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
+                        const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(RunProgramRequest* PROTOBUF_NONNULL other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "RunProgramRequest"; }
+
+ protected:
+  explicit RunProgramRequest(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  RunProgramRequest(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const RunProgramRequest& from);
+  RunProgramRequest(
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, RunProgramRequest&& from) noexcept
+      : RunProgramRequest(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
+  static void* PROTOBUF_NONNULL PlacementNew_(
+      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static constexpr auto InternalNewImpl_();
+
+ public:
+  static constexpr auto InternalGenerateClassData_();
+
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kCommandFieldNumber = 1,
+  };
+  // string command = 1;
+  void clear_command() ;
+  const ::std::string& command() const;
+  template <typename Arg_ = const ::std::string&, typename... Args_>
+  void set_command(Arg_&& arg, Args_... args);
+  ::std::string* PROTOBUF_NONNULL mutable_command();
+  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_command();
+  void set_allocated_command(::std::string* PROTOBUF_NULLABLE value);
+
+  private:
+  const ::std::string& _internal_command() const;
+  PROTOBUF_ALWAYS_INLINE void _internal_set_command(const ::std::string& value);
+  ::std::string* PROTOBUF_NONNULL _internal_mutable_command();
+
+  public:
+  // @@protoc_insertion_point(class_scope:RunProgramRequest)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<0, 1,
+                                   0, 33,
+                                   2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+        const RunProgramRequest& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr command_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_windowmanager_2eproto;
+};
+
+extern const ::google::protobuf::internal::ClassDataFull RunProgramRequest_class_data_;
 // -------------------------------------------------------------------
 
 class RenderRequest final : public ::google::protobuf::Message
@@ -2097,7 +2297,7 @@ class MousePressReply final : public ::google::protobuf::Message
     return *reinterpret_cast<const MousePressReply*>(
         &_MousePressReply_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 5;
+  static constexpr int kIndexInFileMessages = 6;
   friend void swap(MousePressReply& a, MousePressReply& b) { a.Swap(&b); }
   inline void Swap(MousePressReply* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2312,7 +2512,7 @@ class MouseMoveReply final : public ::google::protobuf::Message
     return *reinterpret_cast<const MouseMoveReply*>(
         &_MouseMoveReply_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 4;
+  static constexpr int kIndexInFileMessages = 5;
   friend void swap(MouseMoveReply& a, MouseMoveReply& b) { a.Swap(&b); }
   inline void Swap(MouseMoveReply* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2527,9 +2727,10 @@ class DataSegment final : public ::google::protobuf::Message
     kWindowRegisterBorderRequest = 9,
     kRenderRequest = 10,
     kRenderReply = 11,
+    kRunProgramRequest = 12,
     DATA_NOT_SET = 0,
   };
-  static constexpr int kIndexInFileMessages = 11;
+  static constexpr int kIndexInFileMessages = 12;
   friend void swap(DataSegment& a, DataSegment& b) { a.Swap(&b); }
   inline void Swap(DataSegment* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2628,6 +2829,7 @@ class DataSegment final : public ::google::protobuf::Message
     kWindowRegisterBorderRequestFieldNumber = 9,
     kRenderRequestFieldNumber = 10,
     kRenderReplyFieldNumber = 11,
+    kRunProgramRequestFieldNumber = 12,
   };
   // .WindowRequest window_request = 1;
   bool has_window_request() const;
@@ -2838,6 +3040,25 @@ class DataSegment final : public ::google::protobuf::Message
   ::RenderReply* PROTOBUF_NONNULL _internal_mutable_render_reply();
 
   public:
+  // .RunProgramRequest run_program_request = 12;
+  bool has_run_program_request() const;
+  private:
+  bool _internal_has_run_program_request() const;
+
+  public:
+  void clear_run_program_request() ;
+  const ::RunProgramRequest& run_program_request() const;
+  [[nodiscard]] ::RunProgramRequest* PROTOBUF_NULLABLE release_run_program_request();
+  ::RunProgramRequest* PROTOBUF_NONNULL mutable_run_program_request();
+  void set_allocated_run_program_request(::RunProgramRequest* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_run_program_request(::RunProgramRequest* PROTOBUF_NULLABLE value);
+  ::RunProgramRequest* PROTOBUF_NULLABLE unsafe_arena_release_run_program_request();
+
+  private:
+  const ::RunProgramRequest& _internal_run_program_request() const;
+  ::RunProgramRequest* PROTOBUF_NONNULL _internal_mutable_run_program_request();
+
+  public:
   void clear_data();
   DataCase data_case() const;
   // @@protoc_insertion_point(class_scope:DataSegment)
@@ -2854,11 +3075,12 @@ class DataSegment final : public ::google::protobuf::Message
   void set_has_window_register_border_request();
   void set_has_render_request();
   void set_has_render_reply();
+  void set_has_run_program_request();
   inline bool has_data() const;
   inline void clear_has_data();
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<0, 11,
-                                   11, 0,
+  static const ::google::protobuf::internal::TcParseTable<0, 12,
+                                   12, 0,
                                    2>
       _table_;
 
@@ -2891,6 +3113,7 @@ class DataSegment final : public ::google::protobuf::Message
       ::google::protobuf::Message* PROTOBUF_NULLABLE window_register_border_request_;
       ::google::protobuf::Message* PROTOBUF_NULLABLE render_request_;
       ::google::protobuf::Message* PROTOBUF_NULLABLE render_reply_;
+      ::google::protobuf::Message* PROTOBUF_NULLABLE run_program_request_;
     } data_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::uint32_t _oneof_case_[1];
@@ -2958,7 +3181,7 @@ class Packet final : public ::google::protobuf::Message
     return *reinterpret_cast<const Packet*>(
         &_Packet_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 12;
+  static constexpr int kIndexInFileMessages = 13;
   friend void swap(Packet& a, Packet& b) { a.Swap(&b); }
   inline void Swap(Packet* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -3193,6 +3416,75 @@ inline ::uint64_t RenderReply::_internal_last_frame_observered() const {
 inline void RenderReply::_internal_set_last_frame_observered(::uint64_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.last_frame_observered_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// RunProgramRequest
+
+// string command = 1;
+inline void RunProgramRequest::clear_command() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.command_.ClearToEmpty();
+  _impl_._has_bits_[0] &= ~0x00000001U;
+}
+inline const ::std::string& RunProgramRequest::command() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:RunProgramRequest.command)
+  return _internal_command();
+}
+template <typename Arg_, typename... Args_>
+PROTOBUF_ALWAYS_INLINE void RunProgramRequest::set_command(Arg_&& arg, Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001U;
+  _impl_.command_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:RunProgramRequest.command)
+}
+inline ::std::string* PROTOBUF_NONNULL RunProgramRequest::mutable_command()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::std::string* _s = _internal_mutable_command();
+  // @@protoc_insertion_point(field_mutable:RunProgramRequest.command)
+  return _s;
+}
+inline const ::std::string& RunProgramRequest::_internal_command() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.command_.Get();
+}
+inline void RunProgramRequest::_internal_set_command(const ::std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001U;
+  _impl_.command_.Set(value, GetArena());
+}
+inline ::std::string* PROTOBUF_NONNULL RunProgramRequest::_internal_mutable_command() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_._has_bits_[0] |= 0x00000001U;
+  return _impl_.command_.Mutable( GetArena());
+}
+inline ::std::string* PROTOBUF_NULLABLE RunProgramRequest::release_command() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:RunProgramRequest.command)
+  if ((_impl_._has_bits_[0] & 0x00000001U) == 0) {
+    return nullptr;
+  }
+  _impl_._has_bits_[0] &= ~0x00000001U;
+  auto* released = _impl_.command_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.command_.Set("", GetArena());
+  }
+  return released;
+}
+inline void RunProgramRequest::set_allocated_command(::std::string* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001U;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001U;
+  }
+  _impl_.command_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.command_.IsDefault()) {
+    _impl_.command_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:RunProgramRequest.command)
 }
 
 // -------------------------------------------------------------------
@@ -4717,6 +5009,87 @@ inline ::RenderReply* PROTOBUF_NONNULL DataSegment::mutable_render_reply()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::RenderReply* _msg = _internal_mutable_render_reply();
   // @@protoc_insertion_point(field_mutable:DataSegment.render_reply)
+  return _msg;
+}
+
+// .RunProgramRequest run_program_request = 12;
+inline bool DataSegment::has_run_program_request() const {
+  return data_case() == kRunProgramRequest;
+}
+inline bool DataSegment::_internal_has_run_program_request() const {
+  return data_case() == kRunProgramRequest;
+}
+inline void DataSegment::set_has_run_program_request() {
+  _impl_._oneof_case_[0] = kRunProgramRequest;
+}
+inline void DataSegment::clear_run_program_request() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (data_case() == kRunProgramRequest) {
+    if (GetArena() == nullptr) {
+      delete _impl_.data_.run_program_request_;
+    } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+      ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.data_.run_program_request_);
+    }
+    clear_has_data();
+  }
+}
+inline ::RunProgramRequest* PROTOBUF_NULLABLE DataSegment::release_run_program_request() {
+  // @@protoc_insertion_point(field_release:DataSegment.run_program_request)
+  if (data_case() == kRunProgramRequest) {
+    clear_has_data();
+    auto* temp = reinterpret_cast<::RunProgramRequest*>(_impl_.data_.run_program_request_);
+    if (GetArena() != nullptr) {
+      temp = ::google::protobuf::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.data_.run_program_request_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::RunProgramRequest& DataSegment::_internal_run_program_request() const {
+  return data_case() == kRunProgramRequest ? *reinterpret_cast<::RunProgramRequest*>(_impl_.data_.run_program_request_) : reinterpret_cast<::RunProgramRequest&>(::_RunProgramRequest_default_instance_);
+}
+inline const ::RunProgramRequest& DataSegment::run_program_request() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:DataSegment.run_program_request)
+  return _internal_run_program_request();
+}
+inline ::RunProgramRequest* PROTOBUF_NULLABLE DataSegment::unsafe_arena_release_run_program_request() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:DataSegment.run_program_request)
+  if (data_case() == kRunProgramRequest) {
+    clear_has_data();
+    auto* temp = reinterpret_cast<::RunProgramRequest*>(_impl_.data_.run_program_request_);
+    _impl_.data_.run_program_request_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void DataSegment::unsafe_arena_set_allocated_run_program_request(
+    ::RunProgramRequest* PROTOBUF_NULLABLE value) {
+  // We rely on the oneof clear method to free the earlier contents
+  // of this oneof. We can directly use the pointer we're given to
+  // set the new value.
+  clear_data();
+  if (value) {
+    set_has_run_program_request();
+    _impl_.data_.run_program_request_ = reinterpret_cast<::google::protobuf::Message*>(value);
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:DataSegment.run_program_request)
+}
+inline ::RunProgramRequest* PROTOBUF_NONNULL DataSegment::_internal_mutable_run_program_request() {
+  if (data_case() != kRunProgramRequest) {
+    clear_data();
+    set_has_run_program_request();
+    _impl_.data_.run_program_request_ = reinterpret_cast<::google::protobuf::Message*>(
+        ::google::protobuf::Message::DefaultConstruct<::RunProgramRequest>(GetArena()));
+  }
+  return reinterpret_cast<::RunProgramRequest*>(_impl_.data_.run_program_request_);
+}
+inline ::RunProgramRequest* PROTOBUF_NONNULL DataSegment::mutable_run_program_request()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::RunProgramRequest* _msg = _internal_mutable_run_program_request();
+  // @@protoc_insertion_point(field_mutable:DataSegment.run_program_request)
   return _msg;
 }
 

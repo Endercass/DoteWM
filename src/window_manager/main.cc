@@ -11,6 +11,7 @@
 #include <X11/extensions/shape.h>
 #include <cstdlib>
 #include <mutex>
+#include <thread>
 
 #undef Status
 #undef Bool
@@ -254,29 +255,30 @@ void NokoWindowManager::run() {
   while (true) {
     while (process_events())
       ;
-
     glClearColor(1, 1, 1, 1);
     glClearDepth(1.2);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    ipc_step();
     for (auto window : windows) {
       render_window(window.second.window);
     }
 
-    int ret = ipc_step();
+    glXSwapBuffers(display, output_window);
 
-    Packet packet;
-    auto segment = packet.add_segments();
-
-    auto reply = segment->mutable_render_reply();
-    reply->set_last_frame_observered(0);
-
-    size_t len = packet.ByteSizeLong();
-    char* buf = (char*)malloc(len);
-    packet.SerializeToArray(buf, len);
-
-    nn_send(ipc_sock, buf, len, 0);
-
+    // Packet packet;
+    // auto segment = packet.add_segments();
+    //
+    // auto reply = segment->mutable_render_reply();
+    // reply->set_last_frame_observered(0);
+    //
+    // size_t len = packet.ByteSizeLong();
+    // char* buf = (char*)malloc(len);
+    // packet.SerializeToArray(buf, len);
+    //
+    // nn_send(ipc_sock, buf, len, 0);
+    // free(buf);
+    //
     // render our windows
 
     // for (int i = 0; i < window_count; i++) {
@@ -873,6 +875,14 @@ int main(int argc, char* argv[]) {
   auto wm = NokoWindowManager::create();
   if (!wm.has_value()) {
     printf("wm initialize fail\n");
+  }
+
+  int pid = fork();
+  if (pid == 0) {
+    char* args[] = {
+        (char*)"/home/foxmoss/Projects/cef-project/build/Debug/minimal", NULL};
+    execv("/home/foxmoss/Projects/cef-project/build/Debug/minimal", args);
+    exit(1);
   }
 
   wm.value()->run();

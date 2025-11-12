@@ -1,17 +1,16 @@
 syntax = "proto3";
 
-// requests are from the browser
-// replies are from the window manager
+enum MouseButtonState {
+  MOUSE_LEFT_DOWN = 0;
+  MOUSE_LEFT_UP = 1;
+  MOUSE_RIGHT_DOWN = 2;
+  MOUSE_RIGHT_UP = 3;
+}
+
+// REQUESTS (Browser -> Window Manager)
 
 message WindowRequest {
   uint64 window = 1;
-}
-
-message RenderRequest {
-  uint64 frame_count = 1;
-}
-message RenderReply {
-  uint64 last_frame_observered = 1;
 }
 
 message WindowMapRequest {
@@ -22,36 +21,6 @@ message WindowMapRequest {
   uint32 height = 5;
 }
 
-message MouseMoveReply {
-  uint32 x = 1;
-  uint32 y = 2;
-}
-
-enum MouseButtonState {
-  MOUSE_LEFT_DOWN = 0;
-  MOUSE_LEFT_UP = 1;
-  MOUSE_RIGHT_DOWN = 2;
-  MOUSE_RIGHT_UP = 3;
-}
-
-message MousePressReply {
-  uint32 x = 1;
-  uint32 y = 2;
-  MouseButtonState state = 3;
-}
-
-message WindowFocusReply {
-  uint64 window = 1;
-}
-
-message WindowRegisterBorderRequest {
-  uint64 window = 1;
-  int32 x = 2;  // all of these values are the border arround your window
-  int32 y = 3;
-  int32 width = 4;
-  int32 height = 5;
-}
-
 message WindowFocusRequest {
   uint64 window = 1;
 }
@@ -59,6 +28,24 @@ message WindowFocusRequest {
 message WindowReorderRequest {
   repeated uint64 windows = 1;
 }
+
+message WindowRegisterBorderRequest {
+  uint64 window = 1;
+  int32 x = 2;  // all of these values are the border around your window
+  int32 y = 3;
+  int32 width = 4;
+  int32 height = 5;
+}
+
+message RenderRequest {
+  uint64 frame_count = 1;
+}
+
+message RunProgramRequest {
+  string command = 1;
+}
+
+// REPLIES (Window Manager -> Browser)
 
 message WindowMapReply {
   uint64 window = 1;
@@ -68,6 +55,27 @@ message WindowMapReply {
   uint32 height = 5;
   bool visible = 6;
 }
+
+message WindowFocusReply {
+  uint64 window = 1;
+}
+
+message MouseMoveReply {
+  uint32 x = 1;
+  uint32 y = 2;
+}
+
+message MousePressReply {
+  uint32 x = 1;
+  uint32 y = 2;
+  MouseButtonState state = 3;
+}
+
+message RenderReply {
+  uint64 last_frame_observered = 1;
+}
+
+// PROTOCOL WRAPPER
 
 message DataSegment {
   oneof data {
@@ -82,6 +90,7 @@ message DataSegment {
     WindowRegisterBorderRequest window_register_border_request = 9;
     RenderRequest render_request = 10;
     RenderReply render_reply = 11;
+    RunProgramRequest run_program_request = 12;
   }
 }
 

@@ -12,6 +12,7 @@
 #include <X11/extensions/shape.h>
 #include <nn.h>
 #include <pair.h>
+#include <unistd.h>
 #include <condition_variable>
 #include <cstddef>
 #include <cstdio>
@@ -125,7 +126,18 @@ class NokoWindowManager {
                 segment.mutable_window_register_border_request()->width(),
                 segment.mutable_window_register_border_request()->height());
           } else if (segment.data_case() == DataSegment::kRenderRequest) {
-            glXSwapBuffers(display, output_window);
+          } else if (segment.data_case() == DataSegment::kRunProgramRequest) {
+            int pid = fork();
+            if (pid == 0) {
+              const char* c_str = segment.mutable_run_program_request()
+                                      ->mutable_command()
+                                      ->c_str();
+              printf("yo %s\n", c_str);
+              char* args[] = {(char*)c_str, NULL};
+              char* env[] = {(char*)"DISPLAY=:1", NULL};
+              execve(c_str, args, env);
+              exit(1);
+            }
           }
         }
 

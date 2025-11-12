@@ -81,6 +81,10 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
       } else if (segment_json["t"] == "render_request") {
         auto segment = packet.add_segments();
         segment->mutable_render_request();
+      } else if (segment_json["t"] == "run_program") {
+        auto segment = packet.add_segments();
+        auto reply = segment->mutable_run_program_request();
+        reply->set_command(segment_json["command"]);
       }
     }
     if (packet.segments_size() != 0) {
