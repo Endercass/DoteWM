@@ -173,6 +173,8 @@ class NokoWindowManager {
   Window overlay_window;
   Window output_window;
 
+  int xi_opcode;
+
   std::optional<Window> base_window;
   Atom client_list_atom;
 

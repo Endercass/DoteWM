@@ -6,12 +6,15 @@
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/extensions/XInput2.h>
 #include <X11/extensions/Xcomposite.h>
 #include <X11/extensions/Xfixes.h>
 #include <X11/extensions/shape.h>
 #include <cstdlib>
 #include <mutex>
 #include <thread>
+
+#define X11_Success 0
 
 #undef Status
 #undef Bool
@@ -181,7 +184,7 @@ void NokoWindowManager::register_base_window(Window base) {
   changes.y = 0;
   changes.width = screen_width;
   changes.height = screen_height;
-  changes.stack_mode = BottomIf;
+  changes.stack_mode = Below;
   XConfigureWindow(display, base, CWX | CWY | CWWidth | CWHeight | CWStackMode,
                    &changes);
   printf("registering\n");
@@ -389,164 +392,210 @@ bool NokoWindowManager::process_events() {
     XEvent event;
     XNextEvent(display, &event);
 
-    int type = event.type;
+    if (event.xcookie.type != GenericEvent ||
+        event.xcookie.extension != xi_opcode) {
+      int type = event.type;
 
-    if (type == CreateNotify) {
-      Window x_window = event.xcreatewindow.window;
-      if (std::find(blacklisted_windows.begin(), blacklisted_windows.end(),
-                    x_window) != blacklisted_windows.end())
+      if (type == CreateNotify) {
+        Window x_window = event.xcreatewindow.window;
+        if (std::find(blacklisted_windows.begin(), blacklisted_windows.end(),
+                      x_window) != blacklisted_windows.end())
+          goto done;
+
+        windows[x_window] = {};
+        NokoWindow* window = &windows[x_window];
+
+        window->exists = 1;
+        window->window = x_window;
+
+        window->opacity = 1.0;
+        gl_create_vao_vbo_ibo(&window->vao, &window->vbo, &window->ibo);
+
+        // set up some other stuff for the window
+        // this is saying we want focus change and button events from the
+        // window
+
+        XSelectInput(display, x_window, FocusChangeMask | PointerMotionMask);
+        XGrabButton(display, AnyButton, AnyModifier, x_window, 1,
+                    ButtonPressMask | ButtonReleaseMask | ButtonMotionMask,
+                    GrabModeSync, GrabModeSync, 0, 0);
+
+        update_client_list();
+        printf("created a window!\n");
+        if (base_window.has_value()) {
+          XLowerWindow(display, base_window.value());
+        }
+
+      } else if (type == ConfigureNotify ||
+                 type == MapNotify /* show window */ ||
+                 type == UnmapNotify /* hide window */) {
+        Window x_window;
+
+        if (type == ConfigureNotify)
+          x_window = event.xconfigure.window;
+        else if (type == MapNotify)
+          x_window = event.xmap.window;
+        else if (type == UnmapNotify)
+          x_window = event.xunmap.window;
+
+        if (std::find(blacklisted_windows.begin(), blacklisted_windows.end(),
+                      x_window) != blacklisted_windows.end())
+          goto done;
+
+        if (windows.find(x_window) == windows.end())
+          goto done;
+
+        NokoWindow* window = &windows[x_window];
+
+        window->window = x_window;
+
+        // copy everything from the map
+        XWindowAttributes attributes;
+
+        XGetWindowAttributes(display, window->window, &attributes);
+
+        window->visible = attributes.map_state == IsViewable;
+
+        window->x = attributes.x;
+        window->y = attributes.y;
+
+        window->depth = 0.1;
+
+        window->width = attributes.width;
+        window->height = attributes.height;
+
+        // serialize data to client if window not the base window
+        if (!base_window.has_value() || base_window.value() != window->window) {
+          Packet packet;
+          auto segment = packet.add_segments();
+          auto reply = segment->mutable_window_map_reply();
+          reply->set_window(window->window);
+          reply->set_visible(window->visible);
+          reply->set_x(window->x);
+          reply->set_y(window->y);
+          reply->set_width(window->width);
+          reply->set_height(window->height);
+
+          size_t len = packet.ByteSizeLong();
+          char* buf = (char*)malloc(len);
+          packet.SerializeToArray(buf, len);
+
+          nn_send(ipc_sock, buf, len, 0);
+          free(buf);
+        }
+
+        // we're updating the pixel coords
+        if (window->x_pixmap) {
+          XFreePixmap(display, window->x_pixmap);
+          window->x_pixmap = 0;
+        }
+
+        if (window->pixmap) {
+          glXDestroyPixmap(display, window->pixmap);
+          window->pixmap = 0;
+        }
+
+        GLfloat vertex_positions[4 * 2] = {
+            -1, -1, 1, -1, 1, 1, -1, 1,
+        };
+        GLubyte indices[6] = {// top tri
+                              0, 1, 2,
+                              // bottom tri
+                              0, 2, 3};
+
+        window->index_count = 6;
+        gl_set_vao_vbo_ibo_data(window->vao, window->vbo,
+                                sizeof(vertex_positions), vertex_positions,
+                                window->ibo, sizeof(indices), indices);
+
+        if (base_window.has_value()) {
+          XLowerWindow(display, base_window.value());
+        }
+
+      } else if (type == DestroyNotify) {
+        Window x_window = event.xdestroywindow.window;
+        if (!x_window)
+          goto done;
+
+        if (windows.find(x_window) == windows.end())
+          goto done;
+
+        windows.erase(x_window);
+
+        update_client_list();
+      } else if (type == ButtonPress || type == ButtonRelease) {
+        Window x_window = event.xbutton.window;
+
+        if (type == ButtonPress) {
+          focus_window(x_window);
+        }
+
+        if (base_window.has_value() &&
+            event.xbutton.window != base_window.value()) {
+          XEvent forward_event;
+          forward_event.type = type;
+          forward_event.xbutton.type = type;
+          forward_event.xbutton.window = base_window.value();
+          forward_event.xbutton.display = display;
+          forward_event.xbutton.send_event = true;
+          forward_event.xbutton.root = root_window;
+          forward_event.xbutton.subwindow = base_window.value();
+          forward_event.xbutton.x_root = event.xbutton.x_root;
+          forward_event.xbutton.y_root = event.xbutton.y_root;
+          forward_event.xbutton.x = event.xbutton.x_root;
+          forward_event.xbutton.y = event.xbutton.y_root;
+          forward_event.xbutton.state = event.xbutton.state;
+          forward_event.xbutton.button = event.xbutton.button;
+          forward_event.xbutton.time = CurrentTime;
+          XSendEvent(display, base_window.value(), true,
+                     type == ButtonPress ? ButtonPressMask : ButtonReleaseMask,
+                     &forward_event);
+        }
+
+        XAllowEvents(display, AsyncPointer, CurrentTime);
+
+        XSendEvent(display, event.xbutton.window, true,
+                   type == ButtonPress ? ButtonPressMask : ButtonReleaseMask,
+                   &event);
+
+      } else if (type == KeyPress || type == KeyRelease) {
+        // TODO
+      }
+    } else {
+      // xi events only
+      Window root_return, child_return;
+      int root_x_return, root_y_return;
+      int win_x_return, win_y_return;
+      unsigned int mask_return;
+      int retval = XQueryPointer(display, root_window, &root_return,
+                                 &child_return, &root_x_return, &root_y_return,
+                                 &win_x_return, &win_y_return, &mask_return);
+
+      if (!retval) {
         goto done;
-
-      windows[x_window] = {};
-      NokoWindow* window = &windows[x_window];
-
-      window->exists = 1;
-      window->window = x_window;
-
-      window->opacity = 1.0;
-      gl_create_vao_vbo_ibo(&window->vao, &window->vbo, &window->ibo);
-
-      // set up some other stuff for the window
-      // this is saying we want focus change and button events from the
-      // window
-
-      XSelectInput(display, x_window, FocusChangeMask | PointerMotionMask);
-      XGrabButton(display, AnyButton, AnyModifier, x_window, 1,
-                  ButtonPressMask | ButtonReleaseMask | ButtonMotionMask,
-                  GrabModeSync, GrabModeSync, 0, 0);
-
-      update_client_list();
-      printf("created a window!\n");
-
-    } else if (type == ConfigureNotify || type == MapNotify /* show window */ ||
-               type == UnmapNotify /* hide window */) {
-      Window x_window;
-
-      if (type == ConfigureNotify)
-        x_window = event.xconfigure.window;
-      else if (type == MapNotify)
-        x_window = event.xmap.window;
-      else if (type == UnmapNotify)
-        x_window = event.xunmap.window;
-
-      if (std::find(blacklisted_windows.begin(), blacklisted_windows.end(),
-                    x_window) != blacklisted_windows.end())
-        goto done;
-
-      if (windows.find(x_window) == windows.end())
-        goto done;
-
-      NokoWindow* window = &windows[x_window];
-
-      window->window = x_window;
-
-      // copy everything from the map
-      XWindowAttributes attributes;
-
-      XGetWindowAttributes(display, window->window, &attributes);
-
-      window->visible = attributes.map_state == IsViewable;
-
-      window->x = attributes.x;
-      window->y = attributes.y;
-
-      window->depth = 0.1;
-
-      window->width = attributes.width;
-      window->height = attributes.height;
-
-      // serialize data to client if window not the base window
-      if (!base_window.has_value() || base_window.value() != window->window) {
-        Packet packet;
-        auto segment = packet.add_segments();
-        auto reply = segment->mutable_window_map_reply();
-        reply->set_window(window->window);
-        reply->set_visible(window->visible);
-        reply->set_x(window->x);
-        reply->set_y(window->y);
-        reply->set_width(window->width);
-        reply->set_height(window->height);
-
-        size_t len = packet.ByteSizeLong();
-        char* buf = (char*)malloc(len);
-        packet.SerializeToArray(buf, len);
-
-        nn_send(ipc_sock, buf, len, 0);
-        free(buf);
       }
 
-      // we're updating the pixel coords
-      if (window->x_pixmap) {
-        XFreePixmap(display, window->x_pixmap);
-        window->x_pixmap = 0;
-      }
-
-      if (window->pixmap) {
-        glXDestroyPixmap(display, window->pixmap);
-        window->pixmap = 0;
-      }
-
-      GLfloat vertex_positions[4 * 2] = {
-          -1, -1, 1, -1, 1, 1, -1, 1,
-      };
-      GLubyte indices[6] = {// top tri
-                            0, 1, 2,
-                            // bottom tri
-                            0, 2, 3};
-
-      window->index_count = 6;
-      gl_set_vao_vbo_ibo_data(window->vao, window->vbo,
-                              sizeof(vertex_positions), vertex_positions,
-                              window->ibo, sizeof(indices), indices);
-    } else if (type == DestroyNotify) {
-      Window x_window = event.xdestroywindow.window;
-      if (!x_window)
-        goto done;
-
-      if (windows.find(x_window) == windows.end())
-        goto done;
-
-      windows.erase(x_window);
-
-      update_client_list();
-    } else if (type == ButtonPress || type == ButtonRelease) {
-      Window x_window = event.xbutton.window;
-
-      if (type == ButtonPress) {
-        focus_window(x_window);
-      }
-
-      // pass the event on to the client
-      XAllowEvents(display, ReplayPointer, CurrentTime);
-
-      // if we shouldn't pass the event on to the client, we still need to
-      // sync the pointer or else we hang
-      // XAllowEvents(wm->display, SyncPointer, CurrentTime);
+      // got value, forward to base window
 
       if (base_window.has_value()) {
-        Packet packet;
-        auto segment = packet.add_segments();
-        auto reply = segment->mutable_mouse_press_reply();
-        reply->set_x(event.xbutton.x);
-        reply->set_y(event.xbutton.y);
-        reply->set_state(
-            (type == ButtonPress
-                 ? (event.xbutton.button == Button1 ? MOUSE_LEFT_DOWN
-                                                    : MOUSE_RIGHT_DOWN)
-                 : (event.xbutton.button == Button1 ? MOUSE_LEFT_UP
-                                                    : MOUSE_RIGHT_UP)));
-
-        size_t len = packet.ByteSizeLong();
-        char* buf = (char*)malloc(len);
-        packet.SerializeToArray(buf, len);
-
-        nn_send(ipc_sock, buf, len, 0);
-        free(buf);
+        XEvent forward_event;
+        forward_event.type = MotionNotify;
+        forward_event.xmotion.type = MotionNotify;
+        forward_event.xmotion.window = base_window.value();
+        forward_event.xmotion.display = display;
+        forward_event.xmotion.send_event = true;
+        forward_event.xmotion.root = root_window;
+        forward_event.xmotion.subwindow = base_window.value();
+        forward_event.xmotion.x_root = root_x_return;
+        forward_event.xmotion.y_root = root_y_return;
+        forward_event.xmotion.x = root_x_return;
+        forward_event.xmotion.y = root_y_return;
+        forward_event.xmotion.time = CurrentTime;
+        XSendEvent(display, base_window.value(), true, PointerMotionMask,
+                   &forward_event);
       }
-
-    } else if (type == KeyPress || type == KeyRelease) {
-      // TODO
     }
+    XFreeEventData(display, &event.xcookie);
   }
 done:
   return events_left;
@@ -568,10 +617,6 @@ void NokoWindowManager::update_client_list() {
 
 void NokoWindowManager::focus_window(Window window_id) {
   Window window = windows[window_id].window;
-
-  if (base_window.has_value()) {
-    XLowerWindow(display, base_window.value());
-  }
 
   if (base_window.has_value() && window == base_window.value())
     return;
@@ -828,7 +873,29 @@ std::optional<NokoWindowManager*> NokoWindowManager::create() {
   ret->blacklisted_windows.push_back(ret->overlay_window);
   ret->blacklisted_windows.push_back(ret->output_window);
 
-  gettimeofday(&ret->previous_time, 0);
+  // https://stackoverflow.com/questions/62448181/how-do-i-monitor-mouse-movement-events-in-all-windows-not-just-one-on-x11#62469861
+  int event, error;
+  if (!XQueryExtension(ret->display, "XInputExtension", &ret->xi_opcode, &event,
+                       &error)) {
+    return {};
+  }
+
+  int major = 2;
+  int minor = 0;
+  int retval = XIQueryVersion(ret->display, &major, &minor);
+  if (retval != X11_Success) {
+    return {};
+  }
+
+  unsigned char mask_bytes[(XI_LASTEVENT + 7) / 8] = {0};
+  // select direct motion events
+  XISetMask(mask_bytes, XI_RawMotion);
+
+  XIEventMask evmasks[1];
+  evmasks[0].deviceid = XIAllMasterDevices;
+  evmasks[0].mask_len = sizeof(mask_bytes);
+  evmasks[0].mask = mask_bytes;
+  XISelectEvents(ret->display, ret->root_window, evmasks, 1);
 
   return ret;
 }
