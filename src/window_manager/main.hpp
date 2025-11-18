@@ -126,6 +126,10 @@ class NokoWindowManager {
                 segment.mutable_window_register_border_request()->width(),
                 segment.mutable_window_register_border_request()->height());
           } else if (segment.data_case() == DataSegment::kRenderRequest) {
+          } else if (segment.data_case() == DataSegment::kWindowCloseRequest) {
+            XDestroyWindow(display,
+                           segment.mutable_window_close_request()->window());
+
           } else if (segment.data_case() == DataSegment::kRunProgramRequest) {
             int pid = fork();
             if (pid == 0) {
@@ -240,5 +244,7 @@ class NokoWindowManager {
   int float_to_y_coordinate(float x);
 
   void update_client_list();
+
+  std::optional<Window> focused_window;
   void focus_window(Window window_id);
 };

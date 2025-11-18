@@ -340,7 +340,7 @@ void NokoWindowManager::render_window(unsigned window_id) {
     bind_window_texture(windows[base_window.value()].window);
 
     glUniform1f(opacity_uniform, 1);
-    glUniform1f(depth_uniform, window->depth + 0.001);
+    glUniform1f(depth_uniform, window->depth + 0.0001);
 
     glUniform2f(position_uniform, x_coordinate_to_float(screen_width / 2),
                 y_coordinate_to_float(screen_height / 2));
@@ -517,6 +517,30 @@ bool NokoWindowManager::process_events() {
         if (!x_window)
           goto done;
 
+        if (windows[x_window].x_pixmap) {
+          XFreePixmap(display, windows[x_window].x_pixmap);
+          windows[x_window].x_pixmap = 0;
+        }
+
+        if (windows[x_window].pixmap) {
+          glXDestroyPixmap(display, windows[x_window].pixmap);
+          windows[x_window].pixmap = 0;
+        }
+
+        if (base_window.has_value() && x_window != base_window.value() &&
+            x_window != 0) {
+          Packet packet;
+          auto segment = packet.add_segments();
+          auto reply = segment->mutable_window_close_reply();
+          reply->set_window(x_window);
+
+          size_t len = packet.ByteSizeLong();
+          char* buf = (char*)malloc(len);
+          packet.SerializeToArray(buf, len);
+
+          nn_send(ipc_sock, buf, len, 0);
+        }
+
         if (windows.find(x_window) == windows.end())
           goto done;
 
@@ -526,12 +550,52 @@ bool NokoWindowManager::process_events() {
       } else if (type == ButtonPress || type == ButtonRelease) {
         Window x_window = event.xbutton.window;
 
-        if (type == ButtonPress) {
-          focus_window(x_window);
+        printf("%i %i %i\n", event.xbutton.window, event.xbutton.button,
+               event.xbutton.state);
+
+        float depth = 2.0;
+        bool is_border = false;
+        for (auto bordered_window : windows) {
+          if (!bordered_window.second.border.has_value())
+            continue;
+
+          int border_x =
+              bordered_window.second.x + bordered_window.second.border->x;
+          int border_y =
+              bordered_window.second.y + bordered_window.second.border->y;
+          int border_x2 = bordered_window.second.x +
+                          bordered_window.second.width +
+                          bordered_window.second.border->width;
+          int border_y2 = bordered_window.second.y +
+                          bordered_window.second.height +
+                          bordered_window.second.border->height;
+
+          if (event.xbutton.x_root > border_x &&
+              event.xbutton.y_root > border_y &&
+              event.xbutton.x_root < border_x2 &&
+              event.xbutton.y_root < border_y2 &&
+              bordered_window.second.depth < depth) {
+            is_border = true;
+            depth = bordered_window.second.depth;
+          }
+
+          if (event.xbutton.x_root > bordered_window.second.x &&
+              event.xbutton.y_root > bordered_window.second.y &&
+              event.xbutton.x_root <
+                  bordered_window.second.x + bordered_window.second.width &&
+              event.xbutton.y_root <
+                  bordered_window.second.y + bordered_window.second.height &&
+              bordered_window.second.depth <= depth) {
+            is_border = false;
+            depth = bordered_window.second.depth;
+          }
         }
 
-        if (base_window.has_value() &&
+        if (is_border && base_window.has_value() &&
             event.xbutton.window != base_window.value()) {
+          XAllowEvents(display, SyncPointer, CurrentTime);
+
+          printf("sending border\n");
           XEvent forward_event;
           forward_event.type = type;
           forward_event.xbutton.type = type;
@@ -550,14 +614,19 @@ bool NokoWindowManager::process_events() {
           XSendEvent(display, base_window.value(), true,
                      type == ButtonPress ? ButtonPressMask : ButtonReleaseMask,
                      &forward_event);
+        } else {
+          XAllowEvents(display, ReplayPointer, CurrentTime);
         }
 
-        XAllowEvents(display, AsyncPointer, CurrentTime);
+        if (type == ButtonPress && !is_border) {
+          focus_window(x_window);
+        }
 
-        XSendEvent(display, event.xbutton.window, true,
-                   type == ButtonPress ? ButtonPressMask : ButtonReleaseMask,
-                   &event);
-
+      } else if (type == MotionNotify) {
+        if (base_window.has_value() &&
+            event.xmotion.window == base_window.value()) {
+          goto done;
+        }
       } else if (type == KeyPress || type == KeyRelease) {
         // TODO
       }
@@ -615,9 +684,7 @@ void NokoWindowManager::update_client_list() {
   free(client_list);
 }
 
-void NokoWindowManager::focus_window(Window window_id) {
-  Window window = windows[window_id].window;
-
+void NokoWindowManager::focus_window(Window window) {
   if (base_window.has_value() && window == base_window.value())
     return;
 
@@ -629,7 +696,7 @@ void NokoWindowManager::focus_window(Window window_id) {
   Packet packet;
   auto segment = packet.add_segments();
   auto reply = segment->mutable_window_focus_reply();
-  reply->set_window(window_id);
+  reply->set_window(window);
 
   size_t len = packet.ByteSizeLong();
   char* buf = (char*)malloc(len);
@@ -637,6 +704,8 @@ void NokoWindowManager::focus_window(Window window_id) {
 
   nn_send(ipc_sock, buf, len, 0);
   free(buf);
+
+  focused_window = window;
 }
 
 std::optional<NokoWindowManager*> NokoWindowManager::create() {

@@ -85,6 +85,11 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
         auto segment = packet.add_segments();
         auto reply = segment->mutable_run_program_request();
         reply->set_command(segment_json["command"]);
+      } else if (segment_json["t"] == "window_close") {
+        auto segment = packet.add_segments();
+        auto reply = segment->mutable_window_close_request();
+        reply->set_window(
+            std::stoll(segment_json["window"].get<std::string>()));
       }
     }
     if (packet.segments_size() != 0) {
@@ -150,6 +155,14 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
                 {"t", "render_reply"},
                 {"last_frame_observered",
                  segment.render_reply().last_frame_observered()}};
+            to_browser.push_back(obj);
+          } break;
+          case DataSegment::kWindowCloseReply: {
+            nlohmann::json obj = {
+                {"t", "window_close"},
+                {"window",
+                 std::to_string(segment.window_close_reply().window())},
+            };
             to_browser.push_back(obj);
           } break;
 

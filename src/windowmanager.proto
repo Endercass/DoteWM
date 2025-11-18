@@ -75,6 +75,14 @@ message RenderReply {
   uint64 last_frame_observered = 1;
 }
 
+message WindowCloseRequest {
+  uint64 window = 1;
+}
+
+message WindowCloseReply {
+  uint64 window = 1;
+}
+
 // PROTOCOL WRAPPER
 
 message DataSegment {
@@ -91,6 +99,8 @@ message DataSegment {
     RenderRequest render_request = 10;
     RenderReply render_reply = 11;
     RunProgramRequest run_program_request = 12;
+    WindowCloseRequest window_close_request = 13;
+    WindowCloseReply window_close_reply = 14;
   }
 }
 

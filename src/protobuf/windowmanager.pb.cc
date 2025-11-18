@@ -214,6 +214,56 @@ struct WindowFocusReplyDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WindowFocusReplyDefaultTypeInternal _WindowFocusReply_default_instance_;
 
+inline constexpr WindowCloseRequest::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        window_{::uint64_t{0u}} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR WindowCloseRequest::WindowCloseRequest(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(WindowCloseRequest_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct WindowCloseRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR WindowCloseRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~WindowCloseRequestDefaultTypeInternal() {}
+  union {
+    WindowCloseRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WindowCloseRequestDefaultTypeInternal _WindowCloseRequest_default_instance_;
+
+inline constexpr WindowCloseReply::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        window_{::uint64_t{0u}} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR WindowCloseReply::WindowCloseReply(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(WindowCloseReply_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct WindowCloseReplyDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR WindowCloseReplyDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~WindowCloseReplyDefaultTypeInternal() {}
+  union {
+    WindowCloseReply _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WindowCloseReplyDefaultTypeInternal _WindowCloseReply_default_instance_;
+
 inline constexpr RunProgramRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -493,8 +543,20 @@ const ::uint32_t
         4, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::RenderReply, _impl_.last_frame_observered_),
         0,
+        0x081, // bitmap
+        PROTOBUF_FIELD_OFFSET(::WindowCloseRequest, _impl_._has_bits_),
+        4, // hasbit index offset
+        PROTOBUF_FIELD_OFFSET(::WindowCloseRequest, _impl_.window_),
+        0,
+        0x081, // bitmap
+        PROTOBUF_FIELD_OFFSET(::WindowCloseReply, _impl_._has_bits_),
+        4, // hasbit index offset
+        PROTOBUF_FIELD_OFFSET(::WindowCloseReply, _impl_.window_),
+        0,
         0x004, // bitmap
         PROTOBUF_FIELD_OFFSET(::DataSegment, _impl_._oneof_case_[0]),
+        PROTOBUF_FIELD_OFFSET(::DataSegment, _impl_.data_),
+        PROTOBUF_FIELD_OFFSET(::DataSegment, _impl_.data_),
         PROTOBUF_FIELD_OFFSET(::DataSegment, _impl_.data_),
         PROTOBUF_FIELD_OFFSET(::DataSegment, _impl_.data_),
         PROTOBUF_FIELD_OFFSET(::DataSegment, _impl_.data_),
@@ -529,8 +591,10 @@ static const ::_pbi::MigrationSchema
         {71, sizeof(::MouseMoveReply)},
         {78, sizeof(::MousePressReply)},
         {87, sizeof(::RenderReply)},
-        {92, sizeof(::DataSegment)},
-        {107, sizeof(::Packet)},
+        {92, sizeof(::WindowCloseRequest)},
+        {97, sizeof(::WindowCloseReply)},
+        {102, sizeof(::DataSegment)},
+        {119, sizeof(::Packet)},
 };
 static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::_WindowRequest_default_instance_._instance,
@@ -545,6 +609,8 @@ static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::_MouseMoveReply_default_instance_._instance,
     &::_MousePressReply_default_instance_._instance,
     &::_RenderReply_default_instance_._instance,
+    &::_WindowCloseRequest_default_instance_._instance,
+    &::_WindowCloseReply_default_instance_._instance,
     &::_DataSegment_default_instance_._instance,
     &::_Packet_default_instance_._instance,
 };
@@ -567,38 +633,43 @@ const char descriptor_table_protodef_windowmanager_2eproto[] ABSL_ATTRIBUTE_SECT
     "x\030\001 \001(\r\022\t\n\001y\030\002 \001(\r\"I\n\017MousePressReply\022\t\n"
     "\001x\030\001 \001(\r\022\t\n\001y\030\002 \001(\r\022 \n\005state\030\003 \001(\0162\021.Mou"
     "seButtonState\",\n\013RenderReply\022\035\n\025last_fra"
-    "me_observered\030\001 \001(\004\"\343\004\n\013DataSegment\022(\n\016w"
-    "indow_request\030\001 \001(\0132\016.WindowRequestH\000\022+\n"
-    "\020window_map_reply\030\002 \001(\0132\017.WindowMapReply"
-    "H\000\022/\n\022window_map_request\030\003 \001(\0132\021.WindowM"
-    "apRequestH\000\022+\n\020mouse_move_reply\030\004 \001(\0132\017."
-    "MouseMoveReplyH\000\022-\n\021mouse_press_reply\030\005 "
-    "\001(\0132\020.MousePressReplyH\000\022/\n\022window_focus_"
-    "reply\030\006 \001(\0132\021.WindowFocusReplyH\000\0227\n\026wind"
-    "ow_reorder_request\030\007 \001(\0132\025.WindowReorder"
-    "RequestH\000\0223\n\024window_focus_request\030\010 \001(\0132"
-    "\023.WindowFocusRequestH\000\022F\n\036window_registe"
-    "r_border_request\030\t \001(\0132\034.WindowRegisterB"
-    "orderRequestH\000\022(\n\016render_request\030\n \001(\0132\016"
-    ".RenderRequestH\000\022$\n\014render_reply\030\013 \001(\0132\014"
-    ".RenderReplyH\000\0221\n\023run_program_request\030\014 "
-    "\001(\0132\022.RunProgramRequestH\000B\006\n\004data\"(\n\006Pac"
-    "ket\022\036\n\010segments\030\001 \003(\0132\014.DataSegment*d\n\020M"
-    "ouseButtonState\022\023\n\017MOUSE_LEFT_DOWN\020\000\022\021\n\r"
-    "MOUSE_LEFT_UP\020\001\022\024\n\020MOUSE_RIGHT_DOWN\020\002\022\022\n"
-    "\016MOUSE_RIGHT_UP\020\003b\006proto3"
+    "me_observered\030\001 \001(\004\"$\n\022WindowCloseReques"
+    "t\022\016\n\006window\030\001 \001(\004\"\"\n\020WindowCloseReply\022\016\n"
+    "\006window\030\001 \001(\004\"\311\005\n\013DataSegment\022(\n\016window_"
+    "request\030\001 \001(\0132\016.WindowRequestH\000\022+\n\020windo"
+    "w_map_reply\030\002 \001(\0132\017.WindowMapReplyH\000\022/\n\022"
+    "window_map_request\030\003 \001(\0132\021.WindowMapRequ"
+    "estH\000\022+\n\020mouse_move_reply\030\004 \001(\0132\017.MouseM"
+    "oveReplyH\000\022-\n\021mouse_press_reply\030\005 \001(\0132\020."
+    "MousePressReplyH\000\022/\n\022window_focus_reply\030"
+    "\006 \001(\0132\021.WindowFocusReplyH\000\0227\n\026window_reo"
+    "rder_request\030\007 \001(\0132\025.WindowReorderReques"
+    "tH\000\0223\n\024window_focus_request\030\010 \001(\0132\023.Wind"
+    "owFocusRequestH\000\022F\n\036window_register_bord"
+    "er_request\030\t \001(\0132\034.WindowRegisterBorderR"
+    "equestH\000\022(\n\016render_request\030\n \001(\0132\016.Rende"
+    "rRequestH\000\022$\n\014render_reply\030\013 \001(\0132\014.Rende"
+    "rReplyH\000\0221\n\023run_program_request\030\014 \001(\0132\022."
+    "RunProgramRequestH\000\0223\n\024window_close_requ"
+    "est\030\r \001(\0132\023.WindowCloseRequestH\000\022/\n\022wind"
+    "ow_close_reply\030\016 \001(\0132\021.WindowCloseReplyH"
+    "\000B\006\n\004data\"(\n\006Packet\022\036\n\010segments\030\001 \003(\0132\014."
+    "DataSegment*d\n\020MouseButtonState\022\023\n\017MOUSE"
+    "_LEFT_DOWN\020\000\022\021\n\rMOUSE_LEFT_UP\020\001\022\024\n\020MOUSE"
+    "_RIGHT_DOWN\020\002\022\022\n\016MOUSE_RIGHT_UP\020\003b\006proto"
+    "3"
 };
 static ::absl::once_flag descriptor_table_windowmanager_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_windowmanager_2eproto = {
     false,
     false,
-    1465,
+    1641,
     descriptor_table_protodef_windowmanager_2eproto,
     "windowmanager.proto",
     &descriptor_table_windowmanager_2eproto_once,
     nullptr,
     0,
-    14,
+    16,
     schemas,
     file_default_instances,
     TableStruct_windowmanager_2eproto::offsets,
@@ -4177,6 +4248,502 @@ void RenderReply::InternalSwap(RenderReply* PROTOBUF_RESTRICT PROTOBUF_NONNULL o
 }
 // ===================================================================
 
+class WindowCloseRequest::_Internal {
+ public:
+  using HasBits =
+      decltype(::std::declval<WindowCloseRequest>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(WindowCloseRequest, _impl_._has_bits_);
+};
+
+WindowCloseRequest::WindowCloseRequest(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, WindowCloseRequest_class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:WindowCloseRequest)
+}
+WindowCloseRequest::WindowCloseRequest(
+    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const WindowCloseRequest& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, WindowCloseRequest_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(from._impl_) {
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+}
+PROTOBUF_NDEBUG_INLINE WindowCloseRequest::Impl_::Impl_(
+    [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
+    [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
+      : _cached_size_{0} {}
+
+inline void WindowCloseRequest::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.window_ = {};
+}
+WindowCloseRequest::~WindowCloseRequest() {
+  // @@protoc_insertion_point(destructor:WindowCloseRequest)
+  SharedDtor(*this);
+}
+inline void WindowCloseRequest::SharedDtor(MessageLite& self) {
+  WindowCloseRequest& this_ = static_cast<WindowCloseRequest&>(self);
+  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
+    this_.CheckHasBitConsistency();
+  }
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  this_._impl_.~Impl_();
+}
+
+inline void* PROTOBUF_NONNULL WindowCloseRequest::PlacementNew_(
+    const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena) {
+  return ::new (mem) WindowCloseRequest(arena);
+}
+constexpr auto WindowCloseRequest::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(WindowCloseRequest),
+                                            alignof(WindowCloseRequest));
+}
+constexpr auto WindowCloseRequest::InternalGenerateClassData_() {
+  return ::google::protobuf::internal::ClassDataFull{
+      ::google::protobuf::internal::ClassData{
+          &_WindowCloseRequest_default_instance_._instance,
+          &_table_.header,
+          nullptr,  // OnDemandRegisterArenaDtor
+          nullptr,  // IsInitialized
+          &WindowCloseRequest::MergeImpl,
+          ::google::protobuf::Message::GetNewImpl<WindowCloseRequest>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+          &WindowCloseRequest::SharedDtor,
+          ::google::protobuf::Message::GetClearImpl<WindowCloseRequest>(), &WindowCloseRequest::ByteSizeLong,
+              &WindowCloseRequest::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          PROTOBUF_FIELD_OFFSET(WindowCloseRequest, _impl_._cached_size_),
+          false,
+      },
+      &WindowCloseRequest::kDescriptorMethods,
+      &descriptor_table_windowmanager_2eproto,
+      nullptr,  // tracker
+  };
+}
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 const
+    ::google::protobuf::internal::ClassDataFull WindowCloseRequest_class_data_ =
+        WindowCloseRequest::InternalGenerateClassData_();
+
+PROTOBUF_ATTRIBUTE_WEAK const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL
+WindowCloseRequest::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&WindowCloseRequest_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(WindowCloseRequest_class_data_.tc_table);
+  return WindowCloseRequest_class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 1, 0, 0, 2>
+WindowCloseRequest::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(WindowCloseRequest, _impl_._has_bits_),
+    0, // no _extensions_
+    1, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967294,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    1,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    WindowCloseRequest_class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::WindowCloseRequest>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    // uint64 window = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(WindowCloseRequest, _impl_.window_), 0>(),
+     {8, 0, 0,
+      PROTOBUF_FIELD_OFFSET(WindowCloseRequest, _impl_.window_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // uint64 window = 1;
+    {PROTOBUF_FIELD_OFFSET(WindowCloseRequest, _impl_.window_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt64)},
+  }},
+  // no aux_entries
+  {{
+  }},
+};
+PROTOBUF_NOINLINE void WindowCloseRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:WindowCloseRequest)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.window_ = ::uint64_t{0u};
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+::uint8_t* PROTOBUF_NONNULL WindowCloseRequest::_InternalSerialize(
+    const ::google::protobuf::MessageLite& base, ::uint8_t* PROTOBUF_NONNULL target,
+    ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) {
+  const WindowCloseRequest& this_ = static_cast<const WindowCloseRequest&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+::uint8_t* PROTOBUF_NONNULL WindowCloseRequest::_InternalSerialize(
+    ::uint8_t* PROTOBUF_NONNULL target,
+    ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+  const WindowCloseRequest& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
+    this_.CheckHasBitConsistency();
+  }
+  // @@protoc_insertion_point(serialize_to_array_start:WindowCloseRequest)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  cached_has_bits = this_._impl_._has_bits_[0];
+  // uint64 window = 1;
+  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+    if (this_._internal_window() != 0) {
+      target = stream->EnsureSpace(target);
+      target = ::_pbi::WireFormatLite::WriteUInt64ToArray(
+          1, this_._internal_window(), target);
+    }
+  }
+
+  if (ABSL_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:WindowCloseRequest)
+  return target;
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+::size_t WindowCloseRequest::ByteSizeLong(const MessageLite& base) {
+  const WindowCloseRequest& this_ = static_cast<const WindowCloseRequest&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+::size_t WindowCloseRequest::ByteSizeLong() const {
+  const WindowCloseRequest& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  // @@protoc_insertion_point(message_byte_size_start:WindowCloseRequest)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void)cached_has_bits;
+
+   {
+    // uint64 window = 1;
+    cached_has_bits = this_._impl_._has_bits_[0];
+    if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+      if (this_._internal_window() != 0) {
+        total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(
+            this_._internal_window());
+      }
+    }
+  }
+  return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                             &this_._impl_._cached_size_);
+}
+
+void WindowCloseRequest::MergeImpl(::google::protobuf::MessageLite& to_msg,
+                            const ::google::protobuf::MessageLite& from_msg) {
+   auto* const _this =
+      static_cast<WindowCloseRequest*>(&to_msg);
+  auto& from = static_cast<const WindowCloseRequest&>(from_msg);
+  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
+    from.CheckHasBitConsistency();
+  }
+  // @@protoc_insertion_point(class_specific_merge_from_start:WindowCloseRequest)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+    if (from._internal_window() != 0) {
+      _this->_impl_.window_ = from._impl_.window_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+}
+
+void WindowCloseRequest::CopyFrom(const WindowCloseRequest& from) {
+  // @@protoc_insertion_point(class_specific_copy_from_start:WindowCloseRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void WindowCloseRequest::InternalSwap(WindowCloseRequest* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
+  using ::std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  swap(_impl_.window_, other->_impl_.window_);
+}
+
+::google::protobuf::Metadata WindowCloseRequest::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
+class WindowCloseReply::_Internal {
+ public:
+  using HasBits =
+      decltype(::std::declval<WindowCloseReply>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(WindowCloseReply, _impl_._has_bits_);
+};
+
+WindowCloseReply::WindowCloseReply(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, WindowCloseReply_class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:WindowCloseReply)
+}
+WindowCloseReply::WindowCloseReply(
+    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const WindowCloseReply& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, WindowCloseReply_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(from._impl_) {
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+}
+PROTOBUF_NDEBUG_INLINE WindowCloseReply::Impl_::Impl_(
+    [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
+    [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
+      : _cached_size_{0} {}
+
+inline void WindowCloseReply::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.window_ = {};
+}
+WindowCloseReply::~WindowCloseReply() {
+  // @@protoc_insertion_point(destructor:WindowCloseReply)
+  SharedDtor(*this);
+}
+inline void WindowCloseReply::SharedDtor(MessageLite& self) {
+  WindowCloseReply& this_ = static_cast<WindowCloseReply&>(self);
+  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
+    this_.CheckHasBitConsistency();
+  }
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  this_._impl_.~Impl_();
+}
+
+inline void* PROTOBUF_NONNULL WindowCloseReply::PlacementNew_(
+    const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena) {
+  return ::new (mem) WindowCloseReply(arena);
+}
+constexpr auto WindowCloseReply::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(WindowCloseReply),
+                                            alignof(WindowCloseReply));
+}
+constexpr auto WindowCloseReply::InternalGenerateClassData_() {
+  return ::google::protobuf::internal::ClassDataFull{
+      ::google::protobuf::internal::ClassData{
+          &_WindowCloseReply_default_instance_._instance,
+          &_table_.header,
+          nullptr,  // OnDemandRegisterArenaDtor
+          nullptr,  // IsInitialized
+          &WindowCloseReply::MergeImpl,
+          ::google::protobuf::Message::GetNewImpl<WindowCloseReply>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+          &WindowCloseReply::SharedDtor,
+          ::google::protobuf::Message::GetClearImpl<WindowCloseReply>(), &WindowCloseReply::ByteSizeLong,
+              &WindowCloseReply::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          PROTOBUF_FIELD_OFFSET(WindowCloseReply, _impl_._cached_size_),
+          false,
+      },
+      &WindowCloseReply::kDescriptorMethods,
+      &descriptor_table_windowmanager_2eproto,
+      nullptr,  // tracker
+  };
+}
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 const
+    ::google::protobuf::internal::ClassDataFull WindowCloseReply_class_data_ =
+        WindowCloseReply::InternalGenerateClassData_();
+
+PROTOBUF_ATTRIBUTE_WEAK const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL
+WindowCloseReply::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&WindowCloseReply_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(WindowCloseReply_class_data_.tc_table);
+  return WindowCloseReply_class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 1, 0, 0, 2>
+WindowCloseReply::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(WindowCloseReply, _impl_._has_bits_),
+    0, // no _extensions_
+    1, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967294,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    1,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    WindowCloseReply_class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::WindowCloseReply>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    // uint64 window = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(WindowCloseReply, _impl_.window_), 0>(),
+     {8, 0, 0,
+      PROTOBUF_FIELD_OFFSET(WindowCloseReply, _impl_.window_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // uint64 window = 1;
+    {PROTOBUF_FIELD_OFFSET(WindowCloseReply, _impl_.window_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt64)},
+  }},
+  // no aux_entries
+  {{
+  }},
+};
+PROTOBUF_NOINLINE void WindowCloseReply::Clear() {
+// @@protoc_insertion_point(message_clear_start:WindowCloseReply)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.window_ = ::uint64_t{0u};
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+::uint8_t* PROTOBUF_NONNULL WindowCloseReply::_InternalSerialize(
+    const ::google::protobuf::MessageLite& base, ::uint8_t* PROTOBUF_NONNULL target,
+    ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) {
+  const WindowCloseReply& this_ = static_cast<const WindowCloseReply&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+::uint8_t* PROTOBUF_NONNULL WindowCloseReply::_InternalSerialize(
+    ::uint8_t* PROTOBUF_NONNULL target,
+    ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+  const WindowCloseReply& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
+    this_.CheckHasBitConsistency();
+  }
+  // @@protoc_insertion_point(serialize_to_array_start:WindowCloseReply)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  cached_has_bits = this_._impl_._has_bits_[0];
+  // uint64 window = 1;
+  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+    if (this_._internal_window() != 0) {
+      target = stream->EnsureSpace(target);
+      target = ::_pbi::WireFormatLite::WriteUInt64ToArray(
+          1, this_._internal_window(), target);
+    }
+  }
+
+  if (ABSL_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:WindowCloseReply)
+  return target;
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+::size_t WindowCloseReply::ByteSizeLong(const MessageLite& base) {
+  const WindowCloseReply& this_ = static_cast<const WindowCloseReply&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+::size_t WindowCloseReply::ByteSizeLong() const {
+  const WindowCloseReply& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  // @@protoc_insertion_point(message_byte_size_start:WindowCloseReply)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void)cached_has_bits;
+
+   {
+    // uint64 window = 1;
+    cached_has_bits = this_._impl_._has_bits_[0];
+    if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+      if (this_._internal_window() != 0) {
+        total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(
+            this_._internal_window());
+      }
+    }
+  }
+  return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                             &this_._impl_._cached_size_);
+}
+
+void WindowCloseReply::MergeImpl(::google::protobuf::MessageLite& to_msg,
+                            const ::google::protobuf::MessageLite& from_msg) {
+   auto* const _this =
+      static_cast<WindowCloseReply*>(&to_msg);
+  auto& from = static_cast<const WindowCloseReply&>(from_msg);
+  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
+    from.CheckHasBitConsistency();
+  }
+  // @@protoc_insertion_point(class_specific_merge_from_start:WindowCloseReply)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+    if (from._internal_window() != 0) {
+      _this->_impl_.window_ = from._impl_.window_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+}
+
+void WindowCloseReply::CopyFrom(const WindowCloseReply& from) {
+  // @@protoc_insertion_point(class_specific_copy_from_start:WindowCloseReply)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void WindowCloseReply::InternalSwap(WindowCloseReply* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
+  using ::std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  swap(_impl_.window_, other->_impl_.window_);
+}
+
+::google::protobuf::Metadata WindowCloseReply::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
 class DataSegment::_Internal {
  public:
   static constexpr ::int32_t kOneofCaseOffset =
@@ -4339,6 +4906,32 @@ void DataSegment::set_allocated_run_program_request(::RunProgramRequest* PROTOBU
   }
   // @@protoc_insertion_point(field_set_allocated:DataSegment.run_program_request)
 }
+void DataSegment::set_allocated_window_close_request(::WindowCloseRequest* PROTOBUF_NULLABLE window_close_request) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  clear_data();
+  if (window_close_request) {
+    ::google::protobuf::Arena* submessage_arena = window_close_request->GetArena();
+    if (message_arena != submessage_arena) {
+      window_close_request = ::google::protobuf::internal::GetOwnedMessage(message_arena, window_close_request, submessage_arena);
+    }
+    set_has_window_close_request();
+    _impl_.data_.window_close_request_ = window_close_request;
+  }
+  // @@protoc_insertion_point(field_set_allocated:DataSegment.window_close_request)
+}
+void DataSegment::set_allocated_window_close_reply(::WindowCloseReply* PROTOBUF_NULLABLE window_close_reply) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  clear_data();
+  if (window_close_reply) {
+    ::google::protobuf::Arena* submessage_arena = window_close_reply->GetArena();
+    if (message_arena != submessage_arena) {
+      window_close_reply = ::google::protobuf::internal::GetOwnedMessage(message_arena, window_close_reply, submessage_arena);
+    }
+    set_has_window_close_reply();
+    _impl_.data_.window_close_reply_ = window_close_reply;
+  }
+  // @@protoc_insertion_point(field_set_allocated:DataSegment.window_close_reply)
+}
 DataSegment::DataSegment(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, DataSegment_class_data_.base()) {
@@ -4407,6 +5000,12 @@ DataSegment::DataSegment(
         break;
       case kRunProgramRequest:
         _impl_.data_.run_program_request_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.data_.run_program_request_);
+        break;
+      case kWindowCloseRequest:
+        _impl_.data_.window_close_request_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.data_.window_close_request_);
+        break;
+      case kWindowCloseReply:
+        _impl_.data_.window_close_reply_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.data_.window_close_reply_);
         break;
   }
 
@@ -4539,6 +5138,22 @@ void DataSegment::clear_data() {
       }
       break;
     }
+    case kWindowCloseRequest: {
+      if (GetArena() == nullptr) {
+        delete _impl_.data_.window_close_request_;
+      } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.data_.window_close_request_);
+      }
+      break;
+    }
+    case kWindowCloseReply: {
+      if (GetArena() == nullptr) {
+        delete _impl_.data_.window_close_reply_;
+      } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.data_.window_close_reply_);
+      }
+      break;
+    }
     case DATA_NOT_SET: {
       break;
     }
@@ -4590,17 +5205,17 @@ DataSegment::GetClassData() const {
   return DataSegment_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 12, 12, 0, 2>
+const ::_pbi::TcParseTable<0, 14, 14, 0, 2>
 DataSegment::_table_ = {
   {
     0,  // no _has_bits_
     0, // no _extensions_
-    12, 0,  // max_field_number, fast_idx_mask
+    14, 0,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294963200,  // skipmap
+    4294950912,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    12,  // num_field_entries
-    12,  // num_aux_entries
+    14,  // num_field_entries
+    14,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     DataSegment_class_data_.base(),
     nullptr,  // post_loop_handler
@@ -4637,6 +5252,10 @@ DataSegment::_table_ = {
     {PROTOBUF_FIELD_OFFSET(DataSegment, _impl_.data_.render_reply_), _Internal::kOneofCaseOffset + 0, 10, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
     // .RunProgramRequest run_program_request = 12;
     {PROTOBUF_FIELD_OFFSET(DataSegment, _impl_.data_.run_program_request_), _Internal::kOneofCaseOffset + 0, 11, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .WindowCloseRequest window_close_request = 13;
+    {PROTOBUF_FIELD_OFFSET(DataSegment, _impl_.data_.window_close_request_), _Internal::kOneofCaseOffset + 0, 12, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .WindowCloseReply window_close_reply = 14;
+    {PROTOBUF_FIELD_OFFSET(DataSegment, _impl_.data_.window_close_reply_), _Internal::kOneofCaseOffset + 0, 13, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::WindowRequest>()},
@@ -4651,6 +5270,8 @@ DataSegment::_table_ = {
       {::_pbi::TcParser::GetTable<::RenderRequest>()},
       {::_pbi::TcParser::GetTable<::RenderReply>()},
       {::_pbi::TcParser::GetTable<::RunProgramRequest>()},
+      {::_pbi::TcParser::GetTable<::WindowCloseRequest>()},
+      {::_pbi::TcParser::GetTable<::WindowCloseReply>()},
   }},
   {{
   }},
@@ -4757,6 +5378,18 @@ PROTOBUF_NOINLINE void DataSegment::Clear() {
           stream);
       break;
     }
+    case kWindowCloseRequest: {
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          13, *this_._impl_.data_.window_close_request_, this_._impl_.data_.window_close_request_->GetCachedSize(), target,
+          stream);
+      break;
+    }
+    case kWindowCloseReply: {
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          14, *this_._impl_.data_.window_close_reply_, this_._impl_.data_.window_close_reply_->GetCachedSize(), target,
+          stream);
+      break;
+    }
     default:
       break;
   }
@@ -4854,6 +5487,18 @@ PROTOBUF_NOINLINE void DataSegment::Clear() {
     case kRunProgramRequest: {
       total_size += 1 +
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.data_.run_program_request_);
+      break;
+    }
+    // .WindowCloseRequest window_close_request = 13;
+    case kWindowCloseRequest: {
+      total_size += 1 +
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.data_.window_close_request_);
+      break;
+    }
+    // .WindowCloseReply window_close_reply = 14;
+    case kWindowCloseReply: {
+      total_size += 1 +
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.data_.window_close_reply_);
       break;
     }
     case DATA_NOT_SET: {
@@ -4983,6 +5628,22 @@ void DataSegment::MergeImpl(::google::protobuf::MessageLite& to_msg,
           _this->_impl_.data_.run_program_request_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.data_.run_program_request_);
         } else {
           _this->_impl_.data_.run_program_request_->MergeFrom(*from._impl_.data_.run_program_request_);
+        }
+        break;
+      }
+      case kWindowCloseRequest: {
+        if (oneof_needs_init) {
+          _this->_impl_.data_.window_close_request_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.data_.window_close_request_);
+        } else {
+          _this->_impl_.data_.window_close_request_->MergeFrom(*from._impl_.data_.window_close_request_);
+        }
+        break;
+      }
+      case kWindowCloseReply: {
+        if (oneof_needs_init) {
+          _this->_impl_.data_.window_close_reply_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.data_.window_close_reply_);
+        } else {
+          _this->_impl_.data_.window_close_reply_->MergeFrom(*from._impl_.data_.window_close_reply_);
         }
         break;
       }
