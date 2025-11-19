@@ -5,6 +5,7 @@
 #include "src/minimal/client_minimal.h"
 #include <X11/X.h>
 #include <absl/strings/str_format.h>
+#include <cstdio>
 #include <nlohmann/json_fwd.hpp>
 #include <string>
 #include <thread>
@@ -193,21 +194,7 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
   DISALLOW_COPY_AND_ASSIGN(MessageHandler);
 };
 
-Client::Client(int* foriegn_sock) {
-  if ((sock = nn_socket(AF_SP, NN_PAIR)) < 0) {
-    printf("nn_socket\n");
-  }
-  if (nn_connect(sock, "ipc:///tmp/noko.ipc") < 0) {
-    printf("nn_connect\n");
-  }
-
-  // non-blocking
-  int to = 0;
-  if (nn_setsockopt(sock, NN_SOL_SOCKET, NN_RCVTIMEO, &to, sizeof(to)) < 0) {
-    printf("ipc failed\n");
-  }
-  *foriegn_sock = sock;
-}
+Client::Client(int* sock) : sock(sock) {}
 
 void Client::OnTitleChange(CefRefPtr<CefBrowser> browser,
                            const CefString& title) {
@@ -231,15 +218,30 @@ void Client::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
 #if defined(OS_LINUX)
   ::Window window = browser->GetHost()->GetWindowHandle();
 
+  if ((*sock = nn_socket(AF_SP, NN_PAIR)) < 0) {
+    printf("nn_socket\n");
+  }
+  if (nn_connect(*sock, "ipc:///tmp/noko.ipc") < 0) {
+    printf("nn_connect\n");
+  }
+
+  // non-blocking
+  int to = 0;
+  if (nn_setsockopt(*sock, NN_SOL_SOCKET, NN_RCVTIMEO, &to, sizeof(to)) < 0) {
+    printf("ipc failed\n");
+  }
+
   Packet packet;
   auto segment = packet.add_segments();
   segment->mutable_window_request()->set_window(window);
+
+  printf("initializing base window!\n");
 
   size_t len = packet.ByteSizeLong();
   char* buf = (char*)malloc(len);
   packet.SerializeToArray(buf, len);
 
-  nn_send(sock, buf, len, 0);
+  nn_send(*sock, buf, len, 0);
 
   free(buf);
 #endif
@@ -250,7 +252,7 @@ void Client::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
     message_router_ = CefMessageRouterBrowserSide::Create(config);
 
     // Register handlers with the router.
-    message_handler_.reset(new MessageHandler(sock));
+    message_handler_.reset(new MessageHandler(*sock));
     message_router_->AddHandler(message_handler_.get(), false);
   }
 

@@ -11,6 +11,7 @@
 #include <X11/extensions/Xfixes.h>
 #include <X11/extensions/shape.h>
 #include <cstdlib>
+#include <cstring>
 #include <mutex>
 #include <string>
 #include <thread>
@@ -450,8 +451,10 @@ bool NokoWindowManager::process_events() {
                                false, XA_STRING, &actual_type, &actual_format,
                                &nitems, &bytes_after, &prop) == X11_Success &&
             prop) {
-          window->name = std::string((char*)prop);
-          printf("set name %s\n", prop);
+          if (strlen((char*)prop) != 0) {
+            window->name = std::string((char*)prop);
+            printf("set name %s\n", prop);
+          }
           XFree(prop);
         }
         // serialize data to client if window not the base window

@@ -171,8 +171,11 @@ class NokoWindowManager {
                                       ->mutable_command()
                                       ->c_str();
               printf("yo %s\n", c_str);
+              std::string display = "DISPLAY=" + std::string(getenv("DISPLAY"));
+              const char* display_str = display.c_str();
+
               char* args[] = {(char*)c_str, NULL};
-              char* env[] = {(char*)"DISPLAY=:1", NULL};
+              char* env[] = {(char*)display_str, NULL};
               execve(c_str, args, env);
               exit(1);
             }
@@ -201,6 +204,9 @@ class NokoWindowManager {
               reply->set_visible(window.second.visible);
               reply->set_x(window.second.x);
               reply->set_y(window.second.y);
+              if (window.second.name.has_value()) {
+                reply->set_name(window.second.name.value());
+              }
               reply->set_width(window.second.width);
               reply->set_height(window.second.height);
             }

@@ -30,10 +30,10 @@ namespace {
 
 // Implementation of the scheme handler for client:// requests.
 class ClientSchemeHandler : public CefResourceHandler {
-  int sock;
+  int* sock;
 
  public:
-  ClientSchemeHandler(int sock) : sock(sock), offset_(0) {}
+  ClientSchemeHandler(int* sock) : sock(sock), offset_(0) {}
 
   bool NotFound(std::string url, CefRefPtr<CefCallback> callback) {
     data_ = url + " not found.";
@@ -80,17 +80,19 @@ class ClientSchemeHandler : public CefResourceHandler {
       mime_type_ = type->second;
     }
 
-    Packet packet;
-    auto segment = packet.add_segments();
-    segment->mutable_file_register_request()->set_file_path(
-        target_file.string());
+    if (sock != 0) {
+      Packet packet;
+      auto segment = packet.add_segments();
+      segment->mutable_file_register_request()->set_file_path(
+          target_file.string());
 
-    size_t len = packet.ByteSizeLong();
-    char* buf = (char*)malloc(len);
-    packet.SerializeToArray(buf, len);
+      size_t len = packet.ByteSizeLong();
+      char* buf = (char*)malloc(len);
+      packet.SerializeToArray(buf, len);
 
-    nn_send(sock, buf, len, 0);
-    free(buf);
+      nn_send(*sock, buf, len, 0);
+      free(buf);
+    }
 
     callback->Continue();
     return true;
@@ -146,10 +148,10 @@ class ClientSchemeHandler : public CefResourceHandler {
 
 // Implementation of the factory for creating scheme handlers.
 class ClientSchemeHandlerFactory : public CefSchemeHandlerFactory {
-  int sock;
+  int* sock;
 
  public:
-  ClientSchemeHandlerFactory(int sock) : sock(sock) {}
+  ClientSchemeHandlerFactory(int* sock) : sock(sock) {}
 
   // Return a new scheme handler instance to handle the request.
   CefRefPtr<CefResourceHandler> Create(CefRefPtr<CefBrowser> browser,
@@ -167,7 +169,7 @@ class ClientSchemeHandlerFactory : public CefSchemeHandlerFactory {
 
 }  // namespace
 
-void RegisterSchemeHandlerFactory(int sock) {
+void RegisterSchemeHandlerFactory(int* sock) {
   CefRegisterSchemeHandlerFactory(SCHEME, DOMAIN,
                                   new ClientSchemeHandlerFactory(sock));
 }

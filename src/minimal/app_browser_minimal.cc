@@ -20,7 +20,7 @@ class BrowserApp : public CefApp, public CefBrowserProcessHandler {
   int sock;
 
  public:
-  BrowserApp() {}
+  BrowserApp() { sock = 0; }
 
   // CefApp methods:
   CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler() override {
@@ -47,7 +47,7 @@ class BrowserApp : public CefApp, public CefBrowserProcessHandler {
 
   // CefBrowserProcessHandler methods:
   void OnContextInitialized() override {
-    RegisterSchemeHandlerFactory(sock);
+    RegisterSchemeHandlerFactory(&sock);
 
     // Create the browser window.
     shared::CreateBrowser(new Client(&sock), GetStartupURL(),

@@ -14,7 +14,7 @@ namespace minimal {
 class Client : public CefClient,
                public CefDisplayHandler,
                public CefLifeSpanHandler {
-  int sock;
+  int* sock;
 
  public:
   Client(int* sock);
