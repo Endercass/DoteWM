@@ -18,6 +18,7 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <mutex>
 #include <thread>
 #include <unordered_map>
@@ -167,16 +168,14 @@ class NokoWindowManager {
           } else if (segment.data_case() == DataSegment::kRunProgramRequest) {
             int pid = fork();
             if (pid == 0) {
-              const char* c_str = segment.mutable_run_program_request()
-                                      ->mutable_command()
-                                      ->c_str();
-              printf("yo %s\n", c_str);
-              std::string display = "DISPLAY=" + std::string(getenv("DISPLAY"));
-              const char* display_str = display.c_str();
+              std::vector<char*> args;
+              for (const auto& cmd : segment.run_program_request().command()) {
+                args.push_back((char*)(cmd.c_str()));
+              }
+              args.push_back(nullptr);
 
-              char* args[] = {(char*)c_str, NULL};
-              char* env[] = {(char*)display_str, NULL};
-              execve(c_str, args, env);
+              execvp(args[0], args.data());
+              perror("execvp failed");
               exit(1);
             }
           } else if (segment.data_case() == DataSegment::kFileRegisterRequest) {

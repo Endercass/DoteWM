@@ -33,6 +33,10 @@ message FileRegisterRequest {
   string file_path = 1;
 }
 
+message LogMessageReply{
+  string message = 1;
+}
+
 message WindowReorderRequest {
   repeated uint64 windows = 1;
 }
@@ -50,7 +54,7 @@ message RenderRequest {
 }
 
 message RunProgramRequest {
-  string command = 1;
+  repeated string command = 1;
 }
 
 // REPLIES (Window Manager -> Browser)
@@ -113,6 +117,7 @@ message DataSegment {
     FileRegisterRequest file_register_request = 15;
     ReloadReply reload_reply = 16;
     BrowserStartRequest browser_start_request = 17;
+    LogMessageReply log_message_reply = 18;
   }
 }
 

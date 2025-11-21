@@ -270,9 +270,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 inline constexpr RunProgramRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        command_(
-            &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()) {}
+        command_{} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR RunProgramRequest::RunProgramRequest(::_pbi::ConstantInitialized)
@@ -415,6 +413,33 @@ struct MouseMoveReplyDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MouseMoveReplyDefaultTypeInternal _MouseMoveReply_default_instance_;
 
+inline constexpr LogMessageReply::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        message_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()) {}
+
+template <typename>
+PROTOBUF_CONSTEXPR LogMessageReply::LogMessageReply(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(LogMessageReply_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct LogMessageReplyDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR LogMessageReplyDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~LogMessageReplyDefaultTypeInternal() {}
+  union {
+    LogMessageReply _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 LogMessageReplyDefaultTypeInternal _LogMessageReply_default_instance_;
+
 inline constexpr FileRegisterRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -548,6 +573,11 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::FileRegisterRequest, _impl_.file_path_),
         0,
         0x081, // bitmap
+        PROTOBUF_FIELD_OFFSET(::LogMessageReply, _impl_._has_bits_),
+        4, // hasbit index offset
+        PROTOBUF_FIELD_OFFSET(::LogMessageReply, _impl_.message_),
+        0,
+        0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::WindowReorderRequest, _impl_._has_bits_),
         4, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::WindowReorderRequest, _impl_.windows_),
@@ -648,6 +678,7 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::DataSegment, _impl_.data_),
         PROTOBUF_FIELD_OFFSET(::DataSegment, _impl_.data_),
         PROTOBUF_FIELD_OFFSET(::DataSegment, _impl_.data_),
+        PROTOBUF_FIELD_OFFSET(::DataSegment, _impl_.data_),
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::Packet, _impl_._has_bits_),
         4, // hasbit index offset
@@ -663,19 +694,20 @@ static const ::_pbi::MigrationSchema
         {7, sizeof(::WindowMapRequest)},
         {20, sizeof(::WindowFocusRequest)},
         {25, sizeof(::FileRegisterRequest)},
-        {30, sizeof(::WindowReorderRequest)},
-        {35, sizeof(::WindowRegisterBorderRequest)},
-        {48, sizeof(::RenderRequest)},
-        {53, sizeof(::RunProgramRequest)},
-        {58, sizeof(::WindowMapReply)},
-        {75, sizeof(::WindowFocusReply)},
-        {80, sizeof(::MouseMoveReply)},
-        {87, sizeof(::MousePressReply)},
-        {96, sizeof(::RenderReply)},
-        {101, sizeof(::WindowCloseRequest)},
-        {106, sizeof(::WindowCloseReply)},
-        {111, sizeof(::DataSegment)},
-        {131, sizeof(::Packet)},
+        {30, sizeof(::LogMessageReply)},
+        {35, sizeof(::WindowReorderRequest)},
+        {40, sizeof(::WindowRegisterBorderRequest)},
+        {53, sizeof(::RenderRequest)},
+        {58, sizeof(::RunProgramRequest)},
+        {63, sizeof(::WindowMapReply)},
+        {80, sizeof(::WindowFocusReply)},
+        {85, sizeof(::MouseMoveReply)},
+        {92, sizeof(::MousePressReply)},
+        {101, sizeof(::RenderReply)},
+        {106, sizeof(::WindowCloseRequest)},
+        {111, sizeof(::WindowCloseReply)},
+        {116, sizeof(::DataSegment)},
+        {137, sizeof(::Packet)},
 };
 static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::_WindowRequest_default_instance_._instance,
@@ -684,6 +716,7 @@ static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::_WindowMapRequest_default_instance_._instance,
     &::_WindowFocusRequest_default_instance_._instance,
     &::_FileRegisterRequest_default_instance_._instance,
+    &::_LogMessageReply_default_instance_._instance,
     &::_WindowReorderRequest_default_instance_._instance,
     &::_WindowRegisterBorderRequest_default_instance_._instance,
     &::_RenderRequest_default_instance_._instance,
@@ -706,60 +739,62 @@ const char descriptor_table_protodef_windowmanager_2eproto[] ABSL_ATTRIBUTE_SECT
     "ow\030\001 \001(\004\022\t\n\001x\030\002 \001(\r\022\t\n\001y\030\003 \001(\r\022\r\n\005width\030"
     "\004 \001(\r\022\016\n\006height\030\005 \001(\r\"$\n\022WindowFocusRequ"
     "est\022\016\n\006window\030\001 \001(\004\"(\n\023FileRegisterReque"
-    "st\022\021\n\tfile_path\030\001 \001(\t\"\'\n\024WindowReorderRe"
-    "quest\022\017\n\007windows\030\001 \003(\004\"b\n\033WindowRegister"
-    "BorderRequest\022\016\n\006window\030\001 \001(\004\022\t\n\001x\030\002 \001(\005"
-    "\022\t\n\001y\030\003 \001(\005\022\r\n\005width\030\004 \001(\005\022\016\n\006height\030\005 \001"
-    "(\005\"$\n\rRenderRequest\022\023\n\013frame_count\030\001 \001(\004"
-    "\"$\n\021RunProgramRequest\022\017\n\007command\030\001 \001(\t\"t"
-    "\n\016WindowMapReply\022\016\n\006window\030\001 \001(\004\022\t\n\001x\030\002 "
-    "\001(\r\022\t\n\001y\030\003 \001(\r\022\r\n\005width\030\004 \001(\r\022\016\n\006height\030"
-    "\005 \001(\r\022\017\n\007visible\030\006 \001(\010\022\014\n\004name\030\007 \001(\t\"\"\n\020"
-    "WindowFocusReply\022\016\n\006window\030\001 \001(\004\"&\n\016Mous"
-    "eMoveReply\022\t\n\001x\030\001 \001(\r\022\t\n\001y\030\002 \001(\r\"I\n\017Mous"
-    "ePressReply\022\t\n\001x\030\001 \001(\r\022\t\n\001y\030\002 \001(\r\022 \n\005sta"
-    "te\030\003 \001(\0162\021.MouseButtonState\",\n\013RenderRep"
-    "ly\022\035\n\025last_frame_observered\030\001 \001(\004\"$\n\022Win"
-    "dowCloseRequest\022\016\n\006window\030\001 \001(\004\"\"\n\020Windo"
-    "wCloseReply\022\016\n\006window\030\001 \001(\004\"\335\006\n\013DataSegm"
-    "ent\022(\n\016window_request\030\001 \001(\0132\016.WindowRequ"
-    "estH\000\022+\n\020window_map_reply\030\002 \001(\0132\017.Window"
-    "MapReplyH\000\022/\n\022window_map_request\030\003 \001(\0132\021"
-    ".WindowMapRequestH\000\022+\n\020mouse_move_reply\030"
-    "\004 \001(\0132\017.MouseMoveReplyH\000\022-\n\021mouse_press_"
-    "reply\030\005 \001(\0132\020.MousePressReplyH\000\022/\n\022windo"
-    "w_focus_reply\030\006 \001(\0132\021.WindowFocusReplyH\000"
-    "\0227\n\026window_reorder_request\030\007 \001(\0132\025.Windo"
-    "wReorderRequestH\000\0223\n\024window_focus_reques"
-    "t\030\010 \001(\0132\023.WindowFocusRequestH\000\022F\n\036window"
-    "_register_border_request\030\t \001(\0132\034.WindowR"
-    "egisterBorderRequestH\000\022(\n\016render_request"
-    "\030\n \001(\0132\016.RenderRequestH\000\022$\n\014render_reply"
-    "\030\013 \001(\0132\014.RenderReplyH\000\0221\n\023run_program_re"
-    "quest\030\014 \001(\0132\022.RunProgramRequestH\000\0223\n\024win"
-    "dow_close_request\030\r \001(\0132\023.WindowCloseReq"
-    "uestH\000\022/\n\022window_close_reply\030\016 \001(\0132\021.Win"
-    "dowCloseReplyH\000\0225\n\025file_register_request"
-    "\030\017 \001(\0132\024.FileRegisterRequestH\000\022$\n\014reload"
-    "_reply\030\020 \001(\0132\014.ReloadReplyH\000\0225\n\025browser_"
-    "start_request\030\021 \001(\0132\024.BrowserStartReques"
-    "tH\000B\006\n\004data\"(\n\006Packet\022\036\n\010segments\030\001 \003(\0132"
-    "\014.DataSegment*d\n\020MouseButtonState\022\023\n\017MOU"
-    "SE_LEFT_DOWN\020\000\022\021\n\rMOUSE_LEFT_UP\020\001\022\024\n\020MOU"
-    "SE_RIGHT_DOWN\020\002\022\022\n\016MOUSE_RIGHT_UP\020\003b\006pro"
-    "to3"
+    "st\022\021\n\tfile_path\030\001 \001(\t\"\"\n\017LogMessageReply"
+    "\022\017\n\007message\030\001 \001(\t\"\'\n\024WindowReorderReques"
+    "t\022\017\n\007windows\030\001 \003(\004\"b\n\033WindowRegisterBord"
+    "erRequest\022\016\n\006window\030\001 \001(\004\022\t\n\001x\030\002 \001(\005\022\t\n\001"
+    "y\030\003 \001(\005\022\r\n\005width\030\004 \001(\005\022\016\n\006height\030\005 \001(\005\"$"
+    "\n\rRenderRequest\022\023\n\013frame_count\030\001 \001(\004\"$\n\021"
+    "RunProgramRequest\022\017\n\007command\030\001 \003(\t\"t\n\016Wi"
+    "ndowMapReply\022\016\n\006window\030\001 \001(\004\022\t\n\001x\030\002 \001(\r\022"
+    "\t\n\001y\030\003 \001(\r\022\r\n\005width\030\004 \001(\r\022\016\n\006height\030\005 \001("
+    "\r\022\017\n\007visible\030\006 \001(\010\022\014\n\004name\030\007 \001(\t\"\"\n\020Wind"
+    "owFocusReply\022\016\n\006window\030\001 \001(\004\"&\n\016MouseMov"
+    "eReply\022\t\n\001x\030\001 \001(\r\022\t\n\001y\030\002 \001(\r\"I\n\017MousePre"
+    "ssReply\022\t\n\001x\030\001 \001(\r\022\t\n\001y\030\002 \001(\r\022 \n\005state\030\003"
+    " \001(\0162\021.MouseButtonState\",\n\013RenderReply\022\035"
+    "\n\025last_frame_observered\030\001 \001(\004\"$\n\022WindowC"
+    "loseRequest\022\016\n\006window\030\001 \001(\004\"\"\n\020WindowClo"
+    "seReply\022\016\n\006window\030\001 \001(\004\"\214\007\n\013DataSegment\022"
+    "(\n\016window_request\030\001 \001(\0132\016.WindowRequestH"
+    "\000\022+\n\020window_map_reply\030\002 \001(\0132\017.WindowMapR"
+    "eplyH\000\022/\n\022window_map_request\030\003 \001(\0132\021.Win"
+    "dowMapRequestH\000\022+\n\020mouse_move_reply\030\004 \001("
+    "\0132\017.MouseMoveReplyH\000\022-\n\021mouse_press_repl"
+    "y\030\005 \001(\0132\020.MousePressReplyH\000\022/\n\022window_fo"
+    "cus_reply\030\006 \001(\0132\021.WindowFocusReplyH\000\0227\n\026"
+    "window_reorder_request\030\007 \001(\0132\025.WindowReo"
+    "rderRequestH\000\0223\n\024window_focus_request\030\010 "
+    "\001(\0132\023.WindowFocusRequestH\000\022F\n\036window_reg"
+    "ister_border_request\030\t \001(\0132\034.WindowRegis"
+    "terBorderRequestH\000\022(\n\016render_request\030\n \001"
+    "(\0132\016.RenderRequestH\000\022$\n\014render_reply\030\013 \001"
+    "(\0132\014.RenderReplyH\000\0221\n\023run_program_reques"
+    "t\030\014 \001(\0132\022.RunProgramRequestH\000\0223\n\024window_"
+    "close_request\030\r \001(\0132\023.WindowCloseRequest"
+    "H\000\022/\n\022window_close_reply\030\016 \001(\0132\021.WindowC"
+    "loseReplyH\000\0225\n\025file_register_request\030\017 \001"
+    "(\0132\024.FileRegisterRequestH\000\022$\n\014reload_rep"
+    "ly\030\020 \001(\0132\014.ReloadReplyH\000\0225\n\025browser_star"
+    "t_request\030\021 \001(\0132\024.BrowserStartRequestH\000\022"
+    "-\n\021log_message_reply\030\022 \001(\0132\020.LogMessageR"
+    "eplyH\000B\006\n\004data\"(\n\006Packet\022\036\n\010segments\030\001 \003"
+    "(\0132\014.DataSegment*d\n\020MouseButtonState\022\023\n\017"
+    "MOUSE_LEFT_DOWN\020\000\022\021\n\rMOUSE_LEFT_UP\020\001\022\024\n\020"
+    "MOUSE_RIGHT_DOWN\020\002\022\022\n\016MOUSE_RIGHT_UP\020\003b\006"
+    "proto3"
 };
 static ::absl::once_flag descriptor_table_windowmanager_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_windowmanager_2eproto = {
     false,
     false,
-    1883,
+    1966,
     descriptor_table_protodef_windowmanager_2eproto,
     "windowmanager.proto",
     &descriptor_table_windowmanager_2eproto_once,
     nullptr,
     0,
-    19,
+    20,
     schemas,
     file_default_instances,
     TableStruct_windowmanager_2eproto::offsets,
@@ -2140,6 +2175,281 @@ void FileRegisterRequest::InternalSwap(FileRegisterRequest* PROTOBUF_RESTRICT PR
 }
 // ===================================================================
 
+class LogMessageReply::_Internal {
+ public:
+  using HasBits =
+      decltype(::std::declval<LogMessageReply>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(LogMessageReply, _impl_._has_bits_);
+};
+
+LogMessageReply::LogMessageReply(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, LogMessageReply_class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:LogMessageReply)
+}
+PROTOBUF_NDEBUG_INLINE LogMessageReply::Impl_::Impl_(
+    [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
+    [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+    [[maybe_unused]] const ::LogMessageReply& from_msg)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        message_(arena, from.message_) {}
+
+LogMessageReply::LogMessageReply(
+    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena,
+    const LogMessageReply& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, LogMessageReply_class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  LogMessageReply* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+
+  // @@protoc_insertion_point(copy_constructor:LogMessageReply)
+}
+PROTOBUF_NDEBUG_INLINE LogMessageReply::Impl_::Impl_(
+    [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
+    [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
+      : _cached_size_{0},
+        message_(arena) {}
+
+inline void LogMessageReply::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+}
+LogMessageReply::~LogMessageReply() {
+  // @@protoc_insertion_point(destructor:LogMessageReply)
+  SharedDtor(*this);
+}
+inline void LogMessageReply::SharedDtor(MessageLite& self) {
+  LogMessageReply& this_ = static_cast<LogMessageReply&>(self);
+  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
+    this_.CheckHasBitConsistency();
+  }
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  this_._impl_.message_.Destroy();
+  this_._impl_.~Impl_();
+}
+
+inline void* PROTOBUF_NONNULL LogMessageReply::PlacementNew_(
+    const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena) {
+  return ::new (mem) LogMessageReply(arena);
+}
+constexpr auto LogMessageReply::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::CopyInit(sizeof(LogMessageReply),
+                                            alignof(LogMessageReply));
+}
+constexpr auto LogMessageReply::InternalGenerateClassData_() {
+  return ::google::protobuf::internal::ClassDataFull{
+      ::google::protobuf::internal::ClassData{
+          &_LogMessageReply_default_instance_._instance,
+          &_table_.header,
+          nullptr,  // OnDemandRegisterArenaDtor
+          nullptr,  // IsInitialized
+          &LogMessageReply::MergeImpl,
+          ::google::protobuf::Message::GetNewImpl<LogMessageReply>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+          &LogMessageReply::SharedDtor,
+          ::google::protobuf::Message::GetClearImpl<LogMessageReply>(), &LogMessageReply::ByteSizeLong,
+              &LogMessageReply::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          PROTOBUF_FIELD_OFFSET(LogMessageReply, _impl_._cached_size_),
+          false,
+      },
+      &LogMessageReply::kDescriptorMethods,
+      &descriptor_table_windowmanager_2eproto,
+      nullptr,  // tracker
+  };
+}
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 const
+    ::google::protobuf::internal::ClassDataFull LogMessageReply_class_data_ =
+        LogMessageReply::InternalGenerateClassData_();
+
+PROTOBUF_ATTRIBUTE_WEAK const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL
+LogMessageReply::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&LogMessageReply_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(LogMessageReply_class_data_.tc_table);
+  return LogMessageReply_class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 1, 0, 31, 2>
+LogMessageReply::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(LogMessageReply, _impl_._has_bits_),
+    0, // no _extensions_
+    1, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967294,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    1,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    LogMessageReply_class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::LogMessageReply>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    // string message = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 0, 0,
+      PROTOBUF_FIELD_OFFSET(LogMessageReply, _impl_.message_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string message = 1;
+    {PROTOBUF_FIELD_OFFSET(LogMessageReply, _impl_.message_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+  }},
+  // no aux_entries
+  {{
+    "\17\7\0\0\0\0\0\0"
+    "LogMessageReply"
+    "message"
+  }},
+};
+PROTOBUF_NOINLINE void LogMessageReply::Clear() {
+// @@protoc_insertion_point(message_clear_start:LogMessageReply)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+    _impl_.message_.ClearNonDefaultToEmpty();
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+::uint8_t* PROTOBUF_NONNULL LogMessageReply::_InternalSerialize(
+    const ::google::protobuf::MessageLite& base, ::uint8_t* PROTOBUF_NONNULL target,
+    ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) {
+  const LogMessageReply& this_ = static_cast<const LogMessageReply&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+::uint8_t* PROTOBUF_NONNULL LogMessageReply::_InternalSerialize(
+    ::uint8_t* PROTOBUF_NONNULL target,
+    ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+  const LogMessageReply& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
+    this_.CheckHasBitConsistency();
+  }
+  // @@protoc_insertion_point(serialize_to_array_start:LogMessageReply)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  cached_has_bits = this_._impl_._has_bits_[0];
+  // string message = 1;
+  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+    if (!this_._internal_message().empty()) {
+      const ::std::string& _s = this_._internal_message();
+      ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "LogMessageReply.message");
+      target = stream->WriteStringMaybeAliased(1, _s, target);
+    }
+  }
+
+  if (ABSL_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:LogMessageReply)
+  return target;
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+::size_t LogMessageReply::ByteSizeLong(const MessageLite& base) {
+  const LogMessageReply& this_ = static_cast<const LogMessageReply&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+::size_t LogMessageReply::ByteSizeLong() const {
+  const LogMessageReply& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  // @@protoc_insertion_point(message_byte_size_start:LogMessageReply)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void)cached_has_bits;
+
+   {
+    // string message = 1;
+    cached_has_bits = this_._impl_._has_bits_[0];
+    if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+      if (!this_._internal_message().empty()) {
+        total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                        this_._internal_message());
+      }
+    }
+  }
+  return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                             &this_._impl_._cached_size_);
+}
+
+void LogMessageReply::MergeImpl(::google::protobuf::MessageLite& to_msg,
+                            const ::google::protobuf::MessageLite& from_msg) {
+   auto* const _this =
+      static_cast<LogMessageReply*>(&to_msg);
+  auto& from = static_cast<const LogMessageReply&>(from_msg);
+  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
+    from.CheckHasBitConsistency();
+  }
+  // @@protoc_insertion_point(class_specific_merge_from_start:LogMessageReply)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+    if (!from._internal_message().empty()) {
+      _this->_internal_set_message(from._internal_message());
+    } else {
+      if (_this->_impl_.message_.IsDefault()) {
+        _this->_internal_set_message("");
+      }
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+}
+
+void LogMessageReply::CopyFrom(const LogMessageReply& from) {
+  // @@protoc_insertion_point(class_specific_copy_from_start:LogMessageReply)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void LogMessageReply::InternalSwap(LogMessageReply* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
+  using ::std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.message_, &other->_impl_.message_, arena);
+}
+
+::google::protobuf::Metadata LogMessageReply::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
 class WindowReorderRequest::_Internal {
  public:
   using HasBits =
@@ -3067,7 +3377,7 @@ PROTOBUF_NDEBUG_INLINE RunProgramRequest::Impl_::Impl_(
     [[maybe_unused]] const ::RunProgramRequest& from_msg)
       : _has_bits_{from._has_bits_},
         _cached_size_{0},
-        command_(arena, from.command_) {}
+        command_{visibility, arena, from.command_} {}
 
 RunProgramRequest::RunProgramRequest(
     ::google::protobuf::Arena* PROTOBUF_NULLABLE arena,
@@ -3089,7 +3399,7 @@ PROTOBUF_NDEBUG_INLINE RunProgramRequest::Impl_::Impl_(
     [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
     [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
       : _cached_size_{0},
-        command_(arena) {}
+        command_{visibility, arena} {}
 
 inline void RunProgramRequest::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
@@ -3105,7 +3415,6 @@ inline void RunProgramRequest::SharedDtor(MessageLite& self) {
   }
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
-  this_._impl_.command_.Destroy();
   this_._impl_.~Impl_();
 }
 
@@ -3115,8 +3424,20 @@ inline void* PROTOBUF_NONNULL RunProgramRequest::PlacementNew_(
   return ::new (mem) RunProgramRequest(arena);
 }
 constexpr auto RunProgramRequest::InternalNewImpl_() {
-  return ::google::protobuf::internal::MessageCreator::CopyInit(sizeof(RunProgramRequest),
-                                            alignof(RunProgramRequest));
+  constexpr auto arena_bits = ::google::protobuf::internal::EncodePlacementArenaOffsets({
+      PROTOBUF_FIELD_OFFSET(RunProgramRequest, _impl_.command_) +
+          decltype(RunProgramRequest::_impl_.command_)::
+              InternalGetArenaOffset(
+                  ::google::protobuf::Message::internal_visibility()),
+  });
+  if (arena_bits.has_value()) {
+    return ::google::protobuf::internal::MessageCreator::ZeroInit(
+        sizeof(RunProgramRequest), alignof(RunProgramRequest), *arena_bits);
+  } else {
+    return ::google::protobuf::internal::MessageCreator(&RunProgramRequest::PlacementNew_,
+                                 sizeof(RunProgramRequest),
+                                 alignof(RunProgramRequest));
+  }
 }
 constexpr auto RunProgramRequest::InternalGenerateClassData_() {
   return ::google::protobuf::internal::ClassDataFull{
@@ -3171,15 +3492,15 @@ RunProgramRequest::_table_ = {
     ::_pbi::TcParser::GetTable<::RunProgramRequest>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // string command = 1;
-    {::_pbi::TcParser::FastUS1,
+    // repeated string command = 1;
+    {::_pbi::TcParser::FastUR1,
      {10, 0, 0,
       PROTOBUF_FIELD_OFFSET(RunProgramRequest, _impl_.command_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // string command = 1;
-    {PROTOBUF_FIELD_OFFSET(RunProgramRequest, _impl_.command_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // repeated string command = 1;
+    {PROTOBUF_FIELD_OFFSET(RunProgramRequest, _impl_.command_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcRepeated | ::_fl::kUtf8String | ::_fl::kRepSString)},
   }},
   // no aux_entries
   {{
@@ -3196,8 +3517,8 @@ PROTOBUF_NOINLINE void RunProgramRequest::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-    _impl_.command_.ClearNonDefaultToEmpty();
+  if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
+    _impl_.command_.Clear();
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -3222,13 +3543,13 @@ PROTOBUF_NOINLINE void RunProgramRequest::Clear() {
   (void)cached_has_bits;
 
   cached_has_bits = this_._impl_._has_bits_[0];
-  // string command = 1;
-  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-    if (!this_._internal_command().empty()) {
-      const ::std::string& _s = this_._internal_command();
+  // repeated string command = 1;
+  if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
+    for (int i = 0, n = this_._internal_command_size(); i < n; ++i) {
+      const auto& s = this_._internal_command().Get(i);
       ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-          _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "RunProgramRequest.command");
-      target = stream->WriteStringMaybeAliased(1, _s, target);
+          s.data(), static_cast<int>(s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "RunProgramRequest.command");
+      target = stream->WriteString(1, s, target);
     }
   }
 
@@ -3255,13 +3576,16 @@ PROTOBUF_NOINLINE void RunProgramRequest::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void)cached_has_bits;
 
+  ::_pbi::Prefetch5LinesFrom7Lines(&this_);
    {
-    // string command = 1;
+    // repeated string command = 1;
     cached_has_bits = this_._impl_._has_bits_[0];
-    if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-      if (!this_._internal_command().empty()) {
-        total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
-                                        this_._internal_command());
+    if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
+      total_size +=
+          1 * ::google::protobuf::internal::FromIntSize(this_._internal_command().size());
+      for (int i = 0, n = this_._internal_command().size(); i < n; ++i) {
+        total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+            this_._internal_command().Get(i));
       }
     }
   }
@@ -3277,20 +3601,17 @@ void RunProgramRequest::MergeImpl(::google::protobuf::MessageLite& to_msg,
   if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
     from.CheckHasBitConsistency();
   }
+  ::google::protobuf::Arena* arena = _this->GetArena();
   // @@protoc_insertion_point(class_specific_merge_from_start:RunProgramRequest)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
   (void)cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-    if (!from._internal_command().empty()) {
-      _this->_internal_set_command(from._internal_command());
-    } else {
-      if (_this->_impl_.command_.IsDefault()) {
-        _this->_internal_set_command("");
-      }
-    }
+  if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
+    _this->_internal_mutable_command()->InternalMergeFromWithArena(
+        ::google::protobuf::MessageLite::internal_visibility(), arena,
+        from._internal_command());
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
@@ -3307,11 +3628,9 @@ void RunProgramRequest::CopyFrom(const RunProgramRequest& from) {
 
 void RunProgramRequest::InternalSwap(RunProgramRequest* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
   using ::std::swap;
-  auto* arena = GetArena();
-  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.command_, &other->_impl_.command_, arena);
+  _impl_.command_.InternalSwap(&other->_impl_.command_);
 }
 
 ::google::protobuf::Metadata RunProgramRequest::GetMetadata() const {
@@ -5616,6 +5935,19 @@ void DataSegment::set_allocated_browser_start_request(::BrowserStartRequest* PRO
   }
   // @@protoc_insertion_point(field_set_allocated:DataSegment.browser_start_request)
 }
+void DataSegment::set_allocated_log_message_reply(::LogMessageReply* PROTOBUF_NULLABLE log_message_reply) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  clear_data();
+  if (log_message_reply) {
+    ::google::protobuf::Arena* submessage_arena = log_message_reply->GetArena();
+    if (message_arena != submessage_arena) {
+      log_message_reply = ::google::protobuf::internal::GetOwnedMessage(message_arena, log_message_reply, submessage_arena);
+    }
+    set_has_log_message_reply();
+    _impl_.data_.log_message_reply_ = log_message_reply;
+  }
+  // @@protoc_insertion_point(field_set_allocated:DataSegment.log_message_reply)
+}
 DataSegment::DataSegment(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, DataSegment_class_data_.base()) {
@@ -5699,6 +6031,9 @@ DataSegment::DataSegment(
         break;
       case kBrowserStartRequest:
         _impl_.data_.browser_start_request_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.data_.browser_start_request_);
+        break;
+      case kLogMessageReply:
+        _impl_.data_.log_message_reply_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.data_.log_message_reply_);
         break;
   }
 
@@ -5871,6 +6206,14 @@ void DataSegment::clear_data() {
       }
       break;
     }
+    case kLogMessageReply: {
+      if (GetArena() == nullptr) {
+        delete _impl_.data_.log_message_reply_;
+      } else if (::google::protobuf::internal::DebugHardenClearOneofMessageOnArena()) {
+        ::google::protobuf::internal::MaybePoisonAfterClear(_impl_.data_.log_message_reply_);
+      }
+      break;
+    }
     case DATA_NOT_SET: {
       break;
     }
@@ -5922,17 +6265,17 @@ DataSegment::GetClassData() const {
   return DataSegment_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 17, 17, 0, 2>
+const ::_pbi::TcParseTable<0, 18, 18, 0, 2>
 DataSegment::_table_ = {
   {
     0,  // no _has_bits_
     0, // no _extensions_
-    17, 0,  // max_field_number, fast_idx_mask
+    18, 0,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294836224,  // skipmap
+    4294705152,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    17,  // num_field_entries
-    17,  // num_aux_entries
+    18,  // num_field_entries
+    18,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     DataSegment_class_data_.base(),
     nullptr,  // post_loop_handler
@@ -5979,6 +6322,8 @@ DataSegment::_table_ = {
     {PROTOBUF_FIELD_OFFSET(DataSegment, _impl_.data_.reload_reply_), _Internal::kOneofCaseOffset + 0, 15, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
     // .BrowserStartRequest browser_start_request = 17;
     {PROTOBUF_FIELD_OFFSET(DataSegment, _impl_.data_.browser_start_request_), _Internal::kOneofCaseOffset + 0, 16, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .LogMessageReply log_message_reply = 18;
+    {PROTOBUF_FIELD_OFFSET(DataSegment, _impl_.data_.log_message_reply_), _Internal::kOneofCaseOffset + 0, 17, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::WindowRequest>()},
@@ -5998,6 +6343,7 @@ DataSegment::_table_ = {
       {::_pbi::TcParser::GetTable<::FileRegisterRequest>()},
       {::_pbi::TcParser::GetTable<::ReloadReply>()},
       {::_pbi::TcParser::GetTable<::BrowserStartRequest>()},
+      {::_pbi::TcParser::GetTable<::LogMessageReply>()},
   }},
   {{
   }},
@@ -6134,6 +6480,12 @@ PROTOBUF_NOINLINE void DataSegment::Clear() {
           stream);
       break;
     }
+    case kLogMessageReply: {
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          18, *this_._impl_.data_.log_message_reply_, this_._impl_.data_.log_message_reply_->GetCachedSize(), target,
+          stream);
+      break;
+    }
     default:
       break;
   }
@@ -6261,6 +6613,12 @@ PROTOBUF_NOINLINE void DataSegment::Clear() {
     case kBrowserStartRequest: {
       total_size += 2 +
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.data_.browser_start_request_);
+      break;
+    }
+    // .LogMessageReply log_message_reply = 18;
+    case kLogMessageReply: {
+      total_size += 2 +
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.data_.log_message_reply_);
       break;
     }
     case DATA_NOT_SET: {
@@ -6430,6 +6788,14 @@ void DataSegment::MergeImpl(::google::protobuf::MessageLite& to_msg,
           _this->_impl_.data_.browser_start_request_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.data_.browser_start_request_);
         } else {
           _this->_impl_.data_.browser_start_request_->MergeFrom(*from._impl_.data_.browser_start_request_);
+        }
+        break;
+      }
+      case kLogMessageReply: {
+        if (oneof_needs_init) {
+          _this->_impl_.data_.log_message_reply_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.data_.log_message_reply_);
+        } else {
+          _this->_impl_.data_.log_message_reply_->MergeFrom(*from._impl_.data_.log_message_reply_);
         }
         break;
       }
