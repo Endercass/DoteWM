@@ -477,7 +477,7 @@ bool NokoWindowManager::process_events() {
           if (window->name.has_value()) {
             reply->set_name(window->name.value());
           }
-          reply->set_has_border(window->name.has_value());
+          reply->set_has_border(window->border.has_value());
 
           size_t len = packet.ByteSizeLong();
           char* buf = (char*)malloc(len);
