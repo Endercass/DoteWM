@@ -33,7 +33,7 @@ message FileRegisterRequest {
   string file_path = 1;
 }
 
-message LogMessageReply{
+message LogMessageReply {
   string message = 1;
 }
 
@@ -67,6 +67,7 @@ message WindowMapReply {
   uint32 height = 5;
   bool visible = 6;
   string name = 7;
+  bool has_border = 8;
 }
 
 message WindowFocusReply {

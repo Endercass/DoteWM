@@ -446,15 +446,21 @@ bool NokoWindowManager::process_events() {
         int actual_format;
         unsigned long nitems, bytes_after;
         unsigned char* prop = nullptr;
+        Atom net_wm_name = XInternAtom(display, "_NET_WM_NAME", false);
+        Atom utf8_string = XInternAtom(display, "UTF8_STRING", false);
 
-        if (XGetWindowProperty(display, window->window, XA_WM_NAME, 0, 1024,
-                               false, XA_STRING, &actual_type, &actual_format,
+        if (XGetWindowProperty(display, window->window, net_wm_name, 0, 1024,
+                               false, utf8_string, &actual_type, &actual_format,
                                &nitems, &bytes_after, &prop) == X11_Success &&
-            prop) {
-          if (strlen((char*)prop) != 0) {
-            window->name = std::string((char*)prop);
-            printf("set name %s\n", prop);
-          }
+            prop && strlen((char*)prop) != 0) {
+          window->name = std::string((char*)prop);
+          XFree(prop);
+        } else if (XGetWindowProperty(display, window->window, XA_WM_NAME, 0,
+                                      1024, false, XA_STRING, &actual_type,
+                                      &actual_format, &nitems, &bytes_after,
+                                      &prop) == X11_Success &&
+                   prop && strlen((char*)prop) != 0) {
+          window->name = std::string((char*)prop);
           XFree(prop);
         }
         // serialize data to client if window not the base window
@@ -471,6 +477,7 @@ bool NokoWindowManager::process_events() {
           if (window->name.has_value()) {
             reply->set_name(window->name.value());
           }
+          reply->set_has_border(window->name.has_value());
 
           size_t len = packet.ByteSizeLong();
           char* buf = (char*)malloc(len);

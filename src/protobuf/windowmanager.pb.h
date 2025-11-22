@@ -1202,6 +1202,7 @@ class WindowMapReply final : public ::google::protobuf::Message
     kWidthFieldNumber = 4,
     kHeightFieldNumber = 5,
     kVisibleFieldNumber = 6,
+    kHasBorderFieldNumber = 8,
   };
   // string name = 7;
   void clear_name() ;
@@ -1278,12 +1279,22 @@ class WindowMapReply final : public ::google::protobuf::Message
   void _internal_set_visible(bool value);
 
   public:
+  // bool has_border = 8;
+  void clear_has_border() ;
+  bool has_border() const;
+  void set_has_border(bool value);
+
+  private:
+  bool _internal_has_border() const;
+  void _internal_set_has_border(bool value);
+
+  public:
   // @@protoc_insertion_point(class_scope:WindowMapReply)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 7,
-                                   0, 27,
+  static const ::google::protobuf::internal::TcParseTable<3, 8,
+                                   0, 35,
                                    2>
       _table_;
 
@@ -1311,6 +1322,7 @@ class WindowMapReply final : public ::google::protobuf::Message
     ::uint32_t width_;
     ::uint32_t height_;
     bool visible_;
+    bool has_border_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -5385,6 +5397,31 @@ inline void WindowMapReply::set_allocated_name(::std::string* PROTOBUF_NULLABLE 
     _impl_.name_.Set("", GetArena());
   }
   // @@protoc_insertion_point(field_set_allocated:WindowMapReply.name)
+}
+
+// bool has_border = 8;
+inline void WindowMapReply::clear_has_border() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.has_border_ = false;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000080U);
+}
+inline bool WindowMapReply::has_border() const {
+  // @@protoc_insertion_point(field_get:WindowMapReply.has_border)
+  return _internal_has_border();
+}
+inline void WindowMapReply::set_has_border(bool value) {
+  _internal_set_has_border(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  // @@protoc_insertion_point(field_set:WindowMapReply.has_border)
+}
+inline bool WindowMapReply::_internal_has_border() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.has_border_;
+}
+inline void WindowMapReply::_internal_set_has_border(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.has_border_ = value;
 }
 
 // -------------------------------------------------------------------

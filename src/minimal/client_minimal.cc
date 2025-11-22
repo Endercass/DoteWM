@@ -132,6 +132,8 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
               nlohmann::json obj = {
                   {"t", "window_map"},
                   {"name", segment.mutable_window_map_reply()->name()},
+                  {"has_border",
+                   segment.mutable_window_map_reply()->has_border()},
                   {"window",
                    std::to_string(segment.window_map_reply().window())},
                   {"visible", segment.window_map_reply().visible()},
