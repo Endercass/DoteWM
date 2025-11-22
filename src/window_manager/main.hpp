@@ -59,6 +59,7 @@ struct NokoWindow {
   Window window;
 
   std::optional<std::string> name;
+  WindowType type;
 
   int visible;
 

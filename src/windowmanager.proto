@@ -7,6 +7,23 @@ enum MouseButtonState {
   MOUSE_RIGHT_UP = 3;
 }
 
+enum WindowType {
+  WINDOW_TYPE_DESKTOP = 0;
+  WINDOW_TYPE_DOCK = 1;
+  WINDOW_TYPE_TOOLBAR = 2;
+  WINDOW_TYPE_MENU = 3;
+  WINDOW_TYPE_UTILITY = 4;
+  WINDOW_TYPE_SPLASH = 5;
+  WINDOW_TYPE_DIALOG = 6;
+  WINDOW_TYPE_DROPDOWN_MENU = 7;
+  WINDOW_TYPE_POPUP_MENU = 8;
+  WINDOW_TYPE_TOOLTIP = 9;
+  WINDOW_TYPE_NOTIFICATION = 10;
+  WINDOW_TYPE_COMBO = 11;
+  WINDOW_TYPE_DND = 12;
+  WINDOW_TYPE_NORMAL = 13;
+}
+
 // REQUESTS (Browser -> Window Manager)
 
 message WindowRequest {
@@ -44,7 +61,7 @@ message WindowReorderRequest {
 message WindowRegisterBorderRequest {
   uint64 window = 1;
   int32 x = 2;  // all of these values are the border around your window
-  int32 y = 3;
+  int32 y = 3;  // like x = -1 means a border one pixel before your window
   int32 width = 4;
   int32 height = 5;
 }
@@ -68,6 +85,7 @@ message WindowMapReply {
   bool visible = 6;
   string name = 7;
   bool has_border = 8;
+  WindowType type = 9;
 }
 
 message WindowFocusReply {

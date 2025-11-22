@@ -56,6 +56,8 @@ extern const ::google::protobuf::internal::DescriptorTable descriptor_table_wind
 }  // extern "C"
 enum MouseButtonState : int;
 extern const uint32_t MouseButtonState_internal_data_[];
+enum WindowType : int;
+extern const uint32_t WindowType_internal_data_[];
 class BrowserStartRequest;
 struct BrowserStartRequestDefaultTypeInternal;
 extern BrowserStartRequestDefaultTypeInternal _BrowserStartRequest_default_instance_;
@@ -141,6 +143,9 @@ namespace protobuf {
 template <>
 internal::EnumTraitsT<::MouseButtonState_internal_data_>
     internal::EnumTraitsImpl::value<::MouseButtonState>;
+template <>
+internal::EnumTraitsT<::WindowType_internal_data_>
+    internal::EnumTraitsImpl::value<::WindowType>;
 }  // namespace protobuf
 }  // namespace google
 
@@ -180,6 +185,54 @@ inline const ::std::string& MouseButtonState_Name(MouseButtonState value) {
 inline bool MouseButtonState_Parse(
     ::absl::string_view name, MouseButtonState* PROTOBUF_NONNULL value) {
   return ::google::protobuf::internal::ParseNamedEnum<MouseButtonState>(MouseButtonState_descriptor(), name,
+                                           value);
+}
+enum WindowType : int {
+  WINDOW_TYPE_DESKTOP = 0,
+  WINDOW_TYPE_DOCK = 1,
+  WINDOW_TYPE_TOOLBAR = 2,
+  WINDOW_TYPE_MENU = 3,
+  WINDOW_TYPE_UTILITY = 4,
+  WINDOW_TYPE_SPLASH = 5,
+  WINDOW_TYPE_DIALOG = 6,
+  WINDOW_TYPE_DROPDOWN_MENU = 7,
+  WINDOW_TYPE_POPUP_MENU = 8,
+  WINDOW_TYPE_TOOLTIP = 9,
+  WINDOW_TYPE_NOTIFICATION = 10,
+  WINDOW_TYPE_COMBO = 11,
+  WINDOW_TYPE_DND = 12,
+  WINDOW_TYPE_NORMAL = 13,
+  WindowType_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      ::std::numeric_limits<::int32_t>::min(),
+  WindowType_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      ::std::numeric_limits<::int32_t>::max(),
+};
+
+extern const uint32_t WindowType_internal_data_[];
+inline constexpr WindowType WindowType_MIN =
+    static_cast<WindowType>(0);
+inline constexpr WindowType WindowType_MAX =
+    static_cast<WindowType>(13);
+inline bool WindowType_IsValid(int value) {
+  return 0 <= value && value <= 13;
+}
+inline constexpr int WindowType_ARRAYSIZE = 13 + 1;
+const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL WindowType_descriptor();
+template <typename T>
+const ::std::string& WindowType_Name(T value) {
+  static_assert(::std::is_same<T, WindowType>::value ||
+                    ::std::is_integral<T>::value,
+                "Incorrect type passed to WindowType_Name().");
+  return WindowType_Name(static_cast<WindowType>(value));
+}
+template <>
+inline const ::std::string& WindowType_Name(WindowType value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<WindowType_descriptor, 0, 13>(
+      static_cast<int>(value));
+}
+inline bool WindowType_Parse(
+    ::absl::string_view name, WindowType* PROTOBUF_NONNULL value) {
+  return ::google::protobuf::internal::ParseNamedEnum<WindowType>(WindowType_descriptor(), name,
                                            value);
 }
 
@@ -1203,6 +1256,7 @@ class WindowMapReply final : public ::google::protobuf::Message
     kHeightFieldNumber = 5,
     kVisibleFieldNumber = 6,
     kHasBorderFieldNumber = 8,
+    kTypeFieldNumber = 9,
   };
   // string name = 7;
   void clear_name() ;
@@ -1289,11 +1343,21 @@ class WindowMapReply final : public ::google::protobuf::Message
   void _internal_set_has_border(bool value);
 
   public:
+  // .WindowType type = 9;
+  void clear_type() ;
+  ::WindowType type() const;
+  void set_type(::WindowType value);
+
+  private:
+  ::WindowType _internal_type() const;
+  void _internal_set_type(::WindowType value);
+
+  public:
   // @@protoc_insertion_point(class_scope:WindowMapReply)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 8,
+  static const ::google::protobuf::internal::TcParseTable<4, 9,
                                    0, 35,
                                    2>
       _table_;
@@ -1323,6 +1387,7 @@ class WindowMapReply final : public ::google::protobuf::Message
     ::uint32_t height_;
     bool visible_;
     bool has_border_;
+    int type_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -5424,6 +5489,31 @@ inline void WindowMapReply::_internal_set_has_border(bool value) {
   _impl_.has_border_ = value;
 }
 
+// .WindowType type = 9;
+inline void WindowMapReply::clear_type() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.type_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000100U);
+}
+inline ::WindowType WindowMapReply::type() const {
+  // @@protoc_insertion_point(field_get:WindowMapReply.type)
+  return _internal_type();
+}
+inline void WindowMapReply::set_type(::WindowType value) {
+  _internal_set_type(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  // @@protoc_insertion_point(field_set:WindowMapReply.type)
+}
+inline ::WindowType WindowMapReply::_internal_type() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::WindowType>(_impl_.type_);
+}
+inline void WindowMapReply::_internal_set_type(::WindowType value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.type_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // WindowFocusReply
@@ -7237,6 +7327,12 @@ struct is_proto_enum<::MouseButtonState> : std::true_type {};
 template <>
 inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::MouseButtonState>() {
   return ::MouseButtonState_descriptor();
+}
+template <>
+struct is_proto_enum<::WindowType> : std::true_type {};
+template <>
+inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::WindowType>() {
+  return ::WindowType_descriptor();
 }
 
 }  // namespace protobuf

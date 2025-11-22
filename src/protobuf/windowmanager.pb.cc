@@ -146,7 +146,8 @@ inline constexpr WindowMapReply::Impl_::Impl_(
         width_{0u},
         height_{0u},
         visible_{false},
-        has_border_{false} {}
+        has_border_{false},
+        type_{static_cast< ::WindowType >(0)} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR WindowMapReply::WindowMapReply(::_pbi::ConstantInitialized)
@@ -537,7 +538,7 @@ struct PacketDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PacketDefaultTypeInternal _Packet_default_instance_;
 static const ::_pb::EnumDescriptor* PROTOBUF_NONNULL
-    file_level_enum_descriptors_windowmanager_2eproto[1];
+    file_level_enum_descriptors_windowmanager_2eproto[2];
 static constexpr const ::_pb::ServiceDescriptor* PROTOBUF_NONNULL* PROTOBUF_NULLABLE
     file_level_service_descriptors_windowmanager_2eproto = nullptr;
 const ::uint32_t
@@ -608,7 +609,7 @@ const ::uint32_t
         0,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::WindowMapReply, _impl_._has_bits_),
-        11, // hasbit index offset
+        12, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::WindowMapReply, _impl_.window_),
         PROTOBUF_FIELD_OFFSET(::WindowMapReply, _impl_.x_),
         PROTOBUF_FIELD_OFFSET(::WindowMapReply, _impl_.y_),
@@ -617,6 +618,7 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::WindowMapReply, _impl_.visible_),
         PROTOBUF_FIELD_OFFSET(::WindowMapReply, _impl_.name_),
         PROTOBUF_FIELD_OFFSET(::WindowMapReply, _impl_.has_border_),
+        PROTOBUF_FIELD_OFFSET(::WindowMapReply, _impl_.type_),
         1,
         2,
         3,
@@ -625,6 +627,7 @@ const ::uint32_t
         6,
         0,
         7,
+        8,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::WindowFocusReply, _impl_._has_bits_),
         4, // hasbit index offset
@@ -703,14 +706,14 @@ static const ::_pbi::MigrationSchema
         {53, sizeof(::RenderRequest)},
         {58, sizeof(::RunProgramRequest)},
         {63, sizeof(::WindowMapReply)},
-        {82, sizeof(::WindowFocusReply)},
-        {87, sizeof(::MouseMoveReply)},
-        {94, sizeof(::MousePressReply)},
-        {103, sizeof(::RenderReply)},
-        {108, sizeof(::WindowCloseRequest)},
-        {113, sizeof(::WindowCloseReply)},
-        {118, sizeof(::DataSegment)},
-        {139, sizeof(::Packet)},
+        {84, sizeof(::WindowFocusReply)},
+        {89, sizeof(::MouseMoveReply)},
+        {96, sizeof(::MousePressReply)},
+        {105, sizeof(::RenderReply)},
+        {110, sizeof(::WindowCloseRequest)},
+        {115, sizeof(::WindowCloseReply)},
+        {120, sizeof(::DataSegment)},
+        {141, sizeof(::Packet)},
 };
 static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::_WindowRequest_default_instance_._instance,
@@ -748,50 +751,60 @@ const char descriptor_table_protodef_windowmanager_2eproto[] ABSL_ATTRIBUTE_SECT
     "erRequest\022\016\n\006window\030\001 \001(\004\022\t\n\001x\030\002 \001(\005\022\t\n\001"
     "y\030\003 \001(\005\022\r\n\005width\030\004 \001(\005\022\016\n\006height\030\005 \001(\005\"$"
     "\n\rRenderRequest\022\023\n\013frame_count\030\001 \001(\004\"$\n\021"
-    "RunProgramRequest\022\017\n\007command\030\001 \003(\t\"\210\001\n\016W"
+    "RunProgramRequest\022\017\n\007command\030\001 \003(\t\"\243\001\n\016W"
     "indowMapReply\022\016\n\006window\030\001 \001(\004\022\t\n\001x\030\002 \001(\r"
     "\022\t\n\001y\030\003 \001(\r\022\r\n\005width\030\004 \001(\r\022\016\n\006height\030\005 \001"
     "(\r\022\017\n\007visible\030\006 \001(\010\022\014\n\004name\030\007 \001(\t\022\022\n\nhas"
-    "_border\030\010 \001(\010\"\"\n\020WindowFocusReply\022\016\n\006win"
-    "dow\030\001 \001(\004\"&\n\016MouseMoveReply\022\t\n\001x\030\001 \001(\r\022\t"
-    "\n\001y\030\002 \001(\r\"I\n\017MousePressReply\022\t\n\001x\030\001 \001(\r\022"
-    "\t\n\001y\030\002 \001(\r\022 \n\005state\030\003 \001(\0162\021.MouseButtonS"
-    "tate\",\n\013RenderReply\022\035\n\025last_frame_observ"
-    "ered\030\001 \001(\004\"$\n\022WindowCloseRequest\022\016\n\006wind"
-    "ow\030\001 \001(\004\"\"\n\020WindowCloseReply\022\016\n\006window\030\001"
-    " \001(\004\"\214\007\n\013DataSegment\022(\n\016window_request\030\001"
-    " \001(\0132\016.WindowRequestH\000\022+\n\020window_map_rep"
-    "ly\030\002 \001(\0132\017.WindowMapReplyH\000\022/\n\022window_ma"
-    "p_request\030\003 \001(\0132\021.WindowMapRequestH\000\022+\n\020"
-    "mouse_move_reply\030\004 \001(\0132\017.MouseMoveReplyH"
-    "\000\022-\n\021mouse_press_reply\030\005 \001(\0132\020.MousePres"
-    "sReplyH\000\022/\n\022window_focus_reply\030\006 \001(\0132\021.W"
-    "indowFocusReplyH\000\0227\n\026window_reorder_requ"
-    "est\030\007 \001(\0132\025.WindowReorderRequestH\000\0223\n\024wi"
-    "ndow_focus_request\030\010 \001(\0132\023.WindowFocusRe"
-    "questH\000\022F\n\036window_register_border_reques"
-    "t\030\t \001(\0132\034.WindowRegisterBorderRequestH\000\022"
-    "(\n\016render_request\030\n \001(\0132\016.RenderRequestH"
-    "\000\022$\n\014render_reply\030\013 \001(\0132\014.RenderReplyH\000\022"
-    "1\n\023run_program_request\030\014 \001(\0132\022.RunProgra"
-    "mRequestH\000\0223\n\024window_close_request\030\r \001(\013"
-    "2\023.WindowCloseRequestH\000\022/\n\022window_close_"
-    "reply\030\016 \001(\0132\021.WindowCloseReplyH\000\0225\n\025file"
-    "_register_request\030\017 \001(\0132\024.FileRegisterRe"
-    "questH\000\022$\n\014reload_reply\030\020 \001(\0132\014.ReloadRe"
-    "plyH\000\0225\n\025browser_start_request\030\021 \001(\0132\024.B"
-    "rowserStartRequestH\000\022-\n\021log_message_repl"
-    "y\030\022 \001(\0132\020.LogMessageReplyH\000B\006\n\004data\"(\n\006P"
-    "acket\022\036\n\010segments\030\001 \003(\0132\014.DataSegment*d\n"
-    "\020MouseButtonState\022\023\n\017MOUSE_LEFT_DOWN\020\000\022\021"
-    "\n\rMOUSE_LEFT_UP\020\001\022\024\n\020MOUSE_RIGHT_DOWN\020\002\022"
-    "\022\n\016MOUSE_RIGHT_UP\020\003b\006proto3"
+    "_border\030\010 \001(\010\022\031\n\004type\030\t \001(\0162\013.WindowType"
+    "\"\"\n\020WindowFocusReply\022\016\n\006window\030\001 \001(\004\"&\n\016"
+    "MouseMoveReply\022\t\n\001x\030\001 \001(\r\022\t\n\001y\030\002 \001(\r\"I\n\017"
+    "MousePressReply\022\t\n\001x\030\001 \001(\r\022\t\n\001y\030\002 \001(\r\022 \n"
+    "\005state\030\003 \001(\0162\021.MouseButtonState\",\n\013Rende"
+    "rReply\022\035\n\025last_frame_observered\030\001 \001(\004\"$\n"
+    "\022WindowCloseRequest\022\016\n\006window\030\001 \001(\004\"\"\n\020W"
+    "indowCloseReply\022\016\n\006window\030\001 \001(\004\"\214\007\n\013Data"
+    "Segment\022(\n\016window_request\030\001 \001(\0132\016.Window"
+    "RequestH\000\022+\n\020window_map_reply\030\002 \001(\0132\017.Wi"
+    "ndowMapReplyH\000\022/\n\022window_map_request\030\003 \001"
+    "(\0132\021.WindowMapRequestH\000\022+\n\020mouse_move_re"
+    "ply\030\004 \001(\0132\017.MouseMoveReplyH\000\022-\n\021mouse_pr"
+    "ess_reply\030\005 \001(\0132\020.MousePressReplyH\000\022/\n\022w"
+    "indow_focus_reply\030\006 \001(\0132\021.WindowFocusRep"
+    "lyH\000\0227\n\026window_reorder_request\030\007 \001(\0132\025.W"
+    "indowReorderRequestH\000\0223\n\024window_focus_re"
+    "quest\030\010 \001(\0132\023.WindowFocusRequestH\000\022F\n\036wi"
+    "ndow_register_border_request\030\t \001(\0132\034.Win"
+    "dowRegisterBorderRequestH\000\022(\n\016render_req"
+    "uest\030\n \001(\0132\016.RenderRequestH\000\022$\n\014render_r"
+    "eply\030\013 \001(\0132\014.RenderReplyH\000\0221\n\023run_progra"
+    "m_request\030\014 \001(\0132\022.RunProgramRequestH\000\0223\n"
+    "\024window_close_request\030\r \001(\0132\023.WindowClos"
+    "eRequestH\000\022/\n\022window_close_reply\030\016 \001(\0132\021"
+    ".WindowCloseReplyH\000\0225\n\025file_register_req"
+    "uest\030\017 \001(\0132\024.FileRegisterRequestH\000\022$\n\014re"
+    "load_reply\030\020 \001(\0132\014.ReloadReplyH\000\0225\n\025brow"
+    "ser_start_request\030\021 \001(\0132\024.BrowserStartRe"
+    "questH\000\022-\n\021log_message_reply\030\022 \001(\0132\020.Log"
+    "MessageReplyH\000B\006\n\004data\"(\n\006Packet\022\036\n\010segm"
+    "ents\030\001 \003(\0132\014.DataSegment*d\n\020MouseButtonS"
+    "tate\022\023\n\017MOUSE_LEFT_DOWN\020\000\022\021\n\rMOUSE_LEFT_"
+    "UP\020\001\022\024\n\020MOUSE_RIGHT_DOWN\020\002\022\022\n\016MOUSE_RIGH"
+    "T_UP\020\003*\351\002\n\nWindowType\022\027\n\023WINDOW_TYPE_DES"
+    "KTOP\020\000\022\024\n\020WINDOW_TYPE_DOCK\020\001\022\027\n\023WINDOW_T"
+    "YPE_TOOLBAR\020\002\022\024\n\020WINDOW_TYPE_MENU\020\003\022\027\n\023W"
+    "INDOW_TYPE_UTILITY\020\004\022\026\n\022WINDOW_TYPE_SPLA"
+    "SH\020\005\022\026\n\022WINDOW_TYPE_DIALOG\020\006\022\035\n\031WINDOW_T"
+    "YPE_DROPDOWN_MENU\020\007\022\032\n\026WINDOW_TYPE_POPUP"
+    "_MENU\020\010\022\027\n\023WINDOW_TYPE_TOOLTIP\020\t\022\034\n\030WIND"
+    "OW_TYPE_NOTIFICATION\020\n\022\025\n\021WINDOW_TYPE_CO"
+    "MBO\020\013\022\023\n\017WINDOW_TYPE_DND\020\014\022\026\n\022WINDOW_TYP"
+    "E_NORMAL\020\rb\006proto3"
 };
 static ::absl::once_flag descriptor_table_windowmanager_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_windowmanager_2eproto = {
     false,
     false,
-    1987,
+    2378,
     descriptor_table_protodef_windowmanager_2eproto,
     "windowmanager.proto",
     &descriptor_table_windowmanager_2eproto_once,
@@ -810,6 +823,12 @@ const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL MouseButtonState_desc
 }
 PROTOBUF_CONSTINIT const uint32_t MouseButtonState_internal_data_[] = {
     262144u, 0u, };
+const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL WindowType_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_windowmanager_2eproto);
+  return file_level_enum_descriptors_windowmanager_2eproto[1];
+}
+PROTOBUF_CONSTINIT const uint32_t WindowType_internal_data_[] = {
+    917504u, 0u, };
 // ===================================================================
 
 class WindowRequest::_Internal {
@@ -3683,9 +3702,9 @@ WindowMapReply::WindowMapReply(
                offsetof(Impl_, window_),
            reinterpret_cast<const char*>(&from._impl_) +
                offsetof(Impl_, window_),
-           offsetof(Impl_, has_border_) -
+           offsetof(Impl_, type_) -
                offsetof(Impl_, window_) +
-               sizeof(Impl_::has_border_));
+               sizeof(Impl_::type_));
 
   // @@protoc_insertion_point(copy_constructor:WindowMapReply)
 }
@@ -3700,9 +3719,9 @@ inline void WindowMapReply::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   ::memset(reinterpret_cast<char*>(&_impl_) +
                offsetof(Impl_, window_),
            0,
-           offsetof(Impl_, has_border_) -
+           offsetof(Impl_, type_) -
                offsetof(Impl_, window_) +
-               sizeof(Impl_::has_border_));
+               sizeof(Impl_::type_));
 }
 WindowMapReply::~WindowMapReply() {
   // @@protoc_insertion_point(destructor:WindowMapReply)
@@ -3762,16 +3781,16 @@ WindowMapReply::GetClassData() const {
   return WindowMapReply_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 8, 0, 35, 2>
+const ::_pbi::TcParseTable<4, 9, 0, 35, 2>
 WindowMapReply::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(WindowMapReply, _impl_._has_bits_),
     0, // no _extensions_
-    8, 56,  // max_field_number, fast_idx_mask
+    9, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967040,  // skipmap
+    4294966784,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    8,  // num_field_entries
+    9,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     WindowMapReply_class_data_.base(),
@@ -3781,10 +3800,7 @@ WindowMapReply::_table_ = {
     ::_pbi::TcParser::GetTable<::WindowMapReply>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // bool has_border = 8;
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(WindowMapReply, _impl_.has_border_), 7>(),
-     {64, 7, 0,
-      PROTOBUF_FIELD_OFFSET(WindowMapReply, _impl_.has_border_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     // uint64 window = 1;
     {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(WindowMapReply, _impl_.window_), 1>(),
      {8, 1, 0,
@@ -3813,6 +3829,20 @@ WindowMapReply::_table_ = {
     {::_pbi::TcParser::FastUS1,
      {58, 0, 0,
       PROTOBUF_FIELD_OFFSET(WindowMapReply, _impl_.name_)}},
+    // bool has_border = 8;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(WindowMapReply, _impl_.has_border_), 7>(),
+     {64, 7, 0,
+      PROTOBUF_FIELD_OFFSET(WindowMapReply, _impl_.has_border_)}},
+    // .WindowType type = 9;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(WindowMapReply, _impl_.type_), 8>(),
+     {72, 8, 0,
+      PROTOBUF_FIELD_OFFSET(WindowMapReply, _impl_.type_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
@@ -3832,6 +3862,8 @@ WindowMapReply::_table_ = {
     {PROTOBUF_FIELD_OFFSET(WindowMapReply, _impl_.name_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
     // bool has_border = 8;
     {PROTOBUF_FIELD_OFFSET(WindowMapReply, _impl_.has_border_), _Internal::kHasBitsOffset + 7, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    // .WindowType type = 9;
+    {PROTOBUF_FIELD_OFFSET(WindowMapReply, _impl_.type_), _Internal::kHasBitsOffset + 8, 0, (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
   }},
   // no aux_entries
   {{
@@ -3856,6 +3888,7 @@ PROTOBUF_NOINLINE void WindowMapReply::Clear() {
         reinterpret_cast<char*>(&_impl_.has_border_) -
         reinterpret_cast<char*>(&_impl_.window_)) + sizeof(_impl_.has_border_));
   }
+  _impl_.type_ = 0;
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -3952,6 +3985,15 @@ PROTOBUF_NOINLINE void WindowMapReply::Clear() {
     }
   }
 
+  // .WindowType type = 9;
+  if (CheckHasBit(cached_has_bits, 0x00000100U)) {
+    if (this_._internal_type() != 0) {
+      target = stream->EnsureSpace(target);
+      target = ::_pbi::WireFormatLite::WriteEnumToArray(
+          9, this_._internal_type(), target);
+    }
+  }
+
   if (ABSL_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
     target =
         ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -4033,6 +4075,15 @@ PROTOBUF_NOINLINE void WindowMapReply::Clear() {
       }
     }
   }
+   {
+    // .WindowType type = 9;
+    if (CheckHasBit(cached_has_bits, 0x00000100U)) {
+      if (this_._internal_type() != 0) {
+        total_size += 1 +
+                      ::_pbi::WireFormatLite::EnumSize(this_._internal_type());
+      }
+    }
+  }
   return this_.MaybeComputeUnknownFieldsSize(total_size,
                                              &this_._impl_._cached_size_);
 }
@@ -4097,6 +4148,11 @@ void WindowMapReply::MergeImpl(::google::protobuf::MessageLite& to_msg,
       }
     }
   }
+  if (CheckHasBit(cached_has_bits, 0x00000100U)) {
+    if (from._internal_type() != 0) {
+      _this->_impl_.type_ = from._impl_.type_;
+    }
+  }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
@@ -4118,8 +4174,8 @@ void WindowMapReply::InternalSwap(WindowMapReply* PROTOBUF_RESTRICT PROTOBUF_NON
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, &other->_impl_.name_, arena);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(WindowMapReply, _impl_.has_border_)
-      + sizeof(WindowMapReply::_impl_.has_border_)
+      PROTOBUF_FIELD_OFFSET(WindowMapReply, _impl_.type_)
+      + sizeof(WindowMapReply::_impl_.type_)
       - PROTOBUF_FIELD_OFFSET(WindowMapReply, _impl_.window_)>(
           reinterpret_cast<char*>(&_impl_.window_),
           reinterpret_cast<char*>(&other->_impl_.window_));

@@ -463,6 +463,84 @@ bool NokoWindowManager::process_events() {
           window->name = std::string((char*)prop);
           XFree(prop);
         }
+
+        Atom net_wm_window_type =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE", false);
+
+        const Atom window_type_desktop =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE_DESKTOP", false);
+        Atom window_type_dock =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE_DOCK", false);
+        Atom window_type_toolbar =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE_TOOLBAR", false);
+        Atom window_type_menu =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE_MENU", false);
+        Atom window_type_utility =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE_UTILITY", false);
+        Atom window_type_splash =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE_SPLASH", false);
+        Atom window_type_dialog =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE_DIALOG", false);
+        Atom window_type_dropdown_menu =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE_DROPDOWN_MENU", false);
+        Atom window_type_popup_menu =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE_POPUP_MENU", false);
+        Atom window_type_tooltip =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE_TOOLTIP", false);
+        Atom window_type_notification =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE_NOTIFICATION", false);
+        Atom window_type_combo =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE_COMBO", false);
+        Atom window_type_dnd =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE_DND", false);
+        Atom window_type_normal =
+            XInternAtom(display, "_NET_WM_WINDOW_TYPE_NORMAL", false);
+
+        // default to normal if the window doesnt have it
+        window->type = WINDOW_TYPE_NORMAL;
+
+        if (XGetWindowProperty(display, window->window, net_wm_window_type, 0,
+                               1024, false, XA_ATOM, &actual_type,
+                               &actual_format, &nitems, &bytes_after,
+                               &prop) == X11_Success &&
+            prop) {
+          Atom atom = *(Atom*)prop;
+
+          if (atom == window_type_desktop) {
+            window->type = WINDOW_TYPE_DESKTOP;
+          } else if (atom == window_type_dock) {
+            window->type = WINDOW_TYPE_DOCK;
+          } else if (atom == window_type_toolbar) {
+            window->type = WINDOW_TYPE_TOOLBAR;
+          } else if (atom == window_type_menu) {
+            window->type = WINDOW_TYPE_MENU;
+          } else if (atom == window_type_utility) {
+            window->type = WINDOW_TYPE_UTILITY;
+          } else if (atom == window_type_splash) {
+            window->type = WINDOW_TYPE_SPLASH;
+          } else if (atom == window_type_dialog) {
+            window->type = WINDOW_TYPE_DIALOG;
+          } else if (atom == window_type_dropdown_menu) {
+            window->type = WINDOW_TYPE_DROPDOWN_MENU;
+          } else if (atom == window_type_popup_menu) {
+            window->type = WINDOW_TYPE_POPUP_MENU;
+          } else if (atom == window_type_tooltip) {
+            window->type = WINDOW_TYPE_TOOLTIP;
+          } else if (atom == window_type_notification) {
+            window->type = WINDOW_TYPE_NOTIFICATION;
+          } else if (atom == window_type_combo) {
+            window->type = WINDOW_TYPE_COMBO;
+          } else if (atom == window_type_dnd) {
+            window->type = WINDOW_TYPE_DND;
+          } else if (atom == window_type_normal) {
+            window->type = WINDOW_TYPE_NORMAL;
+          } else {
+            window->type = WINDOW_TYPE_NORMAL;
+          }
+
+          XFree(prop);
+        }
+
         // serialize data to client if window not the base window
         if (!base_window.has_value() || base_window.value() != window->window) {
           Packet packet;
@@ -478,6 +556,7 @@ bool NokoWindowManager::process_events() {
             reply->set_name(window->name.value());
           }
           reply->set_has_border(window->border.has_value());
+          reply->set_type(window->type);
 
           size_t len = packet.ByteSizeLong();
           char* buf = (char*)malloc(len);

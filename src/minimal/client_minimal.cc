@@ -129,6 +129,56 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
 
             } break;
             case DataSegment::kWindowMapReply: {
+              std::string str_window_type;
+
+              switch (segment.window_map_reply().type()) {
+                case WINDOW_TYPE_DESKTOP:
+                  str_window_type = "WINDOW_TYPE_DESKTOP";
+                  break;
+                case WINDOW_TYPE_DOCK:
+                  str_window_type = "WINDOW_TYPE_DOCK";
+                  break;
+                case WINDOW_TYPE_TOOLBAR:
+                  str_window_type = "WINDOW_TYPE_TOOLBAR";
+                  break;
+                case WINDOW_TYPE_MENU:
+                  str_window_type = "WINDOW_TYPE_MENU";
+                  break;
+                case WINDOW_TYPE_UTILITY:
+                  str_window_type = "WINDOW_TYPE_UTILITY";
+                  break;
+                case WINDOW_TYPE_SPLASH:
+                  str_window_type = "WINDOW_TYPE_SPLASH";
+                  break;
+                case WINDOW_TYPE_DIALOG:
+                  str_window_type = "WINDOW_TYPE_DIALOG";
+                  break;
+                case WINDOW_TYPE_DROPDOWN_MENU:
+                  str_window_type = "WINDOW_TYPE_DROPDOWN_MENU";
+                  break;
+                case WINDOW_TYPE_POPUP_MENU:
+                  str_window_type = "WINDOW_TYPE_POPUP_MENU";
+                  break;
+                case WINDOW_TYPE_TOOLTIP:
+                  str_window_type = "WINDOW_TYPE_TOOLTIP";
+                  break;
+                case WINDOW_TYPE_NOTIFICATION:
+                  str_window_type = "WINDOW_TYPE_NOTIFICATION";
+                  break;
+                case WINDOW_TYPE_COMBO:
+                  str_window_type = "WINDOW_TYPE_COMBO";
+                  break;
+                case WINDOW_TYPE_DND:
+                  str_window_type = "WINDOW_TYPE_DND";
+                  break;
+                case WINDOW_TYPE_NORMAL:
+                  str_window_type = "WINDOW_TYPE_NORMAL";
+                  break;
+                default:
+                  str_window_type = "WINDOW_TYPE_NORMAL";
+                  break;
+              }
+
               nlohmann::json obj = {
                   {"t", "window_map"},
                   {"name", segment.mutable_window_map_reply()->name()},
@@ -140,7 +190,9 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
                   {"x", segment.window_map_reply().x()},
                   {"y", segment.window_map_reply().y()},
                   {"width", segment.window_map_reply().width()},
-                  {"height", segment.window_map_reply().height()}};
+                  {"height", segment.window_map_reply().height()},
+                  {"win_t", str_window_type},
+              };
 
               to_browser.push_back(obj);
 
