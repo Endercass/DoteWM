@@ -10,6 +10,7 @@
 #include <X11/extensions/Xcomposite.h>
 #include <X11/extensions/Xfixes.h>
 #include <X11/extensions/shape.h>
+#include <libgen.h>
 #include <cstdlib>
 #include <cstring>
 #include <mutex>
@@ -38,7 +39,7 @@
 #include <vector>
 #include "lodepng.h"
 #include "main.hpp"
-#include "src/protobuf/windowmanager.pb.h"
+#include "windowmanager.pb.h"
 
 #define GLX_CONTEXT_MAJOR_VERSION_ARB 0x2091
 #define GLX_CONTEXT_MINOR_VERSION_ARB 0x2092
@@ -1140,13 +1141,24 @@ int main(int argc, char* argv[]) {
   auto wm = NokoWindowManager::create();
   if (!wm.has_value()) {
     printf("wm initialize fail\n");
+    return 1;
   }
 
   int pid = fork();
   if (pid == 0) {
-    char* args[] = {
-        (char*)"/home/foxmoss/Projects/cef-project/build/Debug/minimal", NULL};
-    execv("/home/foxmoss/Projects/cef-project/build/Debug/minimal", args);
+    char exe_path[PATH_MAX];
+    ssize_t len = readlink("/proc/self/exe", exe_path, sizeof(exe_path) - 1);
+    if (len == -1) {
+      perror("readlink failed");
+      exit(1);
+    }
+    exe_path[len] = '\0';
+
+    char* dir = dirname(exe_path);
+    std::string minimal_path = std::string(dir) + "/dote-browser/minimal";
+
+    char* args[] = {(char*)minimal_path.data(), NULL};
+    execv(minimal_path.c_str(), args);
     exit(1);
   }
 

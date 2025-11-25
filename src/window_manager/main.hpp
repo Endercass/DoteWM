@@ -10,8 +10,8 @@
 #include <X11/extensions/Xcomposite.h>
 #include <X11/extensions/Xfixes.h>
 #include <X11/extensions/shape.h>
-#include <nn.h>
-#include <pair.h>
+#include <nanomsg/nn.h>
+#include <nanomsg/pair.h>
 #include <sys/inotify.h>
 #include <unistd.h>
 #include <condition_variable>
@@ -19,9 +19,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <mutex>
-#include <strstream>
-#include <thread>
 #include <unordered_map>
 
 #undef Status
@@ -32,7 +29,7 @@
 #undef Always
 #undef Success
 
-#include "../protobuf/windowmanager.pb.h"
+#include "windowmanager.pb.h"
 
 #include <sys/time.h>
 #include <cstdint>

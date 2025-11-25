@@ -22,8 +22,8 @@
 
 #include "../protobuf/windowmanager.pb.h"
 
-#include <nn.h>
-#include <pair.h>
+#include <nanomsg/nn.h>
+#include <nanomsg/pair.h>
 #include <sstream>
 #include <string>
 

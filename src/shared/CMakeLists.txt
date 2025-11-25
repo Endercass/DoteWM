@@ -25,7 +25,6 @@ set(SHARED_SRCS
   main.h
   resource_util.cc
   resource_util.h
-  ../protobuf/windowmanager.pb.cc
   )
 set(SHARED_SRCS_LINUX
   client_util_linux.cc
@@ -78,21 +77,6 @@ endif()
 #
 
 if(OS_LINUX)
-  include(FetchContent)
-  FetchContent_Declare(
-    nanomsg
-    GIT_REPOSITORY https://github.com/nanomsg/nanomsg
-    GIT_TAG        1.2.2
-    GIT_SHALLOW TRUE
-    GIT_PROGRESS TRUE
-  )
-  set(FETCHCONTENT_QUIET OFF)
-  FetchContent_MakeAvailable(nanomsg)
-  FetchContent_GetProperties(nanomsg)
-  if(NOT nanomsg_POPULATED)
-    FetchContent_Populate(nanomsg)
-  endif()
-
   find_package(Protobuf REQUIRED)
   find_package(absl REQUIRED)
 
@@ -100,7 +84,7 @@ if(OS_LINUX)
   add_library(${SHARED_TARGET} STATIC ${SHARED_SRCS})
   SET_EXAMPLE_LIBRARY_TARGET_PROPERTIES(${SHARED_TARGET})
   add_dependencies(${SHARED_TARGET} libcef_dll_wrapper)
-  target_link_libraries(${SHARED_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} protobuf::libprotobuf nanomsg absl::log_internal_check_op)
+  target_link_libraries(${SHARED_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} protobuf::libprotobuf nanomsg absl::log_internal_check_op windowmanager_proto)
 
   target_include_directories(${SHARED_TARGET} PUBLIC ${nanomsg_SOURCE_DIR}/src)
 

@@ -199,3 +199,82 @@ if(OS_WINDOWS)
   add_dependencies(${MINIMAL_TARGET} shared)
   target_link_libraries(${MINIMAL_TARGET} shared)
 endif()
+
+if(OS_LINUX)
+  # Install minimal executable
+  install(TARGETS ${MINIMAL_TARGET}
+    RUNTIME DESTINATION bin/dote-browser
+    COMPONENT applications
+  )
+  
+  # Install all CEF shared libraries
+  install(FILES
+    ${EXAMPLE_TARGET_OUT_DIR}/libcef.so
+    ${EXAMPLE_TARGET_OUT_DIR}/libEGL.so
+    ${EXAMPLE_TARGET_OUT_DIR}/libGLESv2.so
+    ${EXAMPLE_TARGET_OUT_DIR}/libvk_swiftshader.so
+    ${EXAMPLE_TARGET_OUT_DIR}/libvulkan.so.1
+    DESTINATION bin/dote-browser
+    COMPONENT runtime
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+  )
+  
+  # Install chrome-sandbox with special permissions
+  install(PROGRAMS
+    ${EXAMPLE_TARGET_OUT_DIR}/chrome-sandbox
+    DESTINATION bin/dote-browser
+    COMPONENT runtime
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+  )
+  
+  # Install resource files
+  install(FILES
+    ${EXAMPLE_TARGET_OUT_DIR}/chrome_100_percent.pak
+    ${EXAMPLE_TARGET_OUT_DIR}/chrome_200_percent.pak
+    ${EXAMPLE_TARGET_OUT_DIR}/resources.pak
+    ${EXAMPLE_TARGET_OUT_DIR}/icudtl.dat
+    ${EXAMPLE_TARGET_OUT_DIR}/v8_context_snapshot.bin
+    ${EXAMPLE_TARGET_OUT_DIR}/vk_swiftshader_icd.json
+    DESTINATION bin/dote-browser
+    COMPONENT resources
+  )
+  
+  # Install locales directory
+  install(DIRECTORY ${EXAMPLE_TARGET_OUT_DIR}/locales
+    DESTINATION bin/dote-browser
+    COMPONENT resources
+  )
+  
+  # Install extensions directory if it exists (appears to be empty)
+  install(DIRECTORY ${EXAMPLE_TARGET_OUT_DIR}/extensions
+    DESTINATION bin/dote-browser
+    COMPONENT resources
+    OPTIONAL
+  )
+
+elseif(OS_WINDOWS)
+  # Install Windows executables
+  install(TARGETS ${MINIMAL_TARGET}
+    RUNTIME DESTINATION bin/dote-browser
+    LIBRARY DESTINATION bin/dote-browser
+    COMPONENT applications
+  )
+  
+  # Install everything from build output
+  install(DIRECTORY ${EXAMPLE_TARGET_OUT_DIR}/
+    DESTINATION bin/dote-browser
+    COMPONENT runtime
+    USE_SOURCE_PERMISSIONS
+    PATTERN "*.a" EXCLUDE
+    PATTERN "CMakeFiles" EXCLUDE
+    PATTERN "cmake_install.cmake" EXCLUDE
+    PATTERN "Makefile" EXCLUDE
+  )
+
+elseif(OS_MAC)
+  # Install macOS app bundle
+  install(TARGETS ${MINIMAL_TARGET}
+    BUNDLE DESTINATION bin/dote-browser
+    COMPONENT applications
+  )
+endif()

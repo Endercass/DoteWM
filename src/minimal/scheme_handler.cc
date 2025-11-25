@@ -17,12 +17,12 @@
 #include "include/cef_scheme.h"
 #include "include/wrapper/cef_helpers.h"
 
-#include "nn.h"
+#include "nanomsg/nn.h"
 #include "src/minimal/mime.h"
 #include "src/minimal/scheme_strings.h"
-#include "src/protobuf/windowmanager.pb.h"
 #include "src/shared/client_util.h"
 #include "src/shared/resource_util.h"
+#include "windowmanager.pb.h"
 
 namespace minimal {
 

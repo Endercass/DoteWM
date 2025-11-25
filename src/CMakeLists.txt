@@ -120,5 +120,6 @@ endmacro()
 add_subdirectory(shared)
 
 # Example executable targets.
+add_subdirectory(protobuf)
 add_subdirectory(minimal)
 add_subdirectory(window_manager)

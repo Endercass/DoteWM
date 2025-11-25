@@ -59,3 +59,4 @@ bazel-*
 MODULE.bazel.lock
 out.log
 build-alpine/
+build-deb/

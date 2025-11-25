@@ -17,6 +17,15 @@ project(cef)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 
+# Find GTK before including CEF
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+
+# Add GTK include directories globally
+include_directories(${GTK3_INCLUDE_DIRS})
+link_directories(${GTK3_LIBRARY_DIRS})
+add_definitions(${GTK3_CFLAGS_OTHER})
+
 #
 # CEF configuration.
 #
@@ -160,3 +169,36 @@ add_subdirectory(src)
 # Display configuration settings.
 PRINT_CEF_CONFIG()
 
+
+set(CPACK_PACKAGE_NAME "dote-wm")
+set(CPACK_PACKAGE_AUTHOR "FoxMoss")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A window manager framework for web technology")
+set(CPACK_PACKAGE_VERSION_MAJOR "0")
+set(CPACK_PACKAGE_VERSION_MINOR "1")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "dote-wm")
+
+set(CPACK_GENERATOR "TGZ;DEB;RPM")
+
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "foxmoss@mediaology.com")
+
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "")
+
+set(CPACK_STRIP_FILES TRUE)
+
+set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "Applications")
+set(CPACK_COMPONENT_APPLICATIONS_DESCRIPTION "Main executables")
+set(CPACK_COMPONENT_APPLICATIONS_REQUIRED TRUE)
+
+set(CPACK_COMPONENT_RUNTIME_DISPLAY_NAME "Runtime Libraries")
+set(CPACK_COMPONENT_RUNTIME_DESCRIPTION "Required runtime libraries")
+set(CPACK_COMPONENT_RUNTIME_REQUIRED TRUE)
+
+set(CPACK_COMPONENT_RESOURCES_DISPLAY_NAME "Resources")
+set(CPACK_COMPONENT_RESOURCES_DESCRIPTION "Application resources and data files")
+set(CPACK_COMPONENT_RESOURCES_REQUIRED TRUE)
+
+include(CPack)

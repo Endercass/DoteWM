@@ -12,10 +12,10 @@
 
 #undef Success
 
-#include "nn.h"
-#include "pair.h"
-#include "src/protobuf/windowmanager.pb.h"
+#include "nanomsg/nn.h"
+#include "nanomsg/pair.h"
 #include "src/shared/client_util.h"
+#include "windowmanager.pb.h"
 
 #include <format>
 #include <nlohmann/json.hpp>
