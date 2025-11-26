@@ -151,11 +151,10 @@ textures from the display sever and render it to the screen ourselves in this ca
 graphics pipeline OpenGL. We're also doing this in X11 because Xlib is fairly easy to write and lets
 me experiment more quickly.
 
-We now live in a weird world now of vibe coding and the knowledge of the inner workings of
-processes being sprung from the aether, so I want to give credit where credit is due. The window
-manager portion is a soft fork of [x-compositing-wm](https://github.com/obiwac/x-compositing-wm/) by
-obiwac then rewritten by hand in C++ with a modern semi error tolerant style. The original project is
-slightly broken in some areas but it provided a good basis on how X11 can interact with OpenGL. 
+To give credit where credit is due,  the window manager is largely based on
+[x-compositing-wm](https://github.com/obiwac/x-compositing-wm/) by obiwac then rewritten by hand in
+C++ with a modern semi error tolerant style. The original project is slightly broken in some areas
+but it provided a good basis on how X11 can interact with OpenGL. 
 
 This I keep as a separate process from the browser on the basis of implementing escape hatches. If
 the browser hangs, I would want to be able implement features where we can kill windows or implement
@@ -240,6 +239,19 @@ context of the JS developer. The philosophy here all interactions should be init
 Javascript. The web dev is the one in control.
  
 ![](completedcommunicationloop.png)
+
+# A Divergence For A DVD
+
+There's just one problem with this if we have requests constantly streaming out of our browser and
+our window manager is unable to keep up with the amount of requests. So we get to a point where
+before the window manager can finish processing the old packets even more come in ending up in the
+process freezing. This is very bad! Here we side step the issue with some pretty basic networking
+principles.
+
+Each end of the nanomsg connection says it can send 100 messages before it will stop, the other end
+keeps track of how many it can receive. Once the receive number hits zero the receiving end with
+tell the sending end that it can continue sending messages. This way neither end will get swamped
+with message.
 
 ## The Protocol in action
 
@@ -360,8 +372,6 @@ In pictures:
 ![](windowbordertopdown.png)
 ![](windowbordersideview.png)
 
-Weirdly complex for something that seems so simple!
-
 On the browser end, we can just give it a command to define these raised window borders.
 
 ```ts
@@ -382,7 +392,7 @@ The last technical hurdle is window icons. Window icons are provided to the wind
 uncompressed array of RGBA values. Which for obvious reasons isn't easy to process by a browser, so
 we first need to convert the image to a PNG. Then to send it over Protobuf and subsequently JSON I
 put it into data base64 url format for the added benefit of being able to be passed directly into a
-src= attribute.
+src= attribute of an `img` tag.
 
 ## Some Musings
 

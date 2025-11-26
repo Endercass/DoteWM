@@ -30,8 +30,6 @@ message WindowRequest {
   uint64 window = 1;
 }
 
-message ReloadReply {}
-
 message BrowserStartRequest {}
 
 message WindowMapRequest {
@@ -48,10 +46,6 @@ message WindowFocusRequest {
 
 message FileRegisterRequest {
   string file_path = 1;
-}
-
-message LogMessageReply {
-  string message = 1;
 }
 
 message WindowReorderRequest {
@@ -74,7 +68,21 @@ message RunProgramRequest {
   repeated string command = 1;
 }
 
+message ProcessedRequest {
+  uint64 can_send = 1;
+}
+
 // REPLIES (Window Manager -> Browser)
+
+message LogMessageReply {
+  string message = 1;
+}
+
+message ProcessedReply {
+  uint64 can_send = 1;
+}
+
+message ReloadReply {}
 
 message WindowIconReply {
   uint64 window = 1;
@@ -143,6 +151,8 @@ message DataSegment {
     BrowserStartRequest browser_start_request = 17;
     LogMessageReply log_message_reply = 18;
     WindowIconReply window_icon_reply = 19;
+    ProcessedReply processed_reply = 20;
+    ProcessedRequest processed_request = 21;
   }
 }
 

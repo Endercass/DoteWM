@@ -565,7 +565,7 @@ bool DoteWindowManager::process_events() {
           char* buf = (char*)malloc(len);
           packet.SerializeToArray(buf, len);
 
-          nn_send(ipc_sock, buf, len, 0);
+          send_wrapper(ipc_sock, buf, len, 0);
           free(buf);
         }
 
@@ -611,7 +611,7 @@ bool DoteWindowManager::process_events() {
               char* buf = (char*)malloc(len);
               packet.SerializeToArray(buf, len);
 
-              nn_send(ipc_sock, buf, len, 0);
+              send_wrapper(ipc_sock, buf, len, 0);
             }
 
             XFree(prop);
@@ -672,7 +672,7 @@ bool DoteWindowManager::process_events() {
           char* buf = (char*)malloc(len);
           packet.SerializeToArray(buf, len);
 
-          nn_send(ipc_sock, buf, len, 0);
+          send_wrapper(ipc_sock, buf, len, 0);
         }
 
         if (windows.find(x_window) == windows.end())
@@ -837,7 +837,7 @@ void DoteWindowManager::focus_window(Window window_id, bool send_event) {
     char* buf = (char*)malloc(len);
     packet.SerializeToArray(buf, len);
 
-    nn_send(ipc_sock, buf, len, 0);
+    send_wrapper(ipc_sock, buf, len, 0);
     free(buf);
   }
 

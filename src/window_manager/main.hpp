@@ -19,6 +19,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <mutex>
+#include <queue>
 #include <unordered_map>
 
 #undef Status
@@ -29,6 +31,7 @@
 #undef Always
 #undef Success
 
+#include "../protobuf/starting_send.h"
 #include "windowmanager.pb.h"
 
 #include <sys/time.h>
@@ -111,120 +114,136 @@ class DoteWindowManager {
       char* buf = (char*)malloc(len);
       packet.SerializeToArray(buf, len);
 
-      nn_send(ipc_sock, buf, len, 0);
+      send_wrapper(ipc_sock, buf, len, 0);
       free(buf);
     }
 
-    char* buf = NULL;
-    int result;
     int count = 0;
-    do {
-      result = nn_recv(ipc_sock, &buf, NN_MSG, 0);
-      if (result > 0) {
-        Packet packet;
-        packet.ParseFromArray(buf, result);
-
-        printf("got %i packets\n", packet.segments_size());
-
-        for (auto segment : packet.segments()) {
-          count++;
-          if (segment.data_case() == DataSegment::kWindowRequest) {
-            register_base_window(segment.window_request().window());
-          } else if (segment.data_case() == DataSegment::kWindowMapRequest) {
-            configure_window(segment.window_map_request().window(),
-                             segment.window_map_request().x(),
-                             segment.window_map_request().y(),
-                             segment.window_map_request().width(),
-                             segment.window_map_request().height());
-          } else if (segment.data_case() ==
-                     DataSegment::kWindowReorderRequest) {
-            printf("reordering\n");
-
-            double window_count =
-                segment.window_reorder_request().windows().size();
-            double inc = (1 / window_count) * 0.8;
-            double depth = 0.8;
-            for (uint64_t window : segment.window_reorder_request().windows()) {
-              if (windows.find(window) == windows.end()) {
-                printf("Window %lu skipped\n", window);
-                continue;
-              }
-              windows[window].depth = depth;
-              printf("Setting window %lu depth to %f\n", window, depth);
-              depth -= inc;
-            }
-          } else if (segment.data_case() == DataSegment::kWindowFocusRequest) {
-            focus_window(segment.mutable_window_focus_request()->window(),
-                         false);
-          } else if (segment.data_case() ==
-                     DataSegment::kWindowRegisterBorderRequest) {
-            register_border(
-                segment.mutable_window_register_border_request()->window(),
-                segment.mutable_window_register_border_request()->x(),
-                segment.mutable_window_register_border_request()->y(),
-                segment.mutable_window_register_border_request()->width(),
-                segment.mutable_window_register_border_request()->height());
-          } else if (segment.data_case() == DataSegment::kRenderRequest) {
-          } else if (segment.data_case() == DataSegment::kWindowCloseRequest) {
-            XDestroyWindow(display,
-                           segment.mutable_window_close_request()->window());
-
-          } else if (segment.data_case() == DataSegment::kRunProgramRequest) {
-            int pid = fork();
-            if (pid == 0) {
-              std::vector<char*> args;
-              for (const auto& cmd : segment.run_program_request().command()) {
-                args.push_back((char*)(cmd.c_str()));
-              }
-              args.push_back(nullptr);
-
-              execvp(args[0], args.data());
-              perror("execvp failed");
-              exit(1);
-            }
-          } else if (segment.data_case() == DataSegment::kFileRegisterRequest) {
-            watched_files[inotify_add_watch(
-                inotify_fd,
-                segment.mutable_file_register_request()->file_path().c_str(),
-                IN_MODIFY)] =
-                segment.mutable_file_register_request()->file_path();
-          } else if (segment.data_case() == DataSegment::kBrowserStartRequest) {
-            printf("resending all windows\n");
-            Packet packet;
-            for (auto window : windows) {
-              if (std::find(blacklisted_windows.begin(),
-                            blacklisted_windows.end(),
-                            window.first) != blacklisted_windows.end())
-                continue;
-              if (base_window.value() == window.first)
-                continue;
-
-              printf("%lu\n", window.first);
-
-              auto segment = packet.add_segments();
-              auto reply = segment->mutable_window_map_reply();
-              reply->set_window(window.second.window);
-              reply->set_visible(window.second.visible);
-              reply->set_x(window.second.x);
-              reply->set_y(window.second.y);
-              if (window.second.name.has_value()) {
-                reply->set_name(window.second.name.value());
-              }
-              reply->set_width(window.second.width);
-              reply->set_height(window.second.height);
-            }
-            size_t len = packet.ByteSizeLong();
-            char* buf = (char*)malloc(len);
-            packet.SerializeToArray(buf, len);
-
-            nn_send(ipc_sock, buf, len, 0);
-            free(buf);
-          }
+    while (true) {
+      Packet packet;
+      {
+        std::lock_guard<std::mutex> packet_gaurd(packet_lock);
+        if (packet_queue.empty()) {
+          break;
         }
-
-        nn_freemsg(buf);
+        packet = packet_queue.front();
+        packet_queue.pop();
       }
-    } while (result > 0);
+
+      can_receive--;
+
+      if (can_receive == 0) {
+        can_receive = START_CAN_SEND;
+
+        Packet packet2;
+        auto request = packet2.add_segments();
+        auto processed = request->mutable_processed_reply();
+        processed->set_can_send(can_receive);
+        size_t len2 = packet2.ByteSizeLong();
+        char* buf2 = (char*)malloc(len2);
+        packet2.SerializeToArray(buf2, len2);
+
+        nn_send(ipc_sock, buf2, len2, 0);
+        free(buf2);
+      }
+
+      for (auto segment : packet.segments()) {
+        count++;
+        if (segment.data_case() == DataSegment::kProcessedRequest) {
+          can_send = segment.processed_request().can_send();
+        } else if (segment.data_case() == DataSegment::kWindowRequest) {
+          register_base_window(segment.window_request().window());
+        } else if (segment.data_case() == DataSegment::kWindowMapRequest) {
+          configure_window(segment.window_map_request().window(),
+                           segment.window_map_request().x(),
+                           segment.window_map_request().y(),
+                           segment.window_map_request().width(),
+                           segment.window_map_request().height());
+        } else if (segment.data_case() == DataSegment::kWindowReorderRequest) {
+          printf("reordering\n");
+
+          double window_count =
+              segment.window_reorder_request().windows().size();
+          double inc = (1 / window_count) * 0.8;
+          double depth = 0.8;
+          for (uint64_t window : segment.window_reorder_request().windows()) {
+            if (windows.find(window) == windows.end()) {
+              printf("Window %lu skipped\n", window);
+              continue;
+            }
+            windows[window].depth = depth;
+            printf("Setting window %lu depth to %f\n", window, depth);
+            depth -= inc;
+          }
+        } else if (segment.data_case() == DataSegment::kWindowFocusRequest) {
+          focus_window(segment.mutable_window_focus_request()->window(), false);
+        } else if (segment.data_case() ==
+                   DataSegment::kWindowRegisterBorderRequest) {
+          register_border(
+              segment.mutable_window_register_border_request()->window(),
+              segment.mutable_window_register_border_request()->x(),
+              segment.mutable_window_register_border_request()->y(),
+              segment.mutable_window_register_border_request()->width(),
+              segment.mutable_window_register_border_request()->height());
+        } else if (segment.data_case() == DataSegment::kRenderRequest) {
+        } else if (segment.data_case() == DataSegment::kWindowCloseRequest) {
+          XDestroyWindow(display,
+                         segment.mutable_window_close_request()->window());
+
+        } else if (segment.data_case() == DataSegment::kRunProgramRequest) {
+          int pid = fork();
+          if (pid == 0) {
+            std::vector<char*> args;
+            for (const auto& cmd : segment.run_program_request().command()) {
+              args.push_back((char*)(cmd.c_str()));
+            }
+            args.push_back(nullptr);
+
+            execvp(args[0], args.data());
+            perror("execvp failed");
+            exit(1);
+          }
+        } else if (segment.data_case() == DataSegment::kFileRegisterRequest) {
+          watched_files[inotify_add_watch(
+              inotify_fd,
+              segment.mutable_file_register_request()->file_path().c_str(),
+              IN_MODIFY)] =
+              segment.mutable_file_register_request()->file_path();
+        } else if (segment.data_case() == DataSegment::kBrowserStartRequest) {
+          printf("resending all windows\n");
+          Packet packet;
+          for (auto window : windows) {
+            if (std::find(blacklisted_windows.begin(),
+                          blacklisted_windows.end(),
+                          window.first) != blacklisted_windows.end())
+              continue;
+            if (base_window.value() == window.first)
+              continue;
+
+            printf("%lu\n", window.first);
+
+            auto segment = packet.add_segments();
+            auto reply = segment->mutable_window_map_reply();
+            reply->set_window(window.second.window);
+            reply->set_visible(window.second.visible);
+            reply->set_x(window.second.x);
+            reply->set_y(window.second.y);
+            if (window.second.name.has_value()) {
+              reply->set_name(window.second.name.value());
+            }
+            reply->set_width(window.second.width);
+            reply->set_height(window.second.height);
+          }
+          size_t len = packet.ByteSizeLong();
+          char* buf = (char*)malloc(len);
+          packet.SerializeToArray(buf, len);
+
+          send_wrapper(ipc_sock, buf, len, 0);
+
+          free(buf);
+        }
+      }
+    }
     return count;
   }
 
@@ -244,10 +263,60 @@ class DoteWindowManager {
     }
 
     inotify_fd = inotify_init1(IN_NONBLOCK);
+
+    nanomsg_thread = std::thread([this]() { nanomsg_watch(); });
   }
-  ~DoteWindowManager() { close(inotify_fd); }
+  ~DoteWindowManager() {
+    should_stop = true;
+    if (nanomsg_thread.joinable()) {
+      nanomsg_thread.join();
+    }
+    close(inotify_fd);
+    nn_close(ipc_sock);
+  }
 
  private:
+  std::queue<Packet> packet_queue;
+  std::mutex packet_lock;
+  std::thread nanomsg_thread;
+  std::atomic<bool> should_stop{false};
+
+  void nanomsg_watch() {
+    char* buf = NULL;
+    int result;
+
+    while (!should_stop) {
+      result = nn_recv(ipc_sock, &buf, NN_MSG, NN_DONTWAIT);
+
+      if (result > 0) {
+        Packet packet;
+        packet.ParseFromArray(buf, result);
+
+        {
+          std::lock_guard<std::mutex> packet_guard(packet_lock);
+          packet_queue.push(packet);
+        }
+
+        nn_freemsg(buf);
+      } else if (result < 0 && nn_errno() == EAGAIN) {
+        // no data available, sleep briefly to avoid busy-waiting
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+      } else if (result < 0) {
+        fprintf(stderr, "nn_recv error: %s\n", nn_strerror(nn_errno()));
+      }
+    }
+  }
+
+  uint64_t can_send = START_CAN_SEND;
+  uint64_t can_receive = START_CAN_SEND;
+  void send_wrapper(int s, const void* buf, size_t len, int flags) {
+    std::lock_guard<std::mutex> packet_gaurd(packet_lock);
+    if (can_send == 0)
+      return;
+    can_send--;
+    nn_send(s, buf, len, flags);
+  }
+
   int ipc_sock;
 
   std::unordered_map<int, std::string> watched_files = {};

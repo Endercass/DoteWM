@@ -5,6 +5,7 @@
 #include "src/minimal/client_minimal.h"
 #include <X11/X.h>
 #include <absl/strings/str_format.h>
+#include <cstdint>
 #include <cstdio>
 #include <nlohmann/json_fwd.hpp>
 #include <string>
@@ -19,6 +20,7 @@
 
 #include <format>
 #include <nlohmann/json.hpp>
+#include "../protobuf/starting_send.h"
 #include "include/wrapper/cef_helpers.h"
 #include "include/wrapper/cef_message_router.h"
 #include "src/shared/client_util.h"
@@ -31,6 +33,8 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
   explicit MessageHandler(int sock) : ipc_sock(sock) {}
 
   int ipc_sock;
+  uint64_t can_send = START_CAN_SEND;
+  uint64_t can_receive = START_CAN_SEND;
 
   bool OnQuery(CefRefPtr<CefBrowser> browser,
                CefRefPtr<CefFrame> frame,
@@ -99,26 +103,45 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
           segment->mutable_browser_start_request();
         }
       }
-      if (packet.segments_size() != 0) {
+      if (packet.segments_size() != 0 && can_send != 0) {
         size_t len = packet.ByteSizeLong();
         char* buf = (char*)malloc(len);
         packet.SerializeToArray(buf, len);
 
         nn_send(ipc_sock, buf, len, 0);
+        can_send--;
         free(buf);
       }
 
       char* buf;
-      int result = nn_recv(ipc_sock, &buf, NN_MSG, 0);
+      int result = nn_recv(ipc_sock, &buf, NN_MSG, NN_DONTWAIT);
 
       nlohmann::json to_browser = nlohmann::json::array();
 
       if (result > 0) {
         Packet packet;
         packet.ParseFromArray(buf, result);
+        can_receive--;
 
         for (auto segment : packet.segments()) {
+          if (can_receive == 0) {
+            can_receive = START_CAN_SEND;
+
+            Packet packet2;
+            auto request = packet2.add_segments();
+            auto processed = request->mutable_processed_request();
+            processed->set_can_send(can_receive);
+            size_t len2 = packet2.ByteSizeLong();
+            char* buf2 = (char*)malloc(len2);
+            packet2.SerializeToArray(buf2, len2);
+
+            nn_send(ipc_sock, buf2, len2, 0);
+            free(buf2);
+          }
           switch (segment.data_case()) {
+            case DataSegment::kProcessedReply: {
+              can_send = segment.processed_reply().can_send();
+            }
             case DataSegment::kWindowFocusReply: {
               nlohmann::json obj = {
                   {"t", "window_focus"},
@@ -261,6 +284,7 @@ class MessageHandler : public CefMessageRouterBrowserSide::Handler {
 
       callback->Success(to_browser.dump());
     } catch (const std::exception& e) {
+      printf("parsing failed %s\n", e.what());
       callback->Failure(-1, std::string(e.what()));
     }
     return true;
