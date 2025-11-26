@@ -10,7 +10,7 @@ namespace minimal {
 namespace {
 
 std::string GetStartupURL() {
-  return "fox://base/index.html";
+  return "dote://base/index.html";
 };
 
 }  // namespace

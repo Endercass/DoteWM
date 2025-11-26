@@ -1,6 +1,6 @@
 #pragma once
 
-#define SCHEME "fox"
+#define SCHEME "dote"
 #define DOMAIN "base"
 #define SCHEME_OPTIONS                                    \
   CEF_SCHEME_OPTION_STANDARD | CEF_SCHEME_OPTION_SECURE | \

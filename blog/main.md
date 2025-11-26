@@ -30,28 +30,33 @@ have a browser control the system. That's the pitch and that's what we're going 
 
 So how do we actually pull off this magic trick. I started with the web browser because I figured
 this would be the hardest bit. We need to communicate with the Javascript process while
-keeping access to low level interfaces in addition to dynamically fetching files. The former will be
-needed for writing the actual window manager elements and the latter will be needed if we want our
-computers still work offline. 
+keeping access to low level interfaces as to interact with our windows. Then the other requirement
+is being able to serve our webpage without a HTTPS request leaving our computer. 
+
+How? CEF.
 
 CEF also known as Chromium Embedded Framework is a multiplatform framework for writing web apps for
 desktop with a nice C++ interface to boot. Like Electron but slightly lower level, it provides the
 functionality we need while abstracting the actual browser process away in an easy to download
-binary. So to load our files off the user's machine we can right a custom schema, wherein the
+binary. So to load our files off the user's machine we can right a custom scheme. Like where the
 traditional chromium browser has chrome:// we can do the same using a interface CEF provides.
 
 ```c++
 // ...
-  CefRegisterSchemeHandlerFactory(SCHEME, DOMAIN,
+  // registers dote://base/
+  CefRegisterSchemeHandlerFactory("dote", "base",
                                   new ClientSchemeHandlerFactory(sock));
 // ...
 ```
 
 And the actual code for finding and returning the file is fairly simple. Just read the file out of
-the `~/.config/fox/` directory and if there is none return a 404. We also have some basic and
-a quick dirty and flawed file extension based MIME type generator.
+the `~/.config/dote/` directory and if there is none return a 404. We also have some basic and
+a quick dirty and flawed file extension based MIME type generator. I won't bore you with the code,
+check out the repo if you want an exact idea of the implementation.
 
-## Dante's Inferno Abridged
+
+
+## The Layer Cake
 
 So now that we can load html and by extension Javascript files we now have a sandbox we need to
 break into. I consider writing a web socket implementation to work over the scheme, but what is much

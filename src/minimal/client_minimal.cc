@@ -275,7 +275,7 @@ Client::Client(int* sock) : sock(sock) {}
 void Client::OnTitleChange(CefRefPtr<CefBrowser> browser,
                            const CefString& title) {
   // Call the default shared implementation.
-  shared::OnTitleChange(browser, "fox-desktop");
+  shared::OnTitleChange(browser, "dote-browser");
 }
 
 bool Client::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
