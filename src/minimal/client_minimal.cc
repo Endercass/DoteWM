@@ -321,7 +321,7 @@ void Client::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
   if ((*sock = nn_socket(AF_SP, NN_PAIR)) < 0) {
     printf("nn_socket\n");
   }
-  if (nn_connect(*sock, "ipc:///tmp/noko.ipc") < 0) {
+  if (nn_connect(*sock, "ipc:///tmp/dote.ipc") < 0) {
     printf("nn_connect\n");
   }
 

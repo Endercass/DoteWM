@@ -13,14 +13,17 @@ Let me explain.
 
 ## A Primer
 
-To display a program window an operating system uses a window display server. On Linux this is mainly 
-X11 written by MIT in 1984, it's old and starting to show it's age and Wayland is taking some of X11
-market share. So you can display a window but to get the nice behavior of movement and resizing
-buttons and keybinds, we need a window manager. This is a separate program that the display server
-consults on how it should render and handle the windows. Then all the windows need to know is how to
-talk to the display server and all the window manager needs to know is how to handle the windows.
-This is a lovely system which allows for window managers to take on all different kinds of shapes
-sizes and appearances while maintaining compatibility.
+To display a program window an operating system uses a window display server.
+On Linux this is mainly X11 written by MIT in 1984, it's old and starting to
+show it's age and Wayland is taking some of X11 market share. So with window
+display server you can display a window, makes sense, but to get the nice behavior of
+movement and resizing buttons and keybinds, we need a window manager. This is a
+separate program that the display server consults on how it should render and
+handle the windows. Then all the windows need to know is how to talk to the
+display server and all the window manager needs to know is how to handle the
+windows. This is a lovely system which allows for window managers to take on
+all different kinds of shapes sizes and appearances while maintaining
+compatibility.
 
 The goal of the project was to decrease the skill needed to write a fully customized window manager.
 I've been aware of many projects that try to do the very opposite of this project for a while, i.e.
@@ -197,7 +200,7 @@ familiar if you've done a Berkeley sockets loop before.
     if ((ipc_sock = nn_socket(AF_SP, NN_PAIR)) < 0) {
       printf("ipc sock failed\n");
     }
-    if (nn_bind(ipc_sock, "ipc:///tmp/noko.ipc") < 0) {
+    if (nn_bind(ipc_sock, "ipc:///tmp/dote.ipc") < 0) {
       printf("ipc bind failed\n");
     }
 

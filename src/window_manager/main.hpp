@@ -251,7 +251,7 @@ class DoteWindowManager {
     if ((ipc_sock = nn_socket(AF_SP, NN_PAIR)) < 0) {
       printf("ipc sock failed\n");
     }
-    if (nn_bind(ipc_sock, "ipc:///tmp/noko.ipc") < 0) {
+    if (nn_bind(ipc_sock, "ipc:///tmp/dote.ipc") < 0) {
       printf("ipc bind failed\n");
     }
 
