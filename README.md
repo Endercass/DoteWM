@@ -15,7 +15,6 @@ A [<img src="hc.png" style="height: 2em; margin-left: 1em; margin-right: 1em;"><
 This is the one I actually developed on and will have the least amount of bugs. `dreamland.js` is a
 great framework, if you're new take a look [at the docs](https://dreamland.js.org/).
 
-
 **Windows XP styled, written in React**
 
 ![](blog/reactdemo.png)
@@ -23,7 +22,6 @@ great framework, if you're new take a look [at the docs](https://dreamland.js.or
 [github.com/FoxMoss/dote-react-xp-example](https://github.com/FoxMoss/dote-react-xp-example)
 
 A port of the Win 98 one to React and XP.css, a bit more rough.
-
 
 **DVD Logo Window Manager, written in vanilla js**
 
@@ -37,6 +35,7 @@ terminal to hit the corner.
 ## Install
 
 ### On Arch
+
 We are on the AUR under dote-wm. So install with your favorite AUR helper.
 
 ```
@@ -53,6 +52,7 @@ files.
 You'll have to build from source, it wont take too long.
 
 The dependencies on arch are as follows and will need to be renamed to the ecosystem of your choice.
+
 ```
 gcc-libs
 libx11
@@ -75,6 +75,7 @@ git
 ```
 
 Compile commands are standard CMake affair:
+
 ```bash
 mkdir build
 cd build
@@ -88,9 +89,10 @@ Any files placed inside `~/.config/dote/` will be served with index.html being l
 reloading is best effort, sometimes a change will need a full restart.
 
 ### Testing
+
 I would recommend developing in Xephyr as changes can occasionally crash your window manager.
 
-``` bash
+```bash
 Xephyr :1 -resizeable -no-host-grab
 
 # in another terminal
@@ -98,9 +100,24 @@ DISPLAY=:1 dotewm
 ```
 
 ### Daily Driving
+
 Set your ~/.xinitrc to the following:
+
 ```xinitrc
 exec dotewm
 ```
 
 Or consult your login manager on usage.
+
+### Using CEF arguments
+
+CEF (Chromium Embedded Framework) is used to render the HTML/CSS/JS. CEF can take in command line
+arguments to control certain behaviors. Due to the way DoteWM launches CEF, these arguments cannot
+be specified directly on the command line when launching DoteWM. Instead, you can set these arguments
+in the "CEF_ARGS" environment variable before starting DoteWM. For example, to enable remote debugging
+on port 9222, you would do the following in your terminal:
+
+```bash
+export CEF_ARGS="--remote-debugging-port=9222"
+dotewm
+```
