@@ -1143,8 +1143,6 @@ struct MinimalArgs {
 };
 
 MinimalArgs minimal_args() {
-  MinimalArgs out;
-
   char exe_path[PATH_MAX];
   ssize_t len = readlink("/proc/self/exe", exe_path, sizeof(exe_path) - 1);
   if (len == -1) {
@@ -1154,11 +1152,13 @@ MinimalArgs minimal_args() {
   exe_path[len] = '\0';
 
   char* dir = dirname(exe_path);
+
+  MinimalArgs out;
   out.storage.emplace_back(std::string(dir) + "/dote-browser/minimal");
   out.argv.push_back(out.storage.back().data());
 
   if (const char* env = std::getenv("CEF_ARGS")) {
-    std::string buf = env;
+    std::string buf(env);
     char* p = std::strtok(buf.data(), " ");
     while (p) {
       out.storage.emplace_back(p);

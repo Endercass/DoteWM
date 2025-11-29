@@ -112,12 +112,14 @@ Or consult your login manager on usage.
 ### Using CEF arguments
 
 CEF (Chromium Embedded Framework) is used to render the HTML/CSS/JS. CEF can take in command line
-arguments to control certain behaviors. Due to the way DoteWM launches CEF, these arguments cannot
-be specified directly on the command line when launching DoteWM. Instead, you can set these arguments
-in the "CEF_ARGS" environment variable before starting DoteWM. For example, to enable remote debugging
+arguments to control certain behaviors. Due to the way Dote launches CEF, these arguments cannot
+be specified directly on the command line when launching Dote. Instead, you can set these arguments
+in the "CEF_ARGS" environment variable before starting Dote. For example, to enable remote debugging
 on port 9222, you would do the following in your terminal:
 
 ```bash
 export CEF_ARGS="--remote-debugging-port=9222"
 dotewm
 ```
+
+Once enabled to remotely debug you can access `chrome://inspect`.
